@@ -1,10 +1,25 @@
 <template>
     <v-app>
+        <v-app-bar
+            color="deep-purple accent-4"
+            dense
+            dark
+        >
+            <div>
+                <v-img width="100" src="http://5.9.51.136/wp-content/uploads/2020/02/Athalon_Schriftzug2020_HoheAufl%C3%B6sung.png" />
+            </div>
+            <v-toolbar-title>Charakter Erstellung</v-toolbar-title>
+            <v-spacer />
+        </v-app-bar>
         <nuxt />
+        <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     </v-app>
 </template>
 
 <style>
+.v-toolbar {
+    flex: 0 0 auto;
+}
 html {
     font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
         Roboto, "Helvetica Neue", Arial, sans-serif;

@@ -54,6 +54,15 @@ export default {
     */
     axios: {
     },
+    vuetify: {
+        theme: {
+            themes: {
+                light: {
+                    primary: '#303E7A'
+                }
+            }
+        }
+    },
     /*
     ** Build configuration
     */
