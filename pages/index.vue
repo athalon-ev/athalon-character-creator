@@ -1,10 +1,10 @@
 <template>
     <div class="container">
-        <div class="w-1/2">
+        <div class="w-2/3">
             <h2 class="subtitle">
                 Erstelle deinen Charakter
             </h2>
-            <v-form>
+            <v-form class="shadow bg-white p-4 rounded">
                 <v-text-field v-model="character.name" name="name" label="Name" />
                 <h2 class="text-xl font-bold">
                     Äußerliche Erscheinung
@@ -120,3 +120,10 @@ export default {
     }
 }
 </script>
+
+<style>
+    #app {
+        background-image: url(https://board.athalon.net/images/revolution/bg.jpeg);
+        background-attachment: fixed
+    }
+</style>
