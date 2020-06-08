@@ -9,6 +9,10 @@ module.exports = {
     variants: {},
     plugins: [],
     purge: [
-        './pages/**/*.vue',
+        'pages/**/*.vue',
+        'components/**/*.vue',
+        'layouts/**/*.vue',
+        'plugins/**/*.js',
+        'nuxt.config.js'
     ],
 }
