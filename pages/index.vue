@@ -18,7 +18,7 @@
                         <v-slider
                             v-model="character.size"
                             vertical name="height" label="Größe"
-                            :min="20" :max="250"
+                            :min="120" :max="180"
                             thumb-label="always"
                         >
                             <div slot="thumb-label">
@@ -111,6 +111,7 @@ export default {
     methods: {
         randomize() {
             this.character.weight = randomFromRange(50, 120).toFixed(1)
+            this.character.size = randomFromRange(120, 180).toFixed(1)
             this.character.age = randomFromRange(14, 100).toFixed(0)
             this.character.haircolor = randomItem(characterData.haircolors)
             this.character.eyecolor = randomItem(characterData.eyecolors)
