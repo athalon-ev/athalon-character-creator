@@ -1,16 +1,22 @@
 <template>
     <div class="container">
         <div class="w-2/3">
-            <h2 class="subtitle">
+            <h2 class="text-xl my-4 text-white">
                 Erstelle deinen Charakter
             </h2>
-            <v-form class="shadow bg-white p-4 rounded">
-                <v-text-field v-model="character.name" name="name" label="Name" />
+            <v-form class="shadow bg-white p-4 rounded relative">
+                <v-btn color="primary" outlined @click="randomize" class="top-0 right-0 absolute m-4">
+                    <v-icon class="mr-2">
+                        mdi-dice-6
+                    </v-icon>
+                    Lass den Zufall entscheiden
+                </v-btn>
+                <v-text-field v-model="character.name" name="name" label="Name" class="w-1/2" />
                 <h2 class="text-xl font-bold">
                     Äußerliche Erscheinung
                 </h2>
                 <p class="text-gray-700">
-                    Mit den Einstellungen kannst du dein Erscheinungsbild verfeinern, wie willst du auf andere wirken?
+                    Hiermit kannst du dein Erscheinungsbild verfeinern, wie willst du auf andere wirken?
                 </p>
                 <div class="flex justify-between">
                     <div class="w-1/2 pr-4">
@@ -32,10 +38,24 @@
                         <v-text-field v-model="character.weight" name="weight" type="number" :min="40" :max="150" label="Gewicht" suffix="kg" />
                     </div>
                 </div>
+                <v-textarea label="Äußerliche Erscheinung" placeholder="Narben, Auffälligkeiten" :rows="2" />
                 <h2 class="text-xl font-bold">
                     Herkunft
                 </h2>
                 <p class="text-gray-700">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                @click="showWiki"
+                                fab small color="primary"
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon>mdi-map</v-icon>
+                            </v-btn>
+                        </template>
+                        <v-img width="50vw" src="http://wiki.athalon.net/images/e/e6/Le%C3%A4ndrien2020.png" />
+                    </v-tooltip>
                     Die Herkunft bestimmt deinen Wortschatz und auch deine Religion und Kultur wie Bräuche
                 </p>
                 <div class="flex justify-between">
@@ -46,10 +66,6 @@
                         <v-combobox name="birthcity" label="Geburtsort" v-model="character.birthcity" :items="cities" />
                     </div>
                 </div>
-                <v-textarea
-                    label="Äußerliche Erscheinung"
-                />
-                Äußerliche Erscheinung
                 Angewohnheiten
                 Weltanschauung
                 Ängste und Phobien
@@ -69,12 +85,6 @@
                 Stabilität
                 Staturbonus
             </v-form>
-            <v-btn color="primary" @click="randomize">
-                <v-icon class="mr-2">
-                    mdi-dice-6
-                </v-icon>
-                Lass den Zufall entscheiden
-            </v-btn>
         </div>
     </div>
 </template>
@@ -111,12 +121,15 @@ export default {
     methods: {
         randomize() {
             this.character.weight = randomFromRange(50, 120).toFixed(1)
-            this.character.size = randomFromRange(120, 180).toFixed(1)
-            this.character.age = randomFromRange(14, 100).toFixed(0)
+            this.character.size = randomFromRange(120, 180).toFixed(0)
+            this.character.age = randomFromRange(14, 50).toFixed(0)
             this.character.haircolor = randomItem(characterData.haircolors)
             this.character.eyecolor = randomItem(characterData.eyecolors)
             this.character.nationality = randomItem(this.nations)
             this.character.birthcity = randomItem(availableCities(this.character))
+        },
+        showWiki() {
+            window.open('http://wiki.athalon.net/index.php/Hauptseite')
         }
     }
 }
