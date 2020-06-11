@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <div class="w-2/3">
+    <div class="container mx-auto">
+        <div>
             <h2 class="text-xl my-4 text-white">
                 Erstelle deinen Charakter
             </h2>
@@ -46,6 +46,8 @@
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn
+                                href="https://wiki.athalon.net/index.php/Hauptseite"
+                                target="_blank"
                                 @click="showWiki"
                                 fab small color="primary"
                                 v-bind="attrs"
@@ -60,22 +62,34 @@
                 </p>
                 <div class="flex justify-between">
                     <div class="w-1/2 pr-4">
-                        <v-select name="nationality" label="Nationalität" v-model="character.nationality" :items="nations" />
+                        <v-select name="nationality" label="Nationalität" v-model="character.nationality" :items="nations">
+                            <v-btn color="primary" icon slot="append" small v-if="character.nationality" :href="getNationUrl(character.nationality)">
+                                <v-icon>mdi-map-search</v-icon>
+                            </v-btn>
+                        </v-select>
                     </div>
                     <div class="w-1/2">
                         <v-combobox name="birthcity" label="Geburtsort" v-model="character.birthcity" :items="cities" />
                     </div>
                 </div>
-                Angewohnheiten
-                Weltanschauung
-                Ängste und Phobien
-                Profession vor Neu Corethon
-                Eltern
-                Andere Verwandte
-                Warum hast du die Heimat verlassen?
-                Was hast du zurück gelassen?
-                Was möchtest du erreichen?
-
+                <h2 class="text-xl font-bold">
+                    Persönliches
+                </h2>
+                <v-textarea label="Angewohnheiten" :rows="2" />
+                <v-textarea label="Weltanschauung" :rows="2" />
+                <v-textarea label="Ängste und Phobien" :rows="2" />
+                <v-textarea label="Weltanschauung" :rows="2" />
+                <h2 class="text-xl font-bold">
+                    Vergangenheit
+                </h2>
+                <v-textarea label="Profession vor Neu Corethon" :rows="2" />
+                <v-textarea label="Familie und Verwandtschaft" :rows="2" />
+                <v-textarea label="Warum hast du die Heimat verlassen?" :rows="2" />
+                <v-textarea label="Was hast du zurück gelassen?" :rows="2" />
+                <v-textarea label="Was möchtest du erreichen?" :rows="2" />
+                <h2 class="text-xl font-bold">
+                    Charakter
+                </h2>
                 Stärke
                 Konstitution
                 Geschick
@@ -93,7 +107,8 @@
 import * as R from 'ramda'
 import characterData from '~/character-data'
 const randomItem = list => list[Math.random() * list.length | 0]
-const availableCities = character => R.prop(character.nationality, characterData.cities)
+const getNationByName = name => R.find(R.propEq('name', name), characterData.nations)
+const availableCities = character => R.prop('cities', getNationByName(character.nationality))
 const randomFromRange = (min, max) => (min + Math.random() * (max - min))
 export default {
     components: {
@@ -101,7 +116,7 @@ export default {
     },
     data: () => ({
         characterData,
-        nations: R.keys(characterData.cities),
+        nations: R.map(R.prop('name'), characterData.nations),
         character: {
             name: '',
             age: '',
@@ -128,8 +143,8 @@ export default {
             this.character.nationality = randomItem(this.nations)
             this.character.birthcity = randomItem(availableCities(this.character))
         },
-        showWiki() {
-            window.open('http://wiki.athalon.net/index.php/Hauptseite')
+        getNationUrl(nation) {
+            return R.prop('url', getNationByName(nation))
         }
     }
 }
