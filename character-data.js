@@ -34,6 +34,7 @@ export default {
         {
             name: 'Tasperin',
             url: 'https://wiki.athalon.net/index.php/Kaiserliche_Monarchie_Tasperin',
+            banner: 'http://wiki.athalon.net/images/4/4b/Wappen_Tasperin_2020.png',
             cities: [
                 'Carviel',
                 'Schwarzwasser',
@@ -46,6 +47,7 @@ export default {
         {
             name: 'Sorridia',
             url: 'https://wiki.athalon.net/index.php/K%C3%B6nigreich_Sorridia',
+            banner: 'http://wiki.athalon.net/images/d/d5/Wappen_Sorridia2020.png',
             cities: [
                 'Montebrillo',
                 'Fortifa',
@@ -56,6 +58,7 @@ export default {
         {
             name: 'AlBastra',
             url: 'https://wiki.athalon.net/index.php/Kalifat_Al%27bastra',
+            banner: 'http://wiki.athalon.net/images/e/e4/Wappen_Kalifat6.png',
             cities: [
                 'Mina Farah',
                 "Waha'kandh",
@@ -66,6 +69,7 @@ export default {
         {
             name: 'Silventrum',
             url: 'https://wiki.athalon.net/index.php/Vereinigte_Provinzen_von_Silventrum',
+            banner: 'http://wiki.athalon.net/images/9/99/Wappen_Silventrum2020.png',
             cities: [
                 'Zweibach',
                 'Windwarden',
@@ -74,39 +78,9 @@ export default {
             ],
         },
         {
-            name: 'Großalbion',
-            url: '',
-            cities: [
-                'Asmaeth',
-                'Molder',
-                'Rodstedt',
-                'Nordingen',
-                'Sechseich',
-                'Oberrath',
-                'Sodenmark',
-                'Lürch',
-                'Dornbach',
-                'Grünfels',
-                'Ringen',
-                'Braundorf',
-                'Hagenstein',
-                'Brist',
-                'Kirkmore',
-                'Averssire',
-                'Ochsenbach',
-                'Mouray',
-                'Gaelaught',
-                'Leyghean',
-                'Deas Mumhain',
-                'Chill Dara',
-                'Sligaec',
-                'Tyr Eoghain',
-                'Ulaydh',
-            ],
-        },
-        {
             name: 'Haldar',
             url: 'https://wiki.athalon.net/index.php/Haldarische_Stammesl%C3%A4nder',
+            banner: 'http://wiki.athalon.net/images/9/9b/Wappen_Haldar_2020.png',
             cities: [
                 'Nebelhafen',
                 'Siefhof',
@@ -117,6 +91,7 @@ export default {
         {
             name: 'Patrien',
             url: 'https://wiki.athalon.net/index.php/K%C3%B6nigreich_Patrien',
+            banner: 'http://wiki.athalon.net/images/4/4e/Wappen_Patrien.png',
             cities: [
                 'Olapaso',
                 'Corastella',
@@ -127,6 +102,7 @@ export default {
         {
             name: 'Fallice',
             url: 'https://wiki.athalon.net/index.php/K%C3%B6nigreich_Fallice',
+            banner: 'http://wiki.athalon.net/images/4/4c/Wappen_FalliceNeu_2020.png',
             cities: [
                 'Hilton',
                 'Tremban',
@@ -137,6 +113,7 @@ export default {
         {
             name: 'Kurmark',
             url: 'https://wiki.athalon.net/index.php/Erzbistum_Kurmark',
+            banner: 'http://wiki.athalon.net/images/4/49/KurmarkFlagge.png',
             cities: [
                 'Zandig',
                 'Sôlfurt',

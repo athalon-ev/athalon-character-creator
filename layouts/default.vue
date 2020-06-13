@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app class="h-full">
         <v-app-bar
             color="deep-purple accent-4"
             dense
@@ -31,6 +31,11 @@ html {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
 }
 
 *,
