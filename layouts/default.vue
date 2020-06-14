@@ -1,7 +1,7 @@
 <template>
     <v-app class="h-full">
         <v-app-bar
-            color="deep-purple accent-4"
+            color="primary"
             dense
             dark
         >
