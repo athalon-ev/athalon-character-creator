@@ -94,17 +94,16 @@
                 </div>
             </v-tab-item>
             <v-tab-item class="p-4">
-                <v-textarea label="Angewohnheiten" :rows="2" />
-                <v-textarea label="Weltanschauung" :rows="2" />
-                <v-textarea label="Ängste und Phobien" :rows="2" />
-                <v-textarea label="Weltanschauung" :rows="2" />
+                <v-textarea label="Angewohnheiten" :rows="2" placeholder="Putzfimmel, Fingernägelkauer, Alkoholproblem, Tagträumer, Raucher, Hutträger..." />
+                <v-textarea label="Weltanschauung" :rows="3" placeholder="Patriotisch, Humanistisch, Religiös, Optimistisch, Pessimistisch, Egoistisch, Esoterisch..." />
+                <v-textarea label="Ängste und Phobien" :rows="2" placeholder="Höhenangst, Feuer, Tod, Dunkelheit, Einsamkeit, Spinnen, Angst vor dem Versagen" />
             </v-tab-item>
             <v-tab-item class="p-4">
-                <v-textarea label="Profession vor Neu Corethon" :rows="2" />
-                <v-textarea label="Familie und Verwandtschaft" :rows="2" />
-                <v-textarea label="Warum hast du die Heimat verlassen?" :rows="2" />
-                <v-textarea label="Was hast du zurück gelassen?" :rows="2" />
-                <v-textarea label="Was möchtest du erreichen?" :rows="2" />
+                <v-textarea label="Profession vor Neu Corethon" :rows="2" placeholder="Hintergrund, Schicksale, Berufsstand" />
+                <v-textarea label="Familie und Verwandtschaft" :rows="4" placeholder="Name, Beruf und der Verbleib deiner Eltern und anderen Verwandten: Lebendig, Verschollen oder Tot?" />
+                <v-textarea label="Warum hast du die Heimat verlassen?" :rows="3" placeholder="Motivation für die Abreise nach Neu Corethon in die Unbekannten Lande" />
+                <v-textarea label="Was hast du zurück gelassen?" :rows="1" placeholder="Familienmitglieder, Nahestehende, Persönliche Gegenstände, Arbeitsstätte, Haustiere" />
+                <v-textarea label="Was möchtest du erreichen?" :rows="3" placeholder="Gesteckte Ziele, Hoffnungen und Antrieb für weiteren Lebensweg" />
             </v-tab-item>
             <v-tab-item class="p-4">
                 <p>Mit den Punkten verteilst du deine Fähigkeiten</p>
@@ -128,6 +127,10 @@
                 Staturbonus
             </v-tab-item>
         </v-tabs-items>
+        <div class="flex flex-row justify-between p-4">
+            <v-btn color="primary" class="self-end" v-if="tab > 0" @click="tab--">Voriger Schritt</v-btn>
+            <v-btn color="primary" class="self-end" v-if="tab < 3" @click="tab++">Nächster Schritt</v-btn>
+        </div>
     </v-form>
 </template>
 
