@@ -162,18 +162,29 @@ export default {
             skillpoints: {
                 strength: {
                     total: 50,
+                    attributes: [
+                        {
+                            name: 'Handgemenge',
+                            points: 10,
+                            custom: false,
+                        }
+                    ],
                 },
                 constitution: {
                     total: 50,
+                    attributes: [],
                 },
                 aptness: {
                     total: 50,
+                    attributes: [],
                 },
                 intelligence: {
                     total: 50,
+                    attributes: [],
                 },
                 mind: {
                     total: 50,
+                    attributes: [],
                 },
             },
         },
