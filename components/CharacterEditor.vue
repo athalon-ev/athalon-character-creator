@@ -17,6 +17,9 @@
             <v-tab>
                 Attribute
             </v-tab>
+            <v-tab>
+                Export
+            </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
             <v-tab-item class="p-4">
@@ -31,8 +34,11 @@
                 <p class="text-gray-700">
                     Hiermit kannst du dein Erscheinungsbild verfeinern, wie willst du auf andere wirken?
                 </p>
-                <div class="sm:flex justify-between">
-                    <div class="sm:w-1/2 pr-4">
+                <div class="sm:flex">
+                    <div class="sm:w-1/6 pr-4">
+                        <MinecraftSkinImage :name="character.minecraftName" />
+                    </div>
+                    <div class="sm:w-2/6 pr-4">
                         <v-text-field v-model="character.age" name="age" type="number" :min="5" :max="200" label="Alter" suffix="Jahre" />
                         <v-slider
                             v-model="character.size"
@@ -45,13 +51,13 @@
                             </div>
                         </v-slider>
                     </div>
-                    <div class="sm:w-1/2">
+                    <div class="sm:w-2/6">
                         <v-combobox name="haircolor" label="Haarfarbe" v-model="character.haircolor" :items="characterData.haircolors" />
                         <v-combobox name="eyecolor" label="Augenfarbe" v-model="character.eyecolor" :items="characterData.eyecolors" />
                         <v-text-field v-model="character.weight" name="weight" type="number" :min="40" :max="150" label="Gewicht" suffix="kg" />
                     </div>
                 </div>
-                <v-textarea label="Äußerliche Erscheinung" placeholder="Narben, Auffälligkeiten" :rows="2" />
+                <v-textarea v-model="character.physical" label="Äußerliche Erscheinung" placeholder="Narben, Auffälligkeiten" :rows="2" />
                 <h2 class="text-xl font-bold my-4">
                     Herkunft
                 </h2>
@@ -94,42 +100,106 @@
                 </div>
             </v-tab-item>
             <v-tab-item class="p-4">
-                <v-textarea label="Angewohnheiten" :rows="2" placeholder="Putzfimmel, Fingernägelkauer, Alkoholproblem, Tagträumer, Raucher, Hutträger..." />
-                <v-textarea label="Weltanschauung" :rows="3" placeholder="Patriotisch, Humanistisch, Religiös, Optimistisch, Pessimistisch, Egoistisch, Esoterisch..." />
-                <v-textarea label="Ängste und Phobien" :rows="2" placeholder="Höhenangst, Feuer, Tod, Dunkelheit, Einsamkeit, Spinnen, Angst vor dem Versagen" />
+                <v-textarea v-model="character.habits" label="Angewohnheiten" :rows="2" placeholder="Putzfimmel, Fingernägelkauer, Alkoholproblem, Tagträumer, Raucher, Hutträger..." />
+                <v-textarea v-model="character.ideology" label="Weltanschauung" :rows="3" placeholder="Patriotisch, Humanistisch, Religiös, Optimistisch, Pessimistisch, Egoistisch, Esoterisch..." />
+                <v-textarea v-model="character.fears" label="Ängste und Phobien" :rows="2" placeholder="Höhenangst, Feuer, Tod, Dunkelheit, Einsamkeit, Spinnen, Angst vor dem Versagen" />
             </v-tab-item>
             <v-tab-item class="p-4">
-                <v-textarea label="Profession vor Neu Corethon" :rows="2" placeholder="Hintergrund, Schicksale, Berufsstand" />
-                <v-textarea label="Familie und Verwandtschaft" :rows="4" placeholder="Name, Beruf und der Verbleib deiner Eltern und anderen Verwandten: Lebendig, Verschollen oder Tot?" />
-                <v-textarea label="Warum hast du die Heimat verlassen?" :rows="3" placeholder="Motivation für die Abreise nach Neu Corethon in die Unbekannten Lande" />
-                <v-textarea label="Was hast du zurück gelassen?" :rows="1" placeholder="Familienmitglieder, Nahestehende, Persönliche Gegenstände, Arbeitsstätte, Haustiere" />
-                <v-textarea label="Was möchtest du erreichen?" :rows="3" placeholder="Gesteckte Ziele, Hoffnungen und Antrieb für weiteren Lebensweg" />
+                <v-textarea v-model="character.job" label="Profession vor Neu Corethon" :rows="2" placeholder="Hintergrund, Schicksale, Berufsstand" />
+                <v-textarea v-model="character.family" label="Familie und Verwandtschaft" :rows="4" placeholder="Name, Beruf und der Verbleib deiner Eltern und anderen Verwandten: Lebendig, Verschollen oder Tot?" />
+                <v-textarea v-model="character.whyLeft" label="Warum hast du die Heimat verlassen?" :rows="3" placeholder="Motivation für die Abreise nach Neu Corethon in die Unbekannten Lande" />
+                <v-textarea v-model="character.leftWhat" label="Was hast du zurück gelassen?" :rows="1" placeholder="Familienmitglieder, Nahestehende, Persönliche Gegenstände, Arbeitsstätte, Haustiere" />
+                <v-textarea v-model="character.goals" label="Was möchtest du erreichen?" :rows="3" placeholder="Gesteckte Ziele, Hoffnungen und Antrieb für weiteren Lebensweg" />
             </v-tab-item>
             <v-tab-item class="p-4">
-                <p>Mit den Punkten verteilst du deine Fähigkeiten</p>
+                <p>Es gibt 250 </p>
+                <v-btn color="primary" class="mb-4" href="https://board.athalon.net/showthread.php?tid=50" target="_blank">
+                    Mehr Informationen
+                </v-btn>
+                <v-progress-linear
+                    class="rounded-full mb-4"
+                    color="primary"
+                    height="25"
+                    :value="usedAttributepointsPercentage"
+                >
+                    <div class="text-white">
+                        {{ usedAttributepoints }} / 250 Attributspunkte
+                    </div>
+                </v-progress-linear>
                 <v-progress-linear
                     class="rounded-full"
                     color="primary"
                     height="25"
-                    :value="attributesUsedPercentage"
+                    :value="usedSkillpointsPercentage"
                 >
                     <div class="text-white">
-                        {{ value }}/250
+                        {{ usedSkillpoints }} / 250 Fertigkeitspunkte
                     </div>
                 </v-progress-linear>
-                <SkillAttributes name="Stärke" color="text-red-400" />
-                <SkillAttributes name="Konstitution" color="text-orange-400" />
-                <SkillAttributes name="Geschick" color="text-green-400" />
-                <SkillAttributes name="Intelligenz" color="text-blue-400" />
-                <SkillAttributes name="Geist" color="text-purple-400" />
+                <SkillAttributes
+                    :all="character.skillpoints"
+                    v-model="character.skillpoints.strength"
+                    name="Stärke" color="text-red-400"
+                />
+                <SkillAttributes
+                    :all="character.skillpoints"
+                    v-model="character.skillpoints.constitution"
+                    name="Konstitution" color="text-orange-400"
+                />
+                <SkillAttributes
+                    :all="character.skillpoints"
+                    v-model="character.skillpoints.aptness"
+                    name="Geschick" color="text-green-400"
+                />
+                <SkillAttributes
+                    :all="character.skillpoints"
+                    v-model="character.skillpoints.intelligence"
+                    name="Intelligenz" color="text-blue-400"
+                />
+                <SkillAttributes
+                    :all="character.skillpoints"
+                    v-model="character.skillpoints.mind"
+                    name="Geist" color="text-purple-400"
+                />
                 Trefferpunkte
                 Stabilität
                 Staturbonus
             </v-tab-item>
+            <v-tab-item class="p-4 py-16 flex justify-between">
+                <div class="text-center w-1/3">
+                    <p class="text-4xl font-bold mb-4">
+                        1.
+                    </p>
+                    <p>Wenn du dich noch nicht registriert hast, ist das jetzt der Zeitpunkt</p>
+                    <p />
+                    <v-btn color="primary" href="https://board.athalon.net/newthread.php?fid=16" target="_blank">
+                        Bewerbung einreichen
+                    </v-btn>
+                </div>
+                <div class="text-center w-1/3">
+                    <p class="text-4xl font-bold mb-4">
+                        2.
+                    </p>
+                    <p>Der Text für deinen Charakter wird beim Klick automatisch in die Zwischenablage kopiert</p>
+                    <v-btn color="primary" @click="exportCharacter">
+                        Charakterdaten Kopieren
+                    </v-btn>
+                </div>
+                <div class="text-center w-1/3">
+                    <p class="text-4xl font-bold mb-4">
+                        3.
+                    </p>
+                    <p>Text mit <kbd>STRG+V</kbd> oder <kbd>CMD+V</kbd> einfügen und auf Absenden klicken - Fertig</p>
+                </div>
+            </v-tab-item>
         </v-tabs-items>
         <div class="flex flex-row justify-between p-4">
-            <v-btn color="primary" class="self-end" v-if="tab > 0" @click="tab--">Voriger Schritt</v-btn>
-            <v-btn color="primary" class="self-end" v-if="tab < 3" @click="tab++">Nächster Schritt</v-btn>
+            <v-btn color="primary" text class="self-end" v-if="tab > 0" @click="tab--">
+                Voriger Schritt
+            </v-btn>
+            <v-btn color="primary" text class="self-end" v-if="tab < 4" @click="tab++">
+                Nächster Schritt
+            </v-btn>
         </div>
     </v-form>
 </template>
@@ -137,13 +207,24 @@
 <script>
 import * as R from 'ramda'
 import SkillAttributes from './SkillAttributes'
+import MinecraftSkinImage from './MinecraftSkinImage'
 import characterData from '~/character-data'
-const randomItem = list => list[Math.random() * list.length | 0]
-const getNationByName = name => R.find(R.propEq('name', name), characterData.nations)
-const availableCities = character => R.prop('cities', getNationByName(character.nationality))
-const randomFromRange = (min, max) => (min + Math.random() * (max - min))
+import { randomItem, getNationByName, availableCities, randomFromRange, exportCharacter } from '~/util'
+
+const copyToClipboard = (str) => {
+    const el = document.createElement('textarea')
+    el.value = str
+    el.setAttribute('readonly', '')
+    el.style.position = 'absolute'
+    el.style.left = '-9999px'
+    document.body.appendChild(el)
+    el.select()
+    document.execCommand('copy')
+    document.body.removeChild(el)
+}
+
 export default {
-    components: { SkillAttributes },
+    components: { SkillAttributes, MinecraftSkinImage },
     data: () => ({
         section: 'character',
         tab: 'Hauptdaten',
@@ -159,10 +240,19 @@ export default {
             eyecolor: '',
             nationality: '',
             birthcity: '',
+            physical: '',
+            habits: '',
+            ideology: '',
+            fears: '',
+            job: '',
+            family: '',
+            whyLeft: '',
+            leftWhat: '',
+            goals: '',
             skillpoints: {
                 strength: {
-                    total: 50,
-                    attributes: [
+                    attribute: 60,
+                    skills: [
                         {
                             name: 'Handgemenge',
                             points: 10,
@@ -171,20 +261,20 @@ export default {
                     ],
                 },
                 constitution: {
-                    total: 50,
-                    attributes: [],
+                    attribute: 55,
+                    skills: [],
                 },
                 aptness: {
-                    total: 50,
-                    attributes: [],
+                    attribute: 45,
+                    skills: [],
                 },
                 intelligence: {
-                    total: 50,
-                    attributes: [],
+                    attribute: 40,
+                    skills: [],
                 },
                 mind: {
-                    total: 50,
-                    attributes: [],
+                    attribute: 50,
+                    skills: [],
                 },
             },
         },
@@ -193,11 +283,33 @@ export default {
         cities() {
             return availableCities(this.character)
         },
-        attributesUsedPercentage() {
-            return this.character.skillpoints
-        }
+        usedAttributepointsPercentage() {
+            return 100 / 250 * this.usedAttributepoints
+        },
+        usedAttributepoints() {
+            return R.pipe(
+                R.map(R.prop('attribute')),
+                R.values,
+                R.sum,
+            )(this.character.skillpoints)
+        },
+        usedSkillpointsPercentage() {
+            return 100 / 250 * this.usedSkillpoints
+        },
+        usedSkillpoints() {
+            return R.pipe(
+                R.map(R.prop('skills')),
+                R.values,
+                R.chain(R.identity),
+                R.chain(R.prop('points')),
+                R.sum,
+            )(this.character.skillpoints)
+        },
     },
     methods: {
+        exportCharacter() {
+            copyToClipboard(exportCharacter(this.character))
+        },
         randomize() {
             this.character.weight = randomFromRange(50, 120).toFixed(1)
             this.character.size = randomFromRange(120, 180).toFixed(0)
