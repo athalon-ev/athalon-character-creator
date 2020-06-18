@@ -142,27 +142,27 @@
                 <SkillAttributes
                     :all="character.skillpoints"
                     v-model="character.skillpoints.strength"
-                    name="Stärke" color="text-red-400"
+                    name="Stärke" color="-red-"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
                     v-model="character.skillpoints.constitution"
-                    name="Konstitution" color="text-orange-400"
+                    name="Konstitution" color="-orange-"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
                     v-model="character.skillpoints.aptness"
-                    name="Geschick" color="text-green-400"
+                    name="Geschick" color="-green-"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
                     v-model="character.skillpoints.intelligence"
-                    name="Intelligenz" color="text-blue-400"
+                    name="Intelligenz" color="-blue-"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
                     v-model="character.skillpoints.mind"
-                    name="Geist" color="text-purple-400"
+                    name="Geist" color="-purple-"
                 />
                 Trefferpunkte
                 Stabilität

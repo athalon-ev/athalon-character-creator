@@ -1,15 +1,15 @@
 <template>
-    <div class="skill-skills my-4 bg-gray-100 rounded">
-        <h3 class="bg-gray-200 pr-2 rounded font-bold justify-between uppercase flex items-center" :class="color">
+    <div class="skill-skills my-4 rounded" :class="`bg${color}100`">
+        <h3 class="pr-2 rounded font-bold justify-between uppercase flex items-center" :class="`text${color}400 bg${color}200`">
             <div class="flex items-center">
                 <v-btn text :disabled="!canDecrement" @click="value.attribute -= 5">
-                    <v-icon :class="color">
+                    <v-icon :class="`text${color}400`">
                         mdi-arrow-down-bold
                     </v-icon>
                 </v-btn>
                 {{ value.attribute }}
                 <v-btn text :disabled="!canIncrement" @click="value.attribute += 5">
-                    <v-icon :class="color">
+                    <v-icon :class="`text${color}400`">
                         mdi-arrow-up-bold
                     </v-icon>
                 </v-btn>
@@ -27,7 +27,7 @@
                 <v-icon class="text-white">mdi-playlist-plus</v-icon> Neue Fertigkeit
             </v-btn>
         </h3>
-        <div class="flex" :class="color">
+        <div class="flex" :class="`text${color}400`">
             <div class="w-32 ml-4" />
         </div>
         <div v-for="skill in value.skills" :key="skill.name" class="flex items-center">
