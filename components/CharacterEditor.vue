@@ -112,7 +112,10 @@
                 <v-textarea v-model="character.goals" label="Was möchtest du erreichen?" :rows="3" placeholder="Gesteckte Ziele, Hoffnungen und Antrieb für weiteren Lebensweg" />
             </v-tab-item>
             <v-tab-item class="p-4">
-                <p>Es gibt 250 </p>
+                <p>
+                    <b>Attribute</b> bestimmen deine generelle Kondition.
+                    <b>Fertigkeiten</b> befähigen deinen Charakter in bestimmten Situationen sein Wissen und seine Erfahrung einzubringen.
+                    Die <b>Attribute</b> wirken sich sich <span class="text-green-400">positiv</span> oder <span class="text-red-400">negativ</span> auf deine <b>Fertigkeiten</b> aus.</p>
                 <v-btn color="primary" class="mb-4" href="https://board.athalon.net/showthread.php?tid=50" target="_blank">
                     Mehr Informationen
                 </v-btn>
@@ -193,10 +196,11 @@
                 </div>
             </v-tab-item>
         </v-tabs-items>
-        <div class="flex flex-row justify-between p-4">
+        <div class="sm:flex justify-between p-4">
             <v-btn color="primary" text class="self-end" v-if="tab > 0" @click="tab--">
                 Voriger Schritt
             </v-btn>
+            <div v-else />
             <v-btn color="primary" text class="self-end" v-if="tab < 4" @click="tab++">
                 Nächster Schritt
             </v-btn>
@@ -249,34 +253,7 @@ export default {
             whyLeft: '',
             leftWhat: '',
             goals: '',
-            skillpoints: {
-                strength: {
-                    attribute: 60,
-                    skills: [
-                        {
-                            name: 'Handgemenge',
-                            points: 10,
-                            custom: false,
-                        }
-                    ],
-                },
-                constitution: {
-                    attribute: 55,
-                    skills: [],
-                },
-                aptness: {
-                    attribute: 45,
-                    skills: [],
-                },
-                intelligence: {
-                    attribute: 40,
-                    skills: [],
-                },
-                mind: {
-                    attribute: 50,
-                    skills: [],
-                },
-            },
+            skillpoints: characterData.skillpoints
         },
     }),
     computed: {

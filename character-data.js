@@ -1,3 +1,9 @@
+const skillpoint = (name, basePoints) => ({
+    name,
+    basePoints,
+    points: 0,
+    custom: false,
+})
 export default {
     haircolors: [
         'Braun',
@@ -123,5 +129,59 @@ export default {
                 'Lötzen',
             ]
         }
-    ]
+    ],
+    skillpoints: {
+        strength: {
+            attribute: 65,
+            skills: [
+                skillpoint('Handgemenge', 25),
+                skillpoint('Werfen', 25),
+                skillpoint('Nahkampfwaffen (Grob)', 15),
+            ],
+        },
+        constitution: {
+            attribute: 60,
+            skills: [
+                skillpoint('Vitalität', 25),
+                skillpoint('Athletik', 20),
+                skillpoint('Klettern', 20),
+                skillpoint('Schwimmen', 10),
+            ],
+        },
+        aptness: {
+            attribute: 45,
+            skills: [
+                skillpoint('Ausweichen', 0),
+                skillpoint('Nahkampfwaffen (Fein)', 15),
+                skillpoint('Fernkampfwaffen', 10),
+                skillpoint('Pulverwaffen', 5),
+                skillpoint('Steuern', 5),
+                skillpoint('Heimlichkeit', 20),
+                skillpoint('Fingerfertigkeit', 20),
+            ],
+        },
+        intelligence: {
+            attribute: 40,
+            skills: [
+                skillpoint('Heilkunde', 10),
+                skillpoint('Wissen', 0),
+                skillpoint('Handwerk', 0),
+                skillpoint('Sprachen', 0),
+                skillpoint('Tasperin', 40),
+                skillpoint('Kunst', 0),
+                skillpoint('Zauberkunde', 0),
+            ],
+        },
+        mind: {
+            attribute: 40,
+            skills: [
+                skillpoint('Wahrnehmung', 25),
+                skillpoint('Horchen', 25),
+                skillpoint('Orientierung', 10),
+                skillpoint('Intuition', 20),
+                skillpoint('Willenskraft', 15),
+                skillpoint('Menschenkenntnis', 5),
+            ],
+        },
+    },
 }
