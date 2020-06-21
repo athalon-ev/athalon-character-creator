@@ -56,7 +56,8 @@
 
 <script>
 import * as R from 'ramda'
-const between = (min, max) => R.both(R.gte(R.__, min), R.lte(R.__, max))
+import { getBonusMalus } from '~/util'
+
 export default {
     props: {
         value: Object,
@@ -66,17 +67,7 @@ export default {
     },
     computed: {
         bonusMalus() {
-            return R.cond([
-                [between(1, 9), () => -20],
-                [between(10, 19), () => -15],
-                [between(20, 29), () => -10],
-                [between(30, 39), () => -5],
-                [between(40, 59), () => 0],
-                [between(60, 69), () => 5],
-                [between(70, 79), () => 10],
-                [between(80, 89), () => 15],
-                [between(90, 99), () => 20],
-            ])(this.value.attribute)
+            return getBonusMalus(this.value.attribute)
         },
         bonusMalusText() {
             return this.bonusMalus > 0 ? `+${this.bonusMalus}` : this.bonusMalus

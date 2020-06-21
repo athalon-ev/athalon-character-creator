@@ -55,6 +55,21 @@
                         <v-combobox name="haircolor" label="Haarfarbe" v-model="character.haircolor" :items="characterData.haircolors" />
                         <v-combobox name="eyecolor" label="Augenfarbe" v-model="character.eyecolor" :items="characterData.eyecolors" />
                         <v-text-field v-model="character.weight" name="weight" type="number" :min="40" :max="150" label="Gewicht" suffix="kg" />
+                        <p>Geschlecht</p>
+                        <v-btn-toggle v-model="character.gender" dense>
+                            <v-btn value="Weiblich">
+                                <v-icon>mdi-gender-female</v-icon>
+                                Weiblich
+                            </v-btn>
+                            <v-btn value="Männlich">
+                                <v-icon>mdi-gender-male</v-icon>
+                                Männlich
+                            </v-btn>
+                            <v-btn value="Divers">
+                                <v-icon>mdi-gender-non-binary</v-icon>
+                                Andere
+                            </v-btn>
+                        </v-btn-toggle>
                     </div>
                 </div>
                 <v-textarea v-model="character.physical" label="Äußerliche Erscheinung" placeholder="Narben, Auffälligkeiten" :rows="2" />
@@ -237,6 +252,7 @@ export default {
         character: {
             name: '',
             minecraftName: '',
+            gender: '',
             age: '',
             size: 170,
             weight: '',
