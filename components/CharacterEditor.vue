@@ -141,7 +141,7 @@
                     :value="usedAttributepointsPercentage"
                 >
                     <div class="text-white">
-                        {{ usedAttributepoints }} / 250 Attributspunkte
+                        {{ usedAttributepoints }} / {{ availableAttributepoints }} Attributspunkte
                     </div>
                 </v-progress-linear>
                 <v-progress-linear
@@ -151,33 +151,38 @@
                     :value="usedSkillpointsPercentage"
                 >
                     <div class="text-white">
-                        {{ usedSkillpoints }} / 250 Fertigkeitspunkte
+                        {{ usedSkillpoints }} / {{ availableSkillpoints }} Fertigkeitspunkte
                     </div>
                 </v-progress-linear>
                 <SkillAttributes
                     :all="character.skillpoints"
                     v-model="character.skillpoints.strength"
                     name="Stärke" color="-red-"
+                    v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
                     v-model="character.skillpoints.constitution"
                     name="Konstitution" color="-orange-"
+                    v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
                     v-model="character.skillpoints.aptness"
                     name="Geschick" color="-green-"
+                    v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
                     v-model="character.skillpoints.intelligence"
                     name="Intelligenz" color="-blue-"
+                    v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
                     v-model="character.skillpoints.mind"
                     name="Geist" color="-purple-"
+                    v-bind="$props"
                 />
                 Trefferpunkte
                 Stabilität
@@ -244,6 +249,24 @@ const copyToClipboard = (str) => {
 
 export default {
     components: { SkillAttributes, MinecraftSkinImage },
+    props: {
+        availableSkillpoints: {
+            type: Number,
+            default: 250,
+        },
+        availableAttributepoints: {
+            type: Number,
+            default: 250,
+        },
+        attributeUpperbound: {
+            type: Number,
+            default: 65,
+        },
+        skillUpperbound: {
+            type: Number,
+            default: 65,
+        },
+    },
     data: () => ({
         section: 'character',
         tab: 'Hauptdaten',
@@ -277,7 +300,7 @@ export default {
             return availableCities(this.character)
         },
         usedAttributepointsPercentage() {
-            return 100 / 250 * this.usedAttributepoints
+            return 100 / this.availableAttributepoints * this.usedAttributepoints
         },
         usedAttributepoints() {
             return R.pipe(
@@ -287,7 +310,7 @@ export default {
             )(this.character.skillpoints)
         },
         usedSkillpointsPercentage() {
-            return 100 / 250 * this.usedSkillpoints
+            return 100 / this.availableSkillpoints * this.usedSkillpoints
         },
         usedSkillpoints() {
             return R.pipe(

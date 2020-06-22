@@ -7,7 +7,7 @@ export const randomFromRange = (min, max) => (min + Math.random() * (max - min))
 const between = (min, max) => R.both(R.gte(R.__, min), R.lte(R.__, max))
 
 export const getBonusMalus = R.cond([
-    [between(1, 9), () => -20],
+    [between(0, 9), () => -20],
     [between(10, 19), () => -15],
     [between(20, 29), () => -10],
     [between(30, 39), () => -5],
@@ -15,7 +15,7 @@ export const getBonusMalus = R.cond([
     [between(60, 69), () => 5],
     [between(70, 79), () => 10],
     [between(80, 89), () => 15],
-    [between(90, 99), () => 20],
+    [between(90, 100), () => 20],
 ])
 
 export const exportSkill = R.curry((attribute, skill) => `[*]☐ [b]${getBonusMalus(attribute) + skill.points + skill.basePoints}%[/b] ${skill.name} ${skill.custom ? '([color=#ff3333]AUSWAHL[/color])' : ''}`)

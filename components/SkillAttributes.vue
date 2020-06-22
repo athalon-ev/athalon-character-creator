@@ -64,6 +64,22 @@ export default {
         all: Object,
         name: String,
         color: String,
+        availableSkillpoints: {
+            type: Number,
+            default: 250,
+        },
+        availableAttributepoints: {
+            type: Number,
+            default: 250,
+        },
+        attributeUpperbound: {
+            type: Number,
+            default: 65,
+        },
+        skillUpperbound: {
+            type: Number,
+            default: 65,
+        },
     },
     computed: {
         bonusMalus() {
@@ -80,7 +96,7 @@ export default {
             )(this.all)
         },
         canIncrement() {
-            return this.usedSkillpoints < 250 && this.value.attribute < 65
+            return this.usedSkillpoints < this.availableSkillpoints && this.value.attribute < this.skillUpperbound
         },
         canDecrement() {
             return this.usedSkillpoints > 0 && this.value.attribute > 10

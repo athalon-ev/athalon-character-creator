@@ -2,10 +2,13 @@
     <div class="flex h-full">
         <div class="container mx-auto">
             <div class="w-4/5 mx-auto">
-                <h2 class="text-xl my-4 text-white">
+                <h2 class="text-xl my-4 text-white flex justify-between items-center">
                     Erstelle deinen Charakter
+                    <div class="bg-white rounded px-4" v-if="$route.query.sl">
+                        <v-switch label="Master Mode" v-model="masterMode" />
+                    </div>
                 </h2>
-                <CharacterEditor />
+                <CharacterEditor v-bind="settings" />
             </div>
         </div>
     </div>
@@ -17,6 +20,24 @@ export default {
     components: {
         CharacterEditor
     },
+    data: () => ({
+        masterMode: false,
+    }),
+    computed: {
+        settings() {
+            return this.masterMode ? {
+                availableSkillpoints: 2000,
+                availableAttributepoints: 500,
+                attributeUpperbound: 100,
+                skillUpperbound: 100,
+            } : {
+                availableSkillpoints: 250,
+                availableAttributepoints: 250,
+                attributeUpperbound: 65,
+                skillUpperbound: 65,
+            }
+        }
+    }
 }
 </script>
 
