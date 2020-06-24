@@ -4,8 +4,8 @@
             <div class="w-4/5 mx-auto">
                 <h2 class="text-xl my-4 text-white flex justify-between items-center">
                     Erstelle deinen Charakter
-                    <div class="bg-white rounded px-4" v-if="$route.query.sl">
-                        <v-switch label="Master Mode" v-model="masterMode" />
+                    <div class="bg-white rounded px-4">
+                        <v-switch label="Sandbox Modus" v-model="masterMode" />
                     </div>
                 </h2>
                 <CharacterEditor v-bind="settings" />

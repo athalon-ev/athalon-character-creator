@@ -1,8 +1,10 @@
-const skillpoint = (name, basePoints) => ({
+const skillpoint = (name, basePoints, categories = [], category = null) => ({
     name,
     basePoints,
     points: 0,
     custom: false,
+    categories,
+    category,
 })
 export default {
     haircolors: [
@@ -136,7 +138,9 @@ export default {
             skills: [
                 skillpoint('Handgemenge', 25),
                 skillpoint('Werfen', 25),
-                skillpoint('Nahkampfwaffen (Grob)', 15),
+                skillpoint('Nahkampfwaffen (Grob)', 15, [
+                    'Äxte', 'Wuchtwaffen', 'Zweihandschwerter', 'Schilde'
+                ]),
             ],
         },
         constitution: {
@@ -152,10 +156,16 @@ export default {
             attribute: 45,
             skills: [
                 skillpoint('Ausweichen', 0),
-                skillpoint('Nahkampfwaffen (Fein)', 15),
-                skillpoint('Fernkampfwaffen', 10),
+                skillpoint('Nahkampfwaffen (Fein)', 15, [
+                    'Einhandschwerter', 'Speere', 'Stangenwaffen', 'Ungewöhnliches'
+                ]),
+                skillpoint('Fernkampfwaffen', 10, [
+                    'Bögen', 'Armbrüste', 'Pulverwaffen', 'Belagerungsgeräte'
+                ]),
                 skillpoint('Pulverwaffen', 5),
-                skillpoint('Steuern', 5),
+                skillpoint('Steuern', 5, [
+                    'Reiten', 'Gespann', 'Schiff', 'Luftschiff'
+                ]),
                 skillpoint('Heimlichkeit', 20),
                 skillpoint('Fingerfertigkeit', 20),
             ],
@@ -164,11 +174,44 @@ export default {
             attribute: 40,
             skills: [
                 skillpoint('Heilkunde', 10),
-                skillpoint('Wissen', 0),
-                skillpoint('Handwerk', 0),
-                skillpoint('Sprachen', 0),
-                skillpoint('Tasperin', 40),
-                skillpoint('Kunst', 0),
+                skillpoint('Wissen', 0, [
+                    'Alchemie', 'Archäologie', 'Astronomie',
+                    'Baukunst', 'Geographie', 'Geschichte',
+                    'Gesteinskunde', 'Heraldik', 'Kryptographie',
+                    'Metamythologie', 'Nautik', 'Okkultismus',
+                    'Pflanzenkunde', 'Philosophie', 'Rechtskunde',
+                    'Schließtechnik', 'Theologie', 'Tierkunde'
+                ]),
+                skillpoint('Handwerk', 0, [
+                    'Barbier', 'Bauer', 'Baumeister',
+                    'Bergarbeiter', 'Braumeister', 'Buchbinder',
+                    'Bäcker', 'Büchsenmacher', 'Fischer',
+                    'Gerber', 'Glaser', 'Imker', 'Jäger',
+                    'Juwelenschleifer', 'Koch', 'Mechanikus',
+                    'Medicus', 'Metzger', 'Münzmeister',
+                    'Schmied', 'Schneider', 'Schreiner',
+                    'Schuhmacher', 'Seifensieder', 'Steinmetz', 'Töpfer'
+                ]),
+                skillpoint('Sprachen', 0, [
+                    'Tasperin',
+                    'Alt-Tasperin',
+                    'Sorridianisch',
+                    'Alt-Sorridianisch',
+                    'Kalifatisch',
+                    'Bororo',
+                ]),
+                skillpoint('Tasperin', 40, [], 'Sprachen'),
+                skillpoint('Kunst', 0, [
+                    'Bildhauerei',
+                    'Fälscherei',
+                    'Gesang',
+                    'Kalligraphie',
+                    'Kartographie',
+                    'Malerei',
+                    'Musikinstrument',
+                    'Schauspiel',
+                    'Tanz',
+                ]),
                 skillpoint('Zauberkunde', 0),
             ],
         },
