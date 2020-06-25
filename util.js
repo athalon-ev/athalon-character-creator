@@ -18,10 +18,13 @@ export const getBonusMalus = R.cond([
     [between(90, 100), () => 20],
 ])
 
-export const exportSkill = R.curry((attribute, skill) => `[*]☐ [b]${getBonusMalus(attribute) + skill.points + skill.basePoints}%[/b] ${skill.name} ${skill.custom ? '([color=#ff3333]AUSWAHL[/color])' : ''}`)
-export const exportSkills = attribute => `
+export const getSkillpointValue = (attribute, skill) => getBonusMalus(attribute) + parseInt(skill.points) + parseInt(skill.basePoints)
+export const getBoundsSkillpointValue = (attribute, skill) => R.clamp(0, 65, getSkillpointValue(attribute, skill))
+export const exportSkill = R.curry(({ attribute, color }, skill) =>
+    `[*]${skill.custom ? '  ' : ''}☐ [b]${getBoundsSkillpointValue(attribute, skill)}%[/b] ${skill.name} ${skill.custom ? `([color=${color}]AUSWAHL[/color])` : ''}`)
+export const exportSkills = (attribute, color) => `
 [list]
-${attribute.skills.map(exportSkill(attribute.attribute), attribute.skills).join(`
+${attribute.skills.map(exportSkill({ attribute: attribute.attribute, color }), attribute.skills).join(`
 `)}
 [/list]
 `
@@ -91,13 +94,17 @@ ${character.goals}
 [b][size=large]IV. Charakterfertigkeiten[/size][/b]
 
 [b][color=#ff3333][size=medium]Stärke ${character.skillpoints.strength.attribute}% [/size][size=small](5)[/size][/color][/b]
-${exportSkills(character.skillpoints.strength)}
+${exportSkills(character.skillpoints.strength, '#ff3333')}
 [b][color=#ff9933][size=medium]Konstitution ${character.skillpoints.constitution.attribute}%[/size][size=small](0)[/size][/color][/b]
-${exportSkills(character.skillpoints.constitution)}
+${exportSkills(character.skillpoints.constitution, '#ff9933')}
 [b][color=#33cc33][size=medium]Geschicklichkeit ${character.skillpoints.aptness.attribute}% [/size][size=small](5)[/size][/color][/b]
-${exportSkills(character.skillpoints.aptness)}
+${exportSkills(character.skillpoints.aptness, '#33cc33')}
 [b][color=#33ccff][size=medium]Intelligenz ${character.skillpoints.intelligence.attribute}% [/size][size=small](0)[/size][/color][/b]
-${exportSkills(character.skillpoints.intelligence)}
+${exportSkills(character.skillpoints.intelligence, '#33ccff')}
 [b][color=#cc33ff][size=medium]Geist ${character.skillpoints.mind.attribute}% [/size][size=small](-15)[/size][/color][/b]
-${exportSkills(character.skillpoints.mind)}
+${exportSkills(character.skillpoints.mind, '#cc33ff')}
+
+[code]
+${JSON.stringify(character, null, 4)}
+[/code]
 `
