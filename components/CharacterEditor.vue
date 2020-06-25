@@ -89,7 +89,7 @@
                                 <v-icon>mdi-map</v-icon>
                             </v-btn>
                         </template>
-                        <v-img width="50vw" src="http://wiki.athalon.net/images/e/e6/Le%C3%A4ndrien2020.png" />
+                        <v-img width="50vw" src="http://wiki.athalon.net/images/e/e7/Le%C3%A4ndrien_Politisch_Wiki_2020_2.png" />
                     </v-tooltip>
                     Die Herkunft bestimmt deinen Wortschatz und auch deine Religion und Kultur wie Bräuche
                 </p>
