@@ -1,10 +1,11 @@
-const skillpoint = (name, basePoints, categories = [], category = null) => ({
+const skillpoint = (name, basePoints, categories = [], category = null, custom = false, deletable = false) => ({
     name,
     basePoints,
     points: 0,
-    custom: false,
+    custom,
     categories,
     category,
+    deletable,
 })
 export default {
     haircolors: [
@@ -24,7 +25,6 @@ export default {
         'Hellbraun',
         'Dunkelbraun',
         'Grau',
-        'Rot',
         'Grün',
         'Hellgrün',
         'Dunkelgrün',
@@ -35,8 +35,6 @@ export default {
         'Eisblau',
         'Meerblau',
         'Türkis',
-        'Violett',
-        'Schwarz'
     ],
     nations: [
         {
@@ -134,7 +132,7 @@ export default {
     ],
     skillpoints: {
         strength: {
-            attribute: 65,
+            attribute: 40,
             skills: [
                 skillpoint('Handgemenge', 25),
                 skillpoint('Werfen', 25),
@@ -144,7 +142,7 @@ export default {
             ],
         },
         constitution: {
-            attribute: 60,
+            attribute: 40,
             skills: [
                 skillpoint('Vitalität', 25),
                 skillpoint('Athletik', 20),
@@ -153,7 +151,7 @@ export default {
             ],
         },
         aptness: {
-            attribute: 45,
+            attribute: 40,
             skills: [
                 skillpoint('Ausweichen', 0),
                 skillpoint('Nahkampfwaffen (Fein)', 15, [
@@ -200,7 +198,7 @@ export default {
                     'Kalifatisch',
                     'Bororo',
                 ]),
-                skillpoint('Tasperin', 40, [], 'Sprachen'),
+                skillpoint('Tasperin', 40, [], 'Sprachen', true, true),
                 skillpoint('Kunst', 0, [
                     'Bildhauerei',
                     'Fälscherei',
@@ -212,7 +210,6 @@ export default {
                     'Schauspiel',
                     'Tanz',
                 ]),
-                skillpoint('Zauberkunde', 0),
             ],
         },
         mind: {

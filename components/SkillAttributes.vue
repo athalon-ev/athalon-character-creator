@@ -38,10 +38,11 @@
                 class="mr-4 w-16"
                 solo dense v-model="skill.points" type="number"
                 min="0" :max="skillUpperbound - (skill.basePoints + bonusMalus)"
+                v-if="!skill.categories.length"
             />
-            <span class="mt-1 mr-2 text-gray-600">+</span>
+            <span class="mt-1 mr-2 text-gray-600" v-if="!skill.categories.length">+</span>
             <v-text-field hide-details class="mr-4 w-16" disabled dense :value="skill.basePoints" />
-            <v-tooltip top v-if="bonusMalus">
+            <v-tooltip top v-if="bonusMalus && !skill.categories.length">
                 <template v-slot:activator="{ on, attrs }">
                     <div class="mt-1 text-sm font-normal" v-bind="attrs" v-on="on" :class="bonusMalus > 0 ? 'text-green-400' : 'text-red-400'">
                         ( {{ bonusMalusText }} )
@@ -49,9 +50,9 @@
                 </template>
                 {{ bonusMalus > 0 ? 'Bonus' : 'Malus' }} für alle Fähigkeiten im Bereich {{ name }}
             </v-tooltip>
-            <span class="mt-1 mx-2 text-gray-600">=</span>
-            <v-text-field hide-details class="mr-4 w-16" disabled dense :value="getBoundsSkillpointValue(value.attribute, skill)" />
-            <v-btn x-small fab @click="removeSkill(skill)" v-if="skill.custom">
+            <span class="mt-1 mx-2 text-gray-600" v-if="!skill.categories.length">=</span>
+            <v-text-field v-if="!skill.categories.length" hide-details class="mr-4 w-16" disabled dense :value="getBoundsSkillpointValue(value.attribute, skill)" />
+            <v-btn x-small fab @click="removeSkill(skill)" v-if="skill.custom && !skill.deletable">
                 <v-icon small class="text-white">mdi-playlist-remove</v-icon>
             </v-btn>
             <div :class="`text${color}400`" v-if="skill.categories.length">
@@ -140,9 +141,10 @@ export default {
                     name: '',
                     custom: true,
                     points: 0,
-                    basePoints: 0,
+                    basePoints: skill.basePoints,
                     categories: [],
                     category: skill.name,
+                    deletable: false,
                 },
                 this.value.skills
             )
