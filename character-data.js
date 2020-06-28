@@ -51,6 +51,17 @@ export default {
             ],
         },
         {
+            name: 'Sorridia',
+            url: 'https://wiki.athalon.net/index.php/K%C3%B6nigreich_Sorridia',
+            banner: 'http://wiki.athalon.net/images/d/d5/Wappen_Sorridia2020.png',
+            cities: [
+                'Montebrillo',
+                'Fortifa',
+                'Jevasqèz',
+                'Matoléz',
+            ],
+        },
+        {
             name: 'Weidtland',
             url: 'http://wiki.athalon.net/index.php/Klanreich_Kaledon',
             banner: 'http://wiki.athalon.net/images/c/ce/WeidtlandFlagge.png',
@@ -73,17 +84,6 @@ export default {
             url: 'http://wiki.athalon.net/index.php/Nordamar',
             banner: 'http://wiki.athalon.net/images/c/cf/Wappen_Nordamar.png',
             cities: [],
-        },
-        {
-            name: 'Sorridia',
-            url: 'https://wiki.athalon.net/index.php/K%C3%B6nigreich_Sorridia',
-            banner: 'http://wiki.athalon.net/images/d/d5/Wappen_Sorridia2020.png',
-            cities: [
-                'Montebrillo',
-                'Fortifa',
-                'Jevasqèz',
-                'Matoléz',
-            ],
         },
         {
             name: 'AlBastra',

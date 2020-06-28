@@ -51,7 +51,7 @@
                 {{ bonusMalus > 0 ? 'Bonus' : 'Malus' }} für alle Fähigkeiten im Bereich {{ name }}
             </v-tooltip>
             <span class="mt-1 mx-2 text-gray-600" v-if="!skill.categories.length">=</span>
-            <v-text-field v-if="!skill.categories.length" hide-details class="mr-4 w-16" disabled dense :value="getBoundsSkillpointValue(value.attribute, skill)" />
+            <v-text-field v-if="!skill.categories.length" hide-details class="mr-4 w-16" disabled dense :value="getBoundsSkillpointValue(skillUpperbound, value.attribute, skill)" />
             <v-btn x-small fab @click="removeSkill(skill)" v-if="skill.custom && !skill.deletable">
                 <v-icon small class="text-white">mdi-playlist-remove</v-icon>
             </v-btn>
@@ -66,7 +66,7 @@
 
 <script>
 import * as R from 'ramda'
-import { getBonusMalus, getSkillpointValue, getBoundsSkillpointValue } from '~/util'
+import { getAttributeBonusMalus, getSkillpointValue, getBoundsSkillpointValue } from '~/util'
 
 export default {
     props: {
@@ -97,7 +97,7 @@ export default {
     }),
     computed: {
         bonusMalus() {
-            return getBonusMalus(this.value.attribute)
+            return getAttributeBonusMalus(this.value.attribute)
         },
         bonusMalusText() {
             return this.bonusMalus > 0 ? `+${this.bonusMalus}` : this.bonusMalus

@@ -89,7 +89,7 @@
                                 <v-icon>mdi-map</v-icon>
                             </v-btn>
                         </template>
-                        <v-img width="50vw" src="http://wiki.athalon.net/images/e/e7/Le%C3%A4ndrien_Politisch_Wiki_2020_2.png" />
+                        <v-img width="40vw" src="http://wiki.athalon.net/images/e/e7/Le%C3%A4ndrien_Politisch_Wiki_2020_2.png" />
                     </v-tooltip>
                     Die Herkunft bestimmt deinen Wortschatz und auch deine Religion und Kultur wie Bräuche
                 </p>
@@ -130,7 +130,8 @@
                 <p>
                     <b>Attribute</b> bestimmen deine generelle Kondition.
                     <b>Fertigkeiten</b> befähigen deinen Charakter in bestimmten Situationen sein Wissen und seine Erfahrung einzubringen.
-                    Die <b>Attribute</b> wirken sich sich <span class="text-green-400">positiv</span> oder <span class="text-red-400">negativ</span> auf deine <b>Fertigkeiten</b> aus.</p>
+                    Die <b>Attribute</b> wirken sich sich <span class="text-green-400">positiv</span> oder <span class="text-red-400">negativ</span> auf deine <b>Fertigkeiten</b> aus.
+                </p>
                 <v-btn color="primary" class="mb-4" href="https://board.athalon.net/showthread.php?tid=50" target="_blank">
                     Mehr Informationen
                 </v-btn>
@@ -184,9 +185,35 @@
                     name="Geist" color="-purple-"
                     v-bind="$props"
                 />
-                Trefferpunkte
-                Stabilität
-                Staturbonus
+                <h4 class="font-bold text-xl">
+                    Errechnete Werte
+                </h4>
+                <div class="flex">
+                    <div class="w-32">
+                        Karmapunkte
+                    </div>
+                    50
+                </div>
+                <div class="flex">
+                    <div class="w-32">
+                        Trefferpunkte
+                    </div>
+                    {{ healthpoints }}
+                </div>
+                <div class="flex">
+                    <div class="w-32">
+                        Stabilität
+                    </div>
+                    {{ character.skillpoints.mind.attribute }}
+                </div>
+                <div class="flex">
+                    <div class="w-32">
+                        Staturbonus
+                    </div>
+                    <div :class="weaponBonusMalus >= 0 ? 'text-green-400' : 'text-red-400'">
+                        {{ weaponBonusMalus }}
+                    </div>
+                </div>
             </v-tab-item>
             <v-tab-item class="p-4 py-16 flex justify-between">
                 <div class="text-center w-1/3">
@@ -233,7 +260,7 @@ import * as R from 'ramda'
 import SkillAttributes from './SkillAttributes'
 import MinecraftSkinImage from './MinecraftSkinImage'
 import characterData from '~/character-data'
-import { randomItem, getNationByName, availableCities, randomFromRange, exportCharacter } from '~/util'
+import { randomItem, getNationByName, availableCities, randomFromRange, exportCharacter, getWeaponBonusMalus, getHealthpoints } from '~/util'
 
 const copyToClipboard = (str) => {
     const el = document.createElement('textarea')
@@ -294,6 +321,7 @@ export default {
             goals: '',
             skillpoints: characterData.skillpoints
         },
+        getWeaponBonusMalus,
     }),
     computed: {
         cities() {
@@ -321,10 +349,16 @@ export default {
                 R.sum,
             )(this.character.skillpoints)
         },
+        weaponBonusMalus() {
+            return getWeaponBonusMalus(this.character.skillpoints.strength.attribute)
+        },
+        healthpoints() {
+            return getHealthpoints(this.character.skillpoints.constitution.attribute)
+        }
     },
     methods: {
         exportCharacter() {
-            copyToClipboard(exportCharacter(this.character))
+            copyToClipboard(exportCharacter(this.character, this.skillUpperbound))
         },
         randomize() {
             this.character.weight = randomFromRange(50, 120).toFixed(1)
