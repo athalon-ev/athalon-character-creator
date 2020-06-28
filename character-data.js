@@ -65,19 +65,27 @@ export default {
             name: 'Weidtland',
             url: 'http://wiki.athalon.net/index.php/Klanreich_Kaledon',
             banner: 'http://wiki.athalon.net/images/c/ce/WeidtlandFlagge.png',
-            cities: [],
+            cities: [
+                'Molder', 'Rodstedt', 'Nordingen'
+            ],
         },
         {
             name: 'Kaledon',
             url: 'http://wiki.athalon.net/index.php/Nostrisches_Imperium',
             banner: 'http://wiki.athalon.net/images/5/54/KaledonFlagge.png',
-            cities: [],
+            cities: [
+                'Kirkmore',
+                'Averssire',
+                'Ochsenbach',
+            ],
         },
         {
             name: 'Nostrien',
             url: 'http://wiki.athalon.net/index.php/Nostrisches_Imperium',
             banner: 'http://wiki.athalon.net/images/7/77/Wappen_Nostrien_2020.png',
-            cities: [],
+            cities: [
+                'Herabion', 'Pentas', 'Yamas',
+            ],
         },
         {
             name: 'Nordamar',
