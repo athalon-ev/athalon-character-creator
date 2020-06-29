@@ -27,7 +27,7 @@
         <div class="flex" :class="`text${color}400`">
             <div class="w-32 ml-4" />
         </div>
-        <div v-for="skill in value.skills" :key="skill.name" class="flex items-center py-1">
+        <div v-for="skill in value.skills" v-if="!skill.hidden" :key="skill.name" class="flex items-center py-1">
             <div class="w-32 mx-2 text-xs">
                 {{ skill.category }}
             </div>

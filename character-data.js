@@ -1,4 +1,4 @@
-const skillpoint = (name, basePoints, categories = [], category = null, custom = false, deletable = false, linkAttribute = false) => ({
+const skillpoint = (name, basePoints, categories = [], category = null, custom = false, deletable = false, linkAttribute = false, hidden = false) => ({
     name,
     basePoints,
     points: 0,
@@ -7,15 +7,20 @@ const skillpoint = (name, basePoints, categories = [], category = null, custom =
     category,
     deletable,
     linkAttribute,
+    hidden,
 })
-const languages = [
+const nativeLanguages = [
     'Tasperin',
-    'Alt-Tasperin',
     'Sorridianisch',
-    'Alt-Sorridianisch',
     'Kalifatisch',
+]
+
+const foreignLanguages = [
+    'Alt-Tasperin',
+    'Alt-Sorridianisch',
     'Bororo',
 ]
+
 export default {
     haircolors: [
         'Braun',
@@ -104,7 +109,12 @@ export default {
             name: 'Nordamar',
             url: 'http://wiki.athalon.net/index.php/Nordamar',
             banner: 'http://wiki.athalon.net/images/c/cf/Wappen_Nordamar.png',
-            cities: [],
+            cities: [
+                'Frostheim',
+                'Otterama',
+                'Bisruk',
+                'Ruladufa'
+            ],
         },
         {
             name: 'AlBastra',
@@ -246,9 +256,9 @@ export default {
                     'Schmied', 'Schneider', 'Schreiner',
                     'Schuhmacher', 'Seifensieder', 'Steinmetz', 'Töpfer'
                 ]),
-                skillpoint('Muttersprache', 0, languages),
+                skillpoint('Muttersprache', 0, nativeLanguages, false, false, false, false, true),
                 skillpoint('Tasperin', 0, [], 'Muttersprache', true, false, true),
-                skillpoint('Fremdsprachen', 0, languages),
+                skillpoint('Fremdsprachen', 0, foreignLanguages),
                 skillpoint('Kunst', 0, [
                     'Bildhauerei',
                     'Fälscherei',

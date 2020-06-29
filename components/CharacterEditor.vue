@@ -115,9 +115,12 @@
                 </div>
             </v-tab-item>
             <v-tab-item class="p-4">
-                <v-textarea v-model="character.ideology" label="Persönlichkeit und Weltanschauung" :rows="5" placeholder="Beispiel: Cholerisch, Melancholisch, Phlegmatisch, Sanguinisch, Patriotisch, Humanistisch, Religiös, Optimistisch, Pessimistisch, Egoistisch, Esoterisch..." />
-                <v-textarea v-model="character.habits" label="Angewohnheiten und Prinzipien" :rows="5" placeholder="Beispiel: Überpünktlich, Penibel, Vergesslich, Dramatisch, Geizig, Chaotisch, Putzfimmel, Fingernägelkauer, Alkoholproblem, Tagträumer, Raucher, Hutträger..." />
-                <v-textarea v-model="character.fears" label="Ängste und Phobien" :rows="5" placeholder="Beispiel: Höhenangst, Feuer, Dunkelheit, Einsamkeit, Spinnen, Wasser, Karotten, Hunde, Platzangst, Armut, Frauen, Magie, Hexen..." />
+                Beispiele: Patriotisch, Religiös, Humanistisch, Optimistisch, Nihilistisch, Esoterisch, Cholerisch, Sanguinisch, Phlegmatisch, Melancholisch, Misanthropisch
+                <v-textarea v-model="character.ideology" label="Persönlichkeit und Weltanschauung" :rows="5" />
+                Beispiel: Überpünktlich, Penibel, Vergesslich, Dramatisch, Geizig, Chaotisch, Putzfimmel, Fingernägelkauer, Alkoholproblem, Tagträumer, Raucher, Hutträger
+                <v-textarea v-model="character.habits" label="Eigenschaften und Angewohnheiten" :rows="5" />
+                Beispiel: Höhenangst, Feuer, Dunkelheit, Einsamkeit, Spinnen, Wasser, Karotten, Hunde, Platzangst, Armut, Frauen, Magie, Hexen
+                <v-textarea v-model="character.fears" label="Ängste und Abneigungen" :rows="5" />
             </v-tab-item>
             <v-tab-item class="p-4">
                 <v-textarea v-model="character.job" label="Profession vor Neu Corethon" :rows="3" placeholder="Hintergrund, Schicksale, Berufsstand" />
@@ -138,12 +141,6 @@
                 <h4 class="font-bold text-xl">
                     Errechnete Werte
                 </h4>
-                <div class="flex">
-                    <div class="w-32">
-                        Karmapunkte
-                    </div>
-                    50
-                </div>
                 <div class="flex">
                     <div class="w-32">
                         Trefferpunkte
