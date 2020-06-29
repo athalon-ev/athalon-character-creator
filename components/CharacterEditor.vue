@@ -115,12 +115,12 @@
                 </div>
             </v-tab-item>
             <v-tab-item class="p-4">
-                Beispiele: Patriotisch, Religiös, Humanistisch, Optimistisch, Nihilistisch, Esoterisch, Cholerisch, Sanguinisch, Phlegmatisch, Melancholisch, Misanthropisch
                 <v-textarea v-model="character.ideology" label="Persönlichkeit und Weltanschauung" :rows="5" />
-                Beispiel: Überpünktlich, Penibel, Vergesslich, Dramatisch, Geizig, Chaotisch, Putzfimmel, Fingernägelkauer, Alkoholproblem, Tagträumer, Raucher, Hutträger
+                <p class="text-gray-600">Beispiele: Patriotisch, Religiös, Humanistisch, Optimistisch, Nihilistisch, Esoterisch, Cholerisch, Sanguinisch, Phlegmatisch, Melancholisch, Misanthropisch</p>
                 <v-textarea v-model="character.habits" label="Eigenschaften und Angewohnheiten" :rows="5" />
-                Beispiel: Höhenangst, Feuer, Dunkelheit, Einsamkeit, Spinnen, Wasser, Karotten, Hunde, Platzangst, Armut, Frauen, Magie, Hexen
+                <p class="text-gray-600">Beispiel: Überpünktlich, Penibel, Vergesslich, Dramatisch, Geizig, Chaotisch, Putzfimmel, Fingernägelkauer, Alkoholproblem, Tagträumer, Raucher, Hutträger</p>
                 <v-textarea v-model="character.fears" label="Ängste und Abneigungen" :rows="5" />
+                <p class="text-gray-600">Beispiel: Höhenangst, Feuer, Dunkelheit, Einsamkeit, Spinnen, Wasser, Karotten, Hunde, Platzangst, Armut, Frauen, Magie, Hexen</p>
             </v-tab-item>
             <v-tab-item class="p-4">
                 <v-textarea v-model="character.job" label="Profession vor Neu Corethon" :rows="3" placeholder="Hintergrund, Schicksale, Berufsstand" />
@@ -149,7 +149,7 @@
                 </div>
                 <div class="flex">
                     <div class="w-32">
-                        Stabilität
+                        Stabilitätspunkte
                     </div>
                     {{ character.skillpoints.mind.attribute }}
                 </div>

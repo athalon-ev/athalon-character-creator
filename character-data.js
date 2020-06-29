@@ -16,6 +16,7 @@ const nativeLanguages = [
 ]
 
 const foreignLanguages = [
+    ...nativeLanguages,
     'Alt-Tasperin',
     'Alt-Sorridianisch',
     'Bororo',
