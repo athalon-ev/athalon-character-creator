@@ -27,8 +27,8 @@ export const getWeaponBonusMalus = R.cond([
 ])
 
 export const getHealthpoints = health => Math.floor(health / 2.5)
-
-export const getSkillpointValue = (attribute, skill) => getAttributeBonusMalus(attribute) + parseInt(skill.points) + parseInt(skill.basePoints)
+export const getSkillBasePoints = (attribute, skill) => skill.linkAttribute ? attribute : skill.basePoints
+export const getSkillpointValue = (attribute, skill) => getAttributeBonusMalus(attribute) + parseInt(skill.points) + getSkillBasePoints(attribute, skill)
 export const getBoundsSkillpointValue = (skillUpperbound, attribute, skill) => R.clamp(0, skillUpperbound, getSkillpointValue(attribute, skill))
 export const exportSkill = R.curry(({ attribute, color, skillUpperbound }, skill) =>
     `[*]${skill.custom ? '    ' : ''}${!skill.categories.length ? '☐' : '-'} [b]${getBoundsSkillpointValue(skillUpperbound, attribute, skill)}%[/b] ${skill.name}`)

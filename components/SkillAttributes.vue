@@ -37,11 +37,11 @@
                 hide-details
                 class="mr-4 w-16"
                 solo dense v-model="skill.points" type="number"
-                min="0" :max="skillUpperbound - (skill.basePoints + bonusMalus)"
+                min="0" :max="skillUpperbound - (getSkillBasePoints(value.attribute, skill) + bonusMalus)"
                 v-if="!skill.categories.length"
             />
             <span class="mt-1 mr-2 text-gray-600" v-if="!skill.categories.length">+</span>
-            <v-text-field hide-details class="mr-4 w-16" disabled dense :value="skill.basePoints" />
+            <v-text-field hide-details class="mr-4 w-16" disabled dense :value="getSkillBasePoints(value.attribute, skill)" />
             <v-tooltip top v-if="bonusMalus && !skill.categories.length">
                 <template v-slot:activator="{ on, attrs }">
                     <div class="mt-1 text-sm font-normal" v-bind="attrs" v-on="on" :class="bonusMalus > 0 ? 'text-green-400' : 'text-red-400'">
@@ -70,7 +70,7 @@
 
 <script>
 import * as R from 'ramda'
-import { getAttributeBonusMalus, getSkillpointValue, getBoundsSkillpointValue } from '~/util'
+import { getAttributeBonusMalus, getSkillpointValue, getBoundsSkillpointValue, getSkillBasePoints } from '~/util'
 
 export default {
     props: {
@@ -98,6 +98,7 @@ export default {
     data: () => ({
         getSkillpointValue,
         getBoundsSkillpointValue,
+        getSkillBasePoints,
     }),
     computed: {
         bonusMalus() {
@@ -127,7 +128,7 @@ export default {
         },
         refreshSkills() {
             this.value.skills = R.map(skill => ({
-                points: R.clamp(0, this.skillUpperbound - (skill.basePoints + this.bonusMalus), parseInt(skill.points)),
+                points: R.clamp(0, this.skillUpperbound - (getSkillBasePoints(this.value.attribute, skill) + this.bonusMalus), parseInt(skill.points)),
                 ...skill
             }), this.value.skills)
         },

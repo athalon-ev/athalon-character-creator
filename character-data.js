@@ -1,4 +1,4 @@
-const skillpoint = (name, basePoints, categories = [], category = null, custom = false, deletable = false) => ({
+const skillpoint = (name, basePoints, categories = [], category = null, custom = false, deletable = false, linkAttribute = false) => ({
     name,
     basePoints,
     points: 0,
@@ -6,6 +6,7 @@ const skillpoint = (name, basePoints, categories = [], category = null, custom =
     categories,
     category,
     deletable,
+    linkAttribute,
 })
 const languages = [
     'Tasperin',
@@ -246,7 +247,7 @@ export default {
                     'Schuhmacher', 'Seifensieder', 'Steinmetz', 'Töpfer'
                 ]),
                 skillpoint('Muttersprache', 0, languages),
-                skillpoint('Tasperin', 0, [], 'Muttersprache', true, false, 'mind'),
+                skillpoint('Tasperin', 0, [], 'Muttersprache', true, false, true),
                 skillpoint('Fremdsprachen', 0, languages),
                 skillpoint('Kunst', 0, [
                     'Bildhauerei',
