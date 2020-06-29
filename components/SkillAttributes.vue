@@ -27,6 +27,7 @@
         <div class="flex" :class="`text${color}400`">
             <div class="w-32 ml-4" />
         </div>
+        // eslint-disable-next-line vue/no-use-v-if-with-v-for
         <div v-for="skill in value.skills" v-if="!skill.hidden" :key="skill.name" class="flex items-center py-1">
             <div class="w-32 mx-2 text-xs">
                 {{ skill.category }}
