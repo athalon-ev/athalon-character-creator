@@ -115,8 +115,8 @@
                 </div>
             </v-tab-item>
             <v-tab-item class="p-4">
-                <v-textarea v-model="character.habits" label="Angewohnheiten und Prinzipien" :rows="5" placeholder="Beispiel: Überpünktlich, Penibel, Vergesslich, Dramatisch, Geizig, Chaotisch, Putzfimmel, Fingernägelkauer, Alkoholproblem, Tagträumer, Raucher, Hutträger..." />
                 <v-textarea v-model="character.ideology" label="Persönlichkeit und Weltanschauung" :rows="5" placeholder="Beispiel: Cholerisch, Melancholisch, Phlegmatisch, Sanguinisch, Patriotisch, Humanistisch, Religiös, Optimistisch, Pessimistisch, Egoistisch, Esoterisch..." />
+                <v-textarea v-model="character.habits" label="Angewohnheiten und Prinzipien" :rows="5" placeholder="Beispiel: Überpünktlich, Penibel, Vergesslich, Dramatisch, Geizig, Chaotisch, Putzfimmel, Fingernägelkauer, Alkoholproblem, Tagträumer, Raucher, Hutträger..." />
                 <v-textarea v-model="character.fears" label="Ängste und Phobien" :rows="5" placeholder="Beispiel: Höhenangst, Feuer, Dunkelheit, Einsamkeit, Spinnen, Wasser, Karotten, Hunde, Platzangst, Armut, Frauen, Magie, Hexen..." />
             </v-tab-item>
             <v-tab-item class="p-4">

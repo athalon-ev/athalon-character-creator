@@ -74,7 +74,10 @@ export default {
             url: 'http://wiki.athalon.net/index.php/Klanreich_Kaledon',
             banner: 'http://wiki.athalon.net/images/c/ce/WeidtlandFlagge.png',
             cities: [
-                'Molder', 'Rodstedt', 'Nordingen'
+                'Asmaeth',
+                'Molder',
+                'Rodstedt',
+                'Nordingen',
             ],
         },
         {
@@ -82,6 +85,7 @@ export default {
             url: 'http://wiki.athalon.net/index.php/Nostrisches_Imperium',
             banner: 'http://wiki.athalon.net/images/5/54/KaledonFlagge.png',
             cities: [
+                'Brist',
                 'Kirkmore',
                 'Averssire',
                 'Ochsenbach',
