@@ -72,7 +72,7 @@
                         </v-btn-toggle>
                     </div>
                 </div>
-                <v-textarea v-model="character.physical" label="Äußerliche Erscheinung" placeholder="Narben, Auffälligkeiten" :rows="2" />
+                <v-textarea v-model="character.physical" label="Äußerliche Erscheinung" placeholder="Alltagskleidung, Hautton, Narben, Auffälligkeiten" :rows="3" />
                 <h2 class="text-xl font-bold my-4">
                     Herkunft
                 </h2>
@@ -115,16 +115,16 @@
                 </div>
             </v-tab-item>
             <v-tab-item class="p-4">
-                <v-textarea v-model="character.habits" label="Angewohnheiten" :rows="2" placeholder="Putzfimmel, Fingernägelkauer, Alkoholproblem, Tagträumer, Raucher, Hutträger..." />
-                <v-textarea v-model="character.ideology" label="Weltanschauung" :rows="3" placeholder="Patriotisch, Humanistisch, Religiös, Optimistisch, Pessimistisch, Egoistisch, Esoterisch..." />
-                <v-textarea v-model="character.fears" label="Ängste und Phobien" :rows="2" placeholder="Höhenangst, Feuer, Tod, Dunkelheit, Einsamkeit, Spinnen, Angst vor dem Versagen" />
+                <v-textarea v-model="character.habits" label="Angewohnheiten und Prinzipien" :rows="5" placeholder="Beispiel: Überpünktlich, Penibel, Vergesslich, Dramatisch, Geizig, Chaotisch, Putzfimmel, Fingernägelkauer, Alkoholproblem, Tagträumer, Raucher, Hutträger..." />
+                <v-textarea v-model="character.ideology" label="Persönlichkeit und Weltanschauung" :rows="5" placeholder="Beispiel: Cholerisch, Melancholisch, Phlegmatisch, Sanguinisch, Patriotisch, Humanistisch, Religiös, Optimistisch, Pessimistisch, Egoistisch, Esoterisch..." />
+                <v-textarea v-model="character.fears" label="Ängste und Phobien" :rows="5" placeholder="Beispiel: Höhenangst, Feuer, Dunkelheit, Einsamkeit, Spinnen, Wasser, Karotten, Hunde, Platzangst, Armut, Frauen, Magie, Hexen..." />
             </v-tab-item>
             <v-tab-item class="p-4">
-                <v-textarea v-model="character.job" label="Profession vor Neu Corethon" :rows="2" placeholder="Hintergrund, Schicksale, Berufsstand" />
+                <v-textarea v-model="character.job" label="Profession vor Neu Corethon" :rows="3" placeholder="Hintergrund, Schicksale, Berufsstand" />
                 <v-textarea v-model="character.family" label="Familie und Verwandtschaft" :rows="4" placeholder="Name, Beruf und der Verbleib deiner Eltern und anderen Verwandten: Lebendig, Verschollen oder Tot?" />
-                <v-textarea v-model="character.whyLeft" label="Warum hast du die Heimat verlassen?" :rows="3" placeholder="Motivation für die Abreise nach Neu Corethon in die Unbekannten Lande" />
-                <v-textarea v-model="character.leftWhat" label="Was hast du zurück gelassen?" :rows="1" placeholder="Familienmitglieder, Nahestehende, Persönliche Gegenstände, Arbeitsstätte, Haustiere" />
-                <v-textarea v-model="character.goals" label="Was möchtest du erreichen?" :rows="3" placeholder="Gesteckte Ziele, Hoffnungen und Antrieb für weiteren Lebensweg" />
+                <v-textarea v-model="character.whyLeft" label="Warum hast du die Heimat verlassen?" :rows="4" placeholder="Motivation für die Abreise nach Neu Corethon in die Unbekannten Lande" />
+                <v-textarea v-model="character.leftWhat" label="Was hast du zurück gelassen?" :rows="2" placeholder="Familienmitglieder, Nahestehende, Persönliche Gegenstände, Arbeitsstätte, Haustiere" />
+                <v-textarea v-model="character.goals" label="Was möchtest du erreichen?" :rows="5" placeholder="Gesteckte Ziele, Hoffnungen und Antrieb für weiteren Lebensweg" />
             </v-tab-item>
             <v-tab-item class="p-4">
                 <p>
@@ -135,6 +135,35 @@
                 <v-btn color="primary" class="mb-4" href="https://board.athalon.net/showthread.php?tid=50" target="_blank">
                     Mehr Informationen
                 </v-btn>
+                <h4 class="font-bold text-xl">
+                    Errechnete Werte
+                </h4>
+                <div class="flex">
+                    <div class="w-32">
+                        Karmapunkte
+                    </div>
+                    50
+                </div>
+                <div class="flex">
+                    <div class="w-32">
+                        Trefferpunkte
+                    </div>
+                    {{ healthpoints }}
+                </div>
+                <div class="flex">
+                    <div class="w-32">
+                        Stabilität
+                    </div>
+                    {{ character.skillpoints.mind.attribute }}
+                </div>
+                <div class="flex">
+                    <div class="w-32">
+                        Staturbonus
+                    </div>
+                    <div :class="weaponBonusMalus >= 0 ? 'text-green-400' : 'text-red-400'">
+                        {{ weaponBonusMalus }}
+                    </div>
+                </div>
                 <v-progress-linear
                     class="rounded-full mb-4"
                     color="primary"
@@ -185,54 +214,25 @@
                     name="Geist" color="-purple-"
                     v-bind="$props"
                 />
-                <h4 class="font-bold text-xl">
-                    Errechnete Werte
-                </h4>
-                <div class="flex">
-                    <div class="w-32">
-                        Karmapunkte
-                    </div>
-                    50
-                </div>
-                <div class="flex">
-                    <div class="w-32">
-                        Trefferpunkte
-                    </div>
-                    {{ healthpoints }}
-                </div>
-                <div class="flex">
-                    <div class="w-32">
-                        Stabilität
-                    </div>
-                    {{ character.skillpoints.mind.attribute }}
-                </div>
-                <div class="flex">
-                    <div class="w-32">
-                        Staturbonus
-                    </div>
-                    <div :class="weaponBonusMalus >= 0 ? 'text-green-400' : 'text-red-400'">
-                        {{ weaponBonusMalus }}
-                    </div>
-                </div>
             </v-tab-item>
             <v-tab-item class="p-4 py-16 flex justify-between">
                 <div class="text-center w-1/3">
                     <p class="text-4xl font-bold mb-4">
                         1.
                     </p>
-                    <p>Wenn du dich noch nicht registriert hast, ist das jetzt der Zeitpunkt</p>
-                    <p />
-                    <v-btn color="primary" href="https://board.athalon.net/newthread.php?fid=16" target="_blank">
-                        Bewerbung einreichen
+                    <p>Gute Arbeit! Der Text für deinen Charakter wird beim Klick automatisch in die Zwischenablage kopiert</p>
+                    <v-btn color="primary" @click="exportCharacter">
+                        Charakterdaten Kopieren
                     </v-btn>
                 </div>
                 <div class="text-center w-1/3">
                     <p class="text-4xl font-bold mb-4">
                         2.
                     </p>
-                    <p>Der Text für deinen Charakter wird beim Klick automatisch in die Zwischenablage kopiert</p>
-                    <v-btn color="primary" @click="exportCharacter">
-                        Charakterdaten Kopieren
+                    <p>Wenn du dich noch nicht registriert hast, ist das jetzt der Zeitpunkt. Der Button öffnet das Forum in einem neuen Tab</p>
+                    <p />
+                    <v-btn color="primary" href="https://board.athalon.net/newthread.php?fid=16" target="_blank">
+                        Bewerbung einreichen
                     </v-btn>
                 </div>
                 <div class="text-center w-1/3">

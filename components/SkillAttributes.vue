@@ -52,12 +52,16 @@
             </v-tooltip>
             <span class="mt-1 mx-2 text-gray-600" v-if="!skill.categories.length">=</span>
             <v-text-field v-if="!skill.categories.length" hide-details class="mr-4 w-16" disabled dense :value="getBoundsSkillpointValue(skillUpperbound, value.attribute, skill)" />
-            <v-btn x-small fab @click="removeSkill(skill)" v-if="skill.custom && !skill.deletable">
-                <v-icon small class="text-white">mdi-playlist-remove</v-icon>
+            <v-btn x-small fab @click="removeSkill(skill)" v-if="skill.custom && skill.deletable">
+                <v-icon small class="text-white">
+                    mdi-playlist-remove
+                </v-icon>
             </v-btn>
             <div :class="`text${color}400`" v-if="skill.categories.length">
                 <v-btn x-small @click="addSkill(skill)">
-                    <v-icon class="text-white">mdi-playlist-plus</v-icon> Neue Fertigkeit
+                    <v-icon class="text-white">
+                        mdi-playlist-plus
+                    </v-icon> Neue Fertigkeit
                 </v-btn>
             </div>
         </div>
@@ -144,7 +148,7 @@ export default {
                     basePoints: skill.basePoints,
                     categories: [],
                     category: skill.name,
-                    deletable: false,
+                    deletable: true,
                 },
                 this.value.skills
             )

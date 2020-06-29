@@ -7,6 +7,14 @@ const skillpoint = (name, basePoints, categories = [], category = null, custom =
     category,
     deletable,
 })
+const languages = [
+    'Tasperin',
+    'Alt-Tasperin',
+    'Sorridianisch',
+    'Alt-Sorridianisch',
+    'Kalifatisch',
+    'Bororo',
+]
 export default {
     haircolors: [
         'Braun',
@@ -164,6 +172,9 @@ export default {
     ],
     skillpoints: {
         strength: {
+            name: 'Stärke',
+            colorForum: '#ff3333',
+            colorCreator: '-red-',
             attribute: 40,
             skills: [
                 skillpoint('Handgemenge', 25),
@@ -174,6 +185,9 @@ export default {
             ],
         },
         constitution: {
+            name: 'Konstitution',
+            colorForum: '#ff9933',
+            colorCreator: '-orange-',
             attribute: 40,
             skills: [
                 skillpoint('Vitalität', 25),
@@ -183,6 +197,9 @@ export default {
             ],
         },
         aptness: {
+            name: 'Geschicklichkeit',
+            colorForum: '#33cc33',
+            colorCreator: '-green-',
             attribute: 40,
             skills: [
                 skillpoint('Ausweichen', 0),
@@ -192,7 +209,6 @@ export default {
                 skillpoint('Fernkampfwaffen', 10, [
                     'Bögen', 'Armbrüste', 'Pulverwaffen', 'Belagerungsgeräte'
                 ]),
-                skillpoint('Pulverwaffen', 5),
                 skillpoint('Steuern', 5, [
                     'Reiten', 'Gespann', 'Schiff', 'Luftschiff'
                 ]),
@@ -201,6 +217,9 @@ export default {
             ],
         },
         intelligence: {
+            name: 'Intelligenz',
+            colorForum: '#33ccff',
+            colorCreator: '-blue-',
             attribute: 40,
             skills: [
                 skillpoint('Heilkunde', 10),
@@ -222,15 +241,9 @@ export default {
                     'Schmied', 'Schneider', 'Schreiner',
                     'Schuhmacher', 'Seifensieder', 'Steinmetz', 'Töpfer'
                 ]),
-                skillpoint('Sprachen', 0, [
-                    'Tasperin',
-                    'Alt-Tasperin',
-                    'Sorridianisch',
-                    'Alt-Sorridianisch',
-                    'Kalifatisch',
-                    'Bororo',
-                ]),
-                skillpoint('Tasperin', 40, [], 'Sprachen', true, true),
+                skillpoint('Muttersprache', 0, languages),
+                skillpoint('Tasperin', 0, [], 'Muttersprache', true, false, 'mind'),
+                skillpoint('Fremdsprachen', 0, languages),
                 skillpoint('Kunst', 0, [
                     'Bildhauerei',
                     'Fälscherei',
@@ -245,6 +258,9 @@ export default {
             ],
         },
         mind: {
+            name: 'Geist',
+            colorForum: '#cc33ff',
+            colorCreator: '-purple-',
             attribute: 40,
             skills: [
                 skillpoint('Wahrnehmung', 25),

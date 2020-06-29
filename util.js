@@ -31,7 +31,7 @@ export const getHealthpoints = health => Math.floor(health / 2.5)
 export const getSkillpointValue = (attribute, skill) => getAttributeBonusMalus(attribute) + parseInt(skill.points) + parseInt(skill.basePoints)
 export const getBoundsSkillpointValue = (skillUpperbound, attribute, skill) => R.clamp(0, skillUpperbound, getSkillpointValue(attribute, skill))
 export const exportSkill = R.curry(({ attribute, color, skillUpperbound }, skill) =>
-    `[*]${skill.custom ? '  ' : ''}☐ [b]${getBoundsSkillpointValue(skillUpperbound, attribute, skill)}%[/b] ${skill.name} ${skill.custom ? `([color=${color}]AUSWAHL[/color])` : ''}`)
+    `[*]${skill.custom ? '    ' : ''}${!skill.categories.length ? '☐' : '-'} [b]${getBoundsSkillpointValue(skillUpperbound, attribute, skill)}%[/b] ${skill.name}`)
 export const exportSkills = (attribute, color, skillUpperbound) => `
 [list]
 ${attribute.skills.map(exportSkill({ attribute: attribute.attribute, color, skillUpperbound }), attribute.skills).join(`
@@ -103,18 +103,12 @@ ${character.goals}
 
 [b][size=large]IV. Charakterfertigkeiten[/size][/b]
 
-[b][color=#ff3333][size=medium]Stärke ${character.skillpoints.strength.attribute}% [/size][size=small](5)[/size][/color][/b]
-${exportSkills(character.skillpoints.strength, '#ff3333', skillUpperbound)}
-[b][color=#ff9933][size=medium]Konstitution ${character.skillpoints.constitution.attribute}%[/size][size=small](0)[/size][/color][/b]
-${exportSkills(character.skillpoints.constitution, '#ff9933', skillUpperbound)}
-[b][color=#33cc33][size=medium]Geschicklichkeit ${character.skillpoints.aptness.attribute}% [/size][size=small](5)[/size][/color][/b]
-${exportSkills(character.skillpoints.aptness, '#33cc33', skillUpperbound)}
-[b][color=#33ccff][size=medium]Intelligenz ${character.skillpoints.intelligence.attribute}% [/size][size=small](0)[/size][/color][/b]
-${exportSkills(character.skillpoints.intelligence, '#33ccff', skillUpperbound)}
-[b][color=#cc33ff][size=medium]Geist ${character.skillpoints.mind.attribute}% [/size][size=small](-15)[/size][/color][/b]
-${exportSkills(character.skillpoints.mind, '#cc33ff', skillUpperbound)}
-
-[code]
-${JSON.stringify(character, null, 4)}
-[/code]
+${R.join('', R.map(exportAttribute(skillUpperbound), R.values(character.skillpoints)))}
 `
+
+const exportAttribute = skillUpperbound => attribute => `
+[b][color=${attribute.colorForum}][size=medium]${attribute.name} ${attribute.attribute}%[/size] [size=small](${getAttributeBonusMalus(attribute.attribute)})[/size][/color][/b]
+${exportSkills(attribute, attribute.colorForum, skillUpperbound)}
+`
+
+// const  this.bonusMalus > 0 ? `+${this.bonusMalus}` : this.bonusMalus
