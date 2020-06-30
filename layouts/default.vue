@@ -6,7 +6,7 @@
             dark
         >
             <div>
-                <v-img width="100" src="http://5.9.51.136/wp-content/uploads/2020/02/Athalon_Schriftzug2020_HoheAufl%C3%B6sung.png" />
+                <v-img width="100" src="https://athalon.net/wp-content/uploads/2020/02/Athalon_Schriftzug2020_HoheAufl%C3%B6sung.png" />
             </div>
             <v-toolbar-title>Charakter Erstellung</v-toolbar-title>
             <v-spacer />

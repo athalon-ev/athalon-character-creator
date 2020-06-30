@@ -43,7 +43,7 @@ export default {
 
 <style>
     #app {
-        background-image: url(http://5.9.51.136/wp-content/uploads/2020/02/Hintergrund_Holz.jpg);
+        background-image: url(https://athalon.net/wp-content/uploads/2020/02/Hintergrund_Holz.jpg);
         background-attachment: fixed
     }
 </style>
