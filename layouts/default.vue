@@ -12,7 +12,6 @@
             <v-spacer />
         </v-app-bar>
         <nuxt />
-        <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
         <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     </v-app>
 </template>
