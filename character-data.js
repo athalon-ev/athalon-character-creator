@@ -218,7 +218,7 @@ export default {
             colorCreator: '-green-',
             attribute: 40,
             skills: [
-                skillpoint('Ausweichen', 0),
+                skillpoint('Ausweichen', 20),
                 skillpoint('Nahkampfwaffen (Fein)', 15, [
                     'Einhandschwerter', 'Speere', 'Stangenwaffen', 'Ungewöhnliches'
                 ]),
