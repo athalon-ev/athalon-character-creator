@@ -7,7 +7,7 @@ import * as R from 'ramda'
 import debounce from 'lodash.debounce'
 const getUuidUrl = R.concat('https://api.minetools.eu/uuid/')
 const getAvatarUrl = uuid => `https://crafatar.com/renders/body/${uuid}?overlay=true&scale=5`
-const FALLBACK_UUID = '8667ba71b85a4004af54457a9734eed7'
+const FALLBACK_UUID = '94f7dd5f8b904602a74a541af6e0676a'
 export default {
     props: {
         name: String,
