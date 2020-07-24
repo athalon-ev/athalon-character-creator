@@ -52,8 +52,8 @@ ${character.age}
 [b]➤ Äußerliche Erscheinung[/b]
 Geschlecht: ${character.gender}
 Alter: ${character.age} Jahre    | Größe: ${character.size}m     | Gewicht: ${character.weight}kg
-Haarfarbe: ${character.hairColor}
-Augenfarbe: ${character.eyeColor}
+Haarfarbe: ${character.haircolor}
+Augenfarbe: ${character.eyecolor}
 
 [b]➤ Angewohnheiten[/b]
 ${character.habits}
