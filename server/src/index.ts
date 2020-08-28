@@ -6,4 +6,3 @@ dotenv.config()
 
 const dependencies = dependencyContainer()
 server(dependencies, routes)
-dependencies.lib.console.log(dependencies)

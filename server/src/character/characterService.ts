@@ -1,7 +1,16 @@
 import type Dependencies from '../dependencies'
+import * as R from 'ramda'
 
 export interface Skillpoint {
-    value: number
+    name: string
+    basePoints: number
+    points: number
+    custom: boolean
+    categories: []
+    category: Skillpoint
+    deletable: boolean
+    linkAttribute: boolean
+    hidden: boolean
 }
 
 export interface Attribute {
@@ -32,17 +41,22 @@ export interface Character {
     whyLeft: string
     leftWhat: string
     goals: string
-    skillpoints: [Attribute]
+    skillpoints: { [key: string]: Skillpoint[] }
 }
 
-const getFilename = (dependencies: ReturnType<typeof Dependencies>, characterName: string) => 
-    dependencies.lib.path.join(dependencies.config.charactersFolderPath, characterName)
+export const getFilename = R.curry((dependencies: ReturnType<typeof Dependencies>, characterName: string) => 
+    dependencies.lib.path.join(
+        dependencies.config.charactersFolderPath,
+        dependencies.lib.filenamify(characterName)
+    )
+)
+export const create = R.curry(async (dependencies: ReturnType<typeof Dependencies>, character: Character, account: string) => {
+    dependencies.lib.fs.writeJSON(getFilename(dependencies, character.name), {})
+})
 
 export default (dependencies: ReturnType<typeof Dependencies>) => {
-    const create = async (character: Character, account: string) => {
-        dependencies.lib.fs.writeJSON(getFilename(dependencies, character))
-    }
     return {
-        create
+        create: create(dependencies),
+        getFilename: getFilename(dependencies),
     }
 }

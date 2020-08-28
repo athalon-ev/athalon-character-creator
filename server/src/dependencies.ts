@@ -5,11 +5,13 @@ import * as cors from '@koa/cors'
 import * as KoaRouter from '@koa/router'
 import * as bodyParser from 'koa-bodyparser'
 import * as path from 'path'
+import * as filenamify from 'filenamify'
 
 const rootPath = path.resolve(__dirname, '..')
 
-export default () => ({
+const getContainer = () => ({
     lib: {
+        filenamify,
         axios,
         fs,
         Koa,
@@ -35,3 +37,6 @@ export default () => ({
         }
     },
 })
+
+export type Dependencies = ReturnType<typeof getContainer>
+export default getContainer
