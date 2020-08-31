@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import type Dependencies from '../dependencies'
+import type { Dependencies } from '../dependencies'
 import type Routes from './routes'
 import type * as Koa from 'koa'
 
@@ -9,7 +9,7 @@ const useMiddleware = dependencies => app => R.pipe(
     R.applyTo(dependencies),
     middleware => app.use(middleware)
 )
-const useMiddlewares = (dependencies: ReturnType<typeof Dependencies>) => 
+const useMiddlewares = (dependencies: Dependencies) => 
     (app: Koa) =>
         R.map(useMiddleware(dependencies)(app))
 
@@ -21,7 +21,7 @@ const chainErrorMessages = R.pipe(
     R.join(',')
 )
 
-export default (dependencies: ReturnType<typeof Dependencies>, routes: typeof Routes) => {
+export default (dependencies: Dependencies, routes: typeof Routes) => {
     const { lib: { Koa, KoaRouter, console }, config, server } = dependencies
     const app = new Koa()
     // @ts-ignore

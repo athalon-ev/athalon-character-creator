@@ -6,6 +6,10 @@ import * as KoaRouter from '@koa/router'
 import * as bodyParser from 'koa-bodyparser'
 import * as path from 'path'
 import * as filenamify from 'filenamify'
+import * as nanoid from 'nanoid'
+
+import * as accountService from './account/accountService'
+import * as characterService from './character/characterService'
 
 const rootPath = path.resolve(__dirname, '..')
 
@@ -18,6 +22,11 @@ const getContainer = () => ({
         KoaRouter,
         console,
         path,
+        nanoid,
+    },
+    services: {
+        accountService,
+        characterService,
     },
     server: {
         middlewares: {
@@ -27,13 +36,14 @@ const getContainer = () => ({
     },
     config: {
         charactersFolderPath: path.join(rootPath, 'data/characters'),
+        forumApiKey: 'Athal0n2020!MybbL0ginK3y',
         forumClient: axios.create({
-            baseURL: 'https://forum.athalon.de'
+            baseURL: 'https://board.athalon.de'
         }),
         server: {
             port: parseInt(process.env.PORT || '80'),
             host: process.env.HOST || '0.0.0.0',
-            pathPrefix: '/',
+            pathPrefix: '',
         }
     },
 })
