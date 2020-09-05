@@ -36,10 +36,10 @@ const readCharacterFile = R.curry((dependencies: Dependencies, filename: string)
     readFileWithPath(dependencies, dependencies.lib.path.join(dependencies.config.charactersFolderPath, filename))
 )
 
-const getFilename = R.curry((dependencies: Dependencies, storedAccount: StoredCharacter) => 
+const getFilename = R.curry((dependencies: Dependencies, account: AccountIdentifier, character: Character) => 
     dependencies.lib.path.join(
         dependencies.config.charactersFolderPath,
-        dependencies.lib.filenamify(`${storedAccount.account.id}${filenameSeperator}${storedAccount.character.name}`)
+        dependencies.lib.filenamify(`${account}${filenameSeperator}${character.name}`)
     )
 )
 
@@ -53,10 +53,13 @@ export const getCharacter = R.curry(async (dependencies: Dependencies, id: Accou
     readCharacterFile(dependencies, dependencies.lib.filenamify(`${id}${filenameSeperator}${characterName}`))
 )
 
-export const create = R.curry(async (dependencies: Dependencies, character: Character, account: Account) => 
-    dependencies.lib.fs.writeJSON(getFilename(dependencies, { account, character }), character)
-)
+export const create = R.curry(async (dependencies: Dependencies, account: AccountIdentifier, character: Character) => {
+    console.log({ character })
+    const filename = getFilename(dependencies, account, character)
+    await dependencies.lib.fs.ensureFile(filename)
+    return dependencies.lib.fs.writeJSON(filename, character)
+})
 
-export const remove = R.curry(async (dependencies: Dependencies, character: Character, account: Account) => 
-    dependencies.lib.fs.remove(getFilename(dependencies, { account, character }))
-)
+// export const remove = R.curry(async (dependencies: Dependencies, character: Character, account: Account) => 
+//     dependencies.lib.fs.remove(getFilename(dependencies, { account, character }))
+// )

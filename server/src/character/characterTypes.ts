@@ -44,6 +44,7 @@ export interface Character {
 export interface Account {
     id: AccountIdentifier
     type: 'board' | 'guest'
+    /** a guest password, except that it is just for one character */
     token?: string
 }
 

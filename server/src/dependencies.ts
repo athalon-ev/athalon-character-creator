@@ -7,6 +7,8 @@ import * as bodyParser from 'koa-bodyparser'
 import * as path from 'path'
 import * as filenamify from 'filenamify'
 import * as nanoid from 'nanoid'
+import * as KoaJWT from 'koa-jwt'
+import * as jwt from 'jsonwebtoken'
 
 import * as accountService from './account/accountService'
 import * as characterService from './character/characterService'
@@ -20,6 +22,8 @@ const getContainer = () => ({
         fs,
         Koa,
         KoaRouter,
+        KoaJWT,
+        jwt,
         console,
         path,
         nanoid,
@@ -35,6 +39,7 @@ const getContainer = () => ({
         },
     },
     config: {
+        jwtSecret: '4thalonS3cretS4uce3',
         charactersFolderPath: path.join(rootPath, 'data/characters'),
         forumApiKey: 'Athal0n2020!MybbL0ginK3y',
         forumClient: axios.create({

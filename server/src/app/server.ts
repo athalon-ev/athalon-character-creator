@@ -26,10 +26,21 @@ export default (dependencies: Dependencies, routes: typeof Routes) => {
     const app = new Koa()
     // @ts-ignore
     useMiddlewares(dependencies)(app)(server.middlewares)
+    app.use(async (ctx, next) => {
+        try {
+            await next()
+        } catch (err) {
+            ctx.status = err.status || 500
+            ctx.body = {
+                message: err.message,
+                status: ctx.status,
+            }
+            ctx.app.emit('error', err, ctx)
+        }
+    })
     app.on('error', err => {
         err.expose = true
-        // @ts-ignore
-        if (err.response && err.response.data) err.message = chainErrorMessages(err.response.data.message)
+        if (err.response) err.message = err.response.data
         console.error(err)
     })
 
