@@ -12,7 +12,8 @@ import * as jwt from 'jsonwebtoken'
 
 import * as accountService from './account/accountService'
 import * as characterService from './character/characterService'
-
+import * as lowdb from 'lowdb/lib/fp'
+import * as LowDbFileAsyncAdapter from 'lowdb/adapters/FileAsync'
 const rootPath = path.resolve(__dirname, '..')
 
 const getContainer = () => ({
@@ -27,6 +28,8 @@ const getContainer = () => ({
         console,
         path,
         nanoid,
+        lowdb,
+        LowDbFileAsyncAdapter,
     },
     services: {
         accountService,
