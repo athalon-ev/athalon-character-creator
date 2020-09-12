@@ -3,7 +3,7 @@ export interface Skillpoint {
     basePoints: number
     points: number
     custom: boolean
-    categories: []
+    categories: Skillpoint[]
     category: Skillpoint
     deletable: boolean
     linkAttribute: boolean
@@ -15,7 +15,7 @@ export interface Attribute {
     colorForum: string
     colorCreator: string
     attribute: number,
-    skills: [Skillpoint]
+    skills: Skillpoint[]
 }
 
 export interface Character {
@@ -24,7 +24,7 @@ export interface Character {
     gender: string
     age: number
     size: number
-    weight: string
+    weight: number
     haircolor: string
     eyecolor: string
     nationality: string
