@@ -6,8 +6,15 @@
             </h2>
         </div>
         <div class="my-8 w-full bg-white shadow">
-            <div class="container">
-                miau
+            <div class="container flex">
+                <div class="p-4 w-1/5">
+                    <nuxt-link to="/characters/create" nuxt class="h-full w-full flex flex-column hover:text-white items-center justify-center py-8 hover:bg-blue-600 transition shadow rounded text-center">
+                        <v-icon class="block">mdi-head-plus-outline</v-icon>
+                        <p>
+                            Neuen Charakter anlegen
+                        </p>
+                    </nuxt-link>
+                </div>
                 {{ characters }}
             </div>
         </div>
@@ -20,7 +27,7 @@ export default {
         characters: []
     }),
     async asyncData(context) {
-        const characters = await context.$axios.get('/characters')
+        const { data: characters } = await context.$axios.get('/characters')
         return { characters }
     }
 }

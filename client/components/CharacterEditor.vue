@@ -116,11 +116,17 @@
             </v-tab-item>
             <v-tab-item class="p-4">
                 <v-textarea v-model="character.ideology" label="Persönlichkeit und Weltanschauung" :rows="5" />
-                <p class="text-gray-600">Beispiele: Patriotisch, Religiös, Humanistisch, Optimistisch, Nihilistisch, Esoterisch, Cholerisch, Sanguinisch, Phlegmatisch, Melancholisch</p>
+                <p class="text-gray-600">
+                    Beispiele: Patriotisch, Religiös, Humanistisch, Optimistisch, Nihilistisch, Esoterisch, Cholerisch, Sanguinisch, Phlegmatisch, Melancholisch
+                </p>
                 <v-textarea v-model="character.habits" label="Eigenschaften und Angewohnheiten" :rows="5" />
-                <p class="text-gray-600">Beispiele: Überpünktlich, Penibel, Vergesslich, Dramatisch, Geizig, Chaotisch, Putzfimmel, Alkoholiker, Tagträumer, Raucher, Hutträger</p>
+                <p class="text-gray-600">
+                    Beispiele: Überpünktlich, Penibel, Vergesslich, Dramatisch, Geizig, Chaotisch, Putzfimmel, Alkoholiker, Tagträumer, Raucher, Hutträger
+                </p>
                 <v-textarea v-model="character.fears" label="Ängste und Abneigungen" :rows="5" />
-                <p class="text-gray-600">Beispiele: Höhenangst, Feuer, Dunkelheit, Einsamkeit, Spinnen, Wasser, Karotten, Hunde, Platzangst, Armut, Frauen, Magie, Hexen</p>
+                <p class="text-gray-600">
+                    Beispiele: Höhenangst, Feuer, Dunkelheit, Einsamkeit, Spinnen, Wasser, Karotten, Hunde, Platzangst, Armut, Frauen, Magie, Hexen
+                </p>
             </v-tab-item>
             <v-tab-item class="p-4">
                 <v-textarea v-model="character.job" label="Profession vor Neu Corethon" :rows="3" placeholder="Hintergrund, Schicksale, Berufsstand" />
@@ -137,6 +143,9 @@
                 </p>
                 <v-btn color="primary" class="mb-4" href="https://board.athalon.net/showthread.php?tid=50" target="_blank">
                     Mehr Informationen
+                    <v-icon class="ml-2" small>
+                        mdi-open-in-new
+                    </v-icon>
                 </v-btn>
                 <h4 class="font-bold text-xl">
                     Errechnete Werte
@@ -220,6 +229,9 @@
                     <p>Gute Arbeit! Der Text für deinen Charakter wird beim Klick automatisch in die Zwischenablage kopiert</p>
                     <v-btn color="primary" @click="exportCharacter">
                         Charakterdaten Kopieren
+                    </v-btn>
+                    <v-btn color="primary" @click="saveCharacter">
+                        Charakter speichern
                     </v-btn>
                 </div>
                 <div class="text-center w-1/3">
@@ -335,6 +347,9 @@ export default {
     methods: {
         exportCharacter() {
             copyToClipboard(exportCharacter(this.character, this.skillUpperbound))
+        },
+        saveCharacter() {
+            console.log(this.character)
         },
         randomize() {
             this.character.weight = randomFromRange(50, 120).toFixed(1)
