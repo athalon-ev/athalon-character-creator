@@ -56,7 +56,7 @@ export default (dependencies: Dependencies, router: KoaRouter) => {
     router.get('/accounts/:id/characters', async ctx => {
         ctx.body = await dependencies.services.characterService.findByAccountId(dependencies, ctx.params.id)
     })
-    router.post('/account/login', async ctx => {
+    router.post('/accounts/login', async ctx => {
         ctx.body = await dependencies.services.accountService.login(dependencies, ctx.request.body)
         // ctx.body = await dependencies.services.characterService.getCharacter(dependencies, ctx.params.accountId)
     })
