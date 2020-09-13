@@ -12,6 +12,8 @@ import * as jwt from 'jsonwebtoken'
 
 import * as accountService from './account/accountService'
 import * as characterService from './character/characterService'
+import * as databaseService from './database/databaseService'
+
 import * as lowdb from 'lowdb/lib/fp'
 import * as LowDbFileAsyncAdapter from 'lowdb/adapters/FileAsync'
 const rootPath = path.resolve(__dirname, '..')
@@ -34,6 +36,7 @@ const getContainer = () => ({
     services: {
         accountService,
         characterService,
+        databaseService,
     },
     server: {
         middlewares: {
@@ -44,6 +47,7 @@ const getContainer = () => ({
     config: {
         jwtSecret: '4thalonS3cretS4uce3',
         charactersFolderPath: path.join(rootPath, 'data/characters'),
+        charactersDatabasePath: path.join(rootPath, 'data/characters.json'),
         forumApiKey: 'Athal0n2020!MybbL0ginK3y',
         forumClient: axios.create({
             baseURL: 'https://board.athalon.de'

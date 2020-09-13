@@ -13,14 +13,6 @@ const useMiddlewares = (dependencies: Dependencies) =>
     (app: Koa) =>
         R.map(useMiddleware(dependencies)(app))
 
-const chainErrorMessages = R.pipe(
-    // @ts-ignore
-    R.chain(R.prop('messages')),
-    // @ts-ignore
-    R.chain(R.prop('message')),
-    R.join(',')
-)
-
 export default (dependencies: Dependencies, routes: typeof Routes) => {
     const { lib: { Koa, KoaRouter, console }, config, server } = dependencies
     const app = new Koa()
@@ -45,7 +37,7 @@ export default (dependencies: Dependencies, routes: typeof Routes) => {
     })
 
     const router = new KoaRouter({ prefix: config.server.pathPrefix })
-    routes(dependencies, app, router)
+    routes(dependencies, router)
     app.use(router.routes())
     return app.listen(
         config.server.port, 

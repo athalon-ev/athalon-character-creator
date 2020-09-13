@@ -38,7 +38,7 @@ export interface Character {
     whyLeft: string
     leftWhat: string
     goals: string
-    skillpoints: { [key: string]: Skillpoint[] }
+    skillpoints: Record<'strength' | 'constitution' | 'aptness' | 'intelligence' | 'mind', Skillpoint[]>
 }
 
 export interface Account {
@@ -49,8 +49,9 @@ export interface Account {
 }
 
 export interface StoredCharacter {
+    id: string
     character: Character
-    account: Account
+    accountId: AccountIdentifier
 }
 
 export type AccountIdentifier = string | number

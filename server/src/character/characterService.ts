@@ -1,65 +1,53 @@
 import type { Dependencies } from '../dependencies'
+import type { LowdbFpAsync } from 'lowdb'
+import type { ParsedQuery } from '../app/appTypes'
 import * as R from 'ramda'
 
 import type { AccountIdentifier, Character, Account, StoredCharacter } from './characterTypes'
 
-const filenameSeperator = '---'
+interface DbSchema {
+    characters: StoredCharacter[]
+    accounts: Account[]
+}
 
-const getCharacterFiles = R.curry(async (dependencies: Dependencies) => 
-    dependencies.lib.fs.readdir(dependencies.config.charactersFolderPath)
-)
+const pickPath = R.curry((paths: string[], obj) => 
+    R.reduce((o, p) => R.assocPath(p.split('.'), R.path(p.split('.'), obj), o), {}, paths))
 
-const parseCharacterFilename = R.pipe(
-    R.split(filenameSeperator),
-    arr => ({ id: arr[0], characterName: arr[1], filename: `${arr[0]}${filenameSeperator}${arr[1]}` })
-)
+const getCharacterDatabase = async (dependencies: Dependencies) =>
+    (await dependencies.services.databaseService.getDb(dependencies, dependencies.config.charactersDatabasePath) as LowdbFpAsync<DbSchema>)
+    ('characters', [])
 
-const getCharactersByAccountId = (files: string[], id: AccountIdentifier) => R.pipe(
-    R.map(parseCharacterFilename),
-    R.filter(R.propSatisfies(x => x == id, 'id')),
-)(files)
-
-const readFileWithPath = R.curry(async (dependencies: Dependencies, filename: string) => {
-    const file = await dependencies.lib.fs.readJSON(filename)
-    return { ...file, ...parseCharacterFilename(dependencies.lib.path.basename(filename)) }
+export const create = R.curry(async (dependencies: Dependencies, accountId: AccountIdentifier, character: Character) => {
+    const db = await getCharacterDatabase(dependencies)
+    await db.write(R.concat(R.__, [{ id: dependencies.lib.nanoid.nanoid(), character, accountId }]))
 })
 
-const readCharacterFiles = (dependencies: Dependencies, files: string[]) =>
-    Promise.all(
-        R.map(
-            readCharacterFile(dependencies),
-            files
-        ) as (StoredCharacter & ReturnType<typeof parseCharacterFilename>)[]
+export const update = R.curry(async (dependencies: Dependencies, id: string, character: Character) => {
+    const db = await getCharacterDatabase(dependencies)
+    await db.write(
+        R.converge(
+            // @ts-ignore
+            R.adjust(R.__, R.over(R.lensProp('character'), R.mergeLeft(character))),
+            [R.findIndex(R.propEq('id', id)), R.identity]
+        )
     )
-
-const readCharacterFile = R.curry((dependencies: Dependencies, filename: string): Promise<StoredCharacter & ReturnType<typeof parseCharacterFilename>> =>
-    readFileWithPath(dependencies, dependencies.lib.path.join(dependencies.config.charactersFolderPath, filename))
-)
-
-const getFilename = R.curry((dependencies: Dependencies, account: AccountIdentifier, character: Character) => 
-    dependencies.lib.path.join(
-        dependencies.config.charactersFolderPath,
-        dependencies.lib.filenamify(`${account}${filenameSeperator}${character.name}`)
-    )
-)
-
-export const getCharactersByAccountIdFromFiles = R.curry(async (dependencies: Dependencies, id: AccountIdentifier) => {
-    const files = await getCharacterFiles(dependencies)
-    const names = getCharactersByAccountId(files, id)
-    return readCharacterFiles(dependencies, R.map(R.prop('filename'), names))
 })
 
-export const getCharacter = R.curry(async (dependencies: Dependencies, id: AccountIdentifier, characterName: string) =>
-    readCharacterFile(dependencies, dependencies.lib.filenamify(`${id}${filenameSeperator}${characterName}`))
-)
-
-export const create = R.curry(async (dependencies: Dependencies, account: AccountIdentifier, character: Character) => {
-    console.log({ character })
-    const filename = getFilename(dependencies, account, character)
-    await dependencies.lib.fs.ensureFile(filename)
-    return dependencies.lib.fs.writeJSON(filename, character)
+export const findByAccountId = R.curry(async (dependencies: Dependencies, accountId: string) => {
+    const db = await getCharacterDatabase(dependencies)
+    return db(R.filter(R.whereEq({ accountId: parseInt(accountId) })))
 })
 
-// export const remove = R.curry(async (dependencies: Dependencies, character: Character, account: Account) => 
-//     dependencies.lib.fs.remove(getFilename(dependencies, { account, character }))
-// )
+export const get = R.curry(async (dependencies: Dependencies, id: string) => {
+    const db = await getCharacterDatabase(dependencies)
+    const characters = await db(R.filter(R.whereEq({ id })))
+    return R.head(characters)
+})
+
+export const find = R.curry(async (dependencies: Dependencies, query: ParsedQuery) => {
+    const db = await getCharacterDatabase(dependencies)
+    return db(R.pipe(
+        R.slice(query._offset, query._offset + query._limit),
+        R.unless(() => R.isEmpty(query._properties), R.map(pickPath(query._properties)))
+    ))
+})
