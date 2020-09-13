@@ -6,6 +6,29 @@ export const availableCities = character => R.prop('cities', getNationByName(cha
 export const randomFromRange = (min, max) => (min + Math.random() * (max - min))
 const between = (min, max) => R.both(R.gte(R.__, min), R.lte(R.__, max))
 
+export const emptyCharacter = () => ({
+    name: '',
+    minecraftName: '',
+    gender: '',
+    age: '',
+    size: 170,
+    weight: null,
+    haircolor: '',
+    eyecolor: '',
+    nationality: '',
+    birthcity: '',
+    physical: '',
+    habits: '',
+    ideology: '',
+    fears: '',
+    job: '',
+    family: '',
+    whyLeft: '',
+    leftWhat: '',
+    goals: '',
+    skillpoints: characterData.skillpoints
+})
+
 export const getAttributeBonusMalus = R.cond([
     [between(0, 9), () => -20],
     [between(10, 19), () => -15],

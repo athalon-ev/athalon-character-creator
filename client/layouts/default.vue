@@ -1,6 +1,7 @@
 <template>
     <v-app class="h-full">
         <v-app-bar
+            fixed
             color="primary"
             dense
             dark
@@ -8,10 +9,14 @@
             <div>
                 <v-img width="100" src="https://athalon.net/wp-content/uploads/2020/02/Athalon_Schriftzug2020_HoheAufl%C3%B6sung.png" />
             </div>
-            <v-toolbar-title>Charakter Erstellung</v-toolbar-title>
+            <v-toolbar-title>Charakter Datenbank</v-toolbar-title>
+            <v-btn text small class="mx-2" href="https://athalon.de">Homepage</v-btn>
+            <v-btn text small class="mx-2" href="https://athalon.de/verein">Verein</v-btn>
+            <v-btn text small class="mx-2" href="https://board.athalon.de">Forum</v-btn>
+            <v-btn text small class="mx-2" href="https://wiki.athalon.de">Wiki</v-btn>
             <v-spacer />
         </v-app-bar>
-        <nuxt />
+        <nuxt class="pt-8" />
         <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     </v-app>
 </template>
@@ -43,4 +48,10 @@ body {
     box-sizing: border-box;
     margin: 0;
 }
+
+#app {
+    background-image: url(https://athalon.net/wp-content/uploads/2020/02/Hintergrund_Holz.jpg);
+    background-attachment: fixed
+}
+
 </style>

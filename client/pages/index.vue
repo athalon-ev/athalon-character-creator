@@ -1,49 +1,27 @@
 <template>
-    <div class="flex h-full">
-        <div class="container mx-auto">
-            <div class="w-4/5 mx-auto">
-                <h2 class="text-xl my-4 text-white flex justify-between items-center">
-                    Erstelle deinen Charakter
-                    <div class="bg-white rounded px-4">
-                        <v-switch label="Sandbox Modus" v-model="masterMode" />
-                    </div>
-                </h2>
-                <CharacterEditor v-bind="settings" />
+    <div class="h-full">
+        <div class="container my-8">
+            <h2 class="text-2xl my-4 text-white">
+                Athalon Charakter Datenbank
+            </h2>
+        </div>
+        <div class="my-8 w-full bg-white shadow">
+            <div class="container">
+                miau
+                {{ characters }}
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import CharacterEditor from '~/components/CharacterEditor'
 export default {
-    components: {
-        CharacterEditor
-    },
     data: () => ({
-        masterMode: false,
+        characters: []
     }),
-    computed: {
-        settings() {
-            return this.masterMode ? {
-                availableSkillpoints: 2000,
-                availableAttributepoints: 500,
-                attributeUpperbound: 100,
-                skillUpperbound: 100,
-            } : {
-                availableSkillpoints: 250,
-                availableAttributepoints: 250,
-                attributeUpperbound: 65,
-                skillUpperbound: 65,
-            }
-        }
+    async asyncData(context) {
+        const characters = await context.$axios.get('/characters')
+        return { characters }
     }
 }
 </script>
-
-<style>
-    #app {
-        background-image: url(https://athalon.net/wp-content/uploads/2020/02/Hintergrund_Holz.jpg);
-        background-attachment: fixed
-    }
-</style>

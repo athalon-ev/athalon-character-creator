@@ -257,7 +257,7 @@ import * as R from 'ramda'
 import SkillAttributes from './SkillAttributes'
 import MinecraftSkinImage from './MinecraftSkinImage'
 import characterData from '~/character-data'
-import { randomItem, getNationByName, availableCities, randomFromRange, exportCharacter, getWeaponBonusMalus, getHealthpoints } from '~/util'
+import { randomItem, getNationByName, availableCities, randomFromRange, exportCharacter, getWeaponBonusMalus, getHealthpoints, emptyCharacter } from '~/util'
 
 const copyToClipboard = (str) => {
     const el = document.createElement('textarea')
@@ -296,28 +296,7 @@ export default {
         tab: 'Hauptdaten',
         characterData,
         nations: characterData.nations,
-        character: {
-            name: '',
-            minecraftName: '',
-            gender: '',
-            age: '',
-            size: 170,
-            weight: '',
-            haircolor: '',
-            eyecolor: '',
-            nationality: '',
-            birthcity: '',
-            physical: '',
-            habits: '',
-            ideology: '',
-            fears: '',
-            job: '',
-            family: '',
-            whyLeft: '',
-            leftWhat: '',
-            goals: '',
-            skillpoints: characterData.skillpoints
-        },
+        character: emptyCharacter(),
         getWeaponBonusMalus,
     }),
     computed: {
