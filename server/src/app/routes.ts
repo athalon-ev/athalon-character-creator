@@ -8,7 +8,7 @@ const parseQuery = (query: Query) => ({
     ...query,
     _limit: parseInt(query._limit || '') || 10,
     _offset: parseInt(query._offset || '') || 0,
-    _properties: (query._properties || '').split(','),
+    _properties: (query._properties || '').split(',').filter(i => i.length),
 })
 
 export default (dependencies: Dependencies, router: KoaRouter) => {

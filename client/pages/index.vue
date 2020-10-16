@@ -15,7 +15,9 @@
                         </p>
                     </nuxt-link>
                 </div>
-                {{ characters }}
+                <div v-for="character in characters" :key="character.id" class="p-4 w-1/5">
+                    {{ character.character.name }}
+                </div>
             </div>
         </div>
     </div>
@@ -27,7 +29,11 @@ export default {
         characters: []
     }),
     async asyncData(context) {
-        const { data: characters } = await context.$axios.get('/characters')
+        const { data: characters } = await context.$axios.get('/characters', {
+            params: {
+                _limit: 2
+            }
+        })
         return { characters }
     }
 }

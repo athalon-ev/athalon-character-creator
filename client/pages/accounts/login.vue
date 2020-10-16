@@ -1,7 +1,9 @@
 <template>
     <div class="h-full flex justify-center items-center">
         <div class="w-1/5 bg-white shadow rounded p-8">
-            <h2 class="text-xl font-bold mb-4">Login</h2>
+            <h2 class="text-xl font-bold mb-4">
+                Login
+            </h2>
             <v-alert type="info" :value="true">
                 Du kannst dich hier mit deinem Forenaccount anmelden
             </v-alert>
@@ -32,6 +34,7 @@ export default {
         async login() {
             try {
                 const { data: user } = await this.$axios.post('/accounts/login', this.credentials)
+                console.log(user)
             } catch (error) {
                 this.error = error
             }

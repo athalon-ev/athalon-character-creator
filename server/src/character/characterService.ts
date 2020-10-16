@@ -46,6 +46,7 @@ export const get = R.curry(async (dependencies: Dependencies, id: string) => {
 
 export const find = R.curry(async (dependencies: Dependencies, query: ParsedQuery) => {
     const db = await getCharacterDatabase(dependencies)
+    console.log(query)
     return db(R.pipe(
         R.slice(query._offset, query._offset + query._limit),
         R.unless(() => R.isEmpty(query._properties), R.map(pickPath(query._properties)))
