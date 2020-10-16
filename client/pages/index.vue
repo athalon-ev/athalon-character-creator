@@ -16,7 +16,9 @@
                     </nuxt-link>
                 </div>
                 <div v-for="character in characters" :key="character.id" class="p-4 w-1/5">
-                    {{ character.character.name }}
+                    <nuxt-link :to="`/characters/${character.id}`" class="h-full w-full flex hover:text-white p-2 hover:bg-blue-600 transition shadow rounded">
+                        {{ character.character.name }}
+                    </nuxt-link>
                 </div>
             </div>
         </div>

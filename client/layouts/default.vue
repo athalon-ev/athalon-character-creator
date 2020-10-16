@@ -10,7 +10,7 @@
                 <div>
                     <v-img width="100" src="https://athalon.net/wp-content/uploads/2020/02/Athalon_Schriftzug2020_HoheAufl%C3%B6sung.png" />
                 </div>
-                <p class="text-white text-xl leading-none m-0">Charakter Datenbank</p>
+                <p class="text-white text-xl leading-none mx-4">Charakter Datenbank</p>
             </nuxt-link>
             <v-btn text small class="mx-2" href="https://athalon.de">Homepage</v-btn>
             <v-btn text small class="mx-2" href="https://athalon.de/verein">Verein</v-btn>
@@ -24,7 +24,7 @@
     </v-app>
 </template>
 
-<style>
+<style lang="stylus">
 .v-toolbar {
     flex: 0 0 auto;
 }
@@ -56,5 +56,7 @@ body {
     background-image: url(https://athalon.net/wp-content/uploads/2020/02/Hintergrund_Holz.jpg);
     background-attachment: fixed
 }
-
+.v-app-bar
+    p
+        margin-bottom 0
 </style>

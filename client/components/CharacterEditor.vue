@@ -302,13 +302,16 @@ export default {
             type: Number,
             default: 65,
         },
+        character: {
+            type: Object,
+            default: emptyCharacter
+        },
     },
     data: () => ({
         section: 'character',
         tab: 'Hauptdaten',
         characterData,
         nations: characterData.nations,
-        character: emptyCharacter(),
         getWeaponBonusMalus,
     }),
     computed: {
