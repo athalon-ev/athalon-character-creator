@@ -12,7 +12,7 @@
         </div>
         <div class="my-8 w-full">
             <div v-if="character" class="container">
-                <CharacterEditor class="w-full" />
+                <CharacterEditor class="w-full" :id="$route.params.id" :new="false" :character="character.character" />
             </div>
             <div v-else class="container bg-white rounded shadow p-8 flex flex-column items-center justify-center text-center">
                 <div class="w-1/2">

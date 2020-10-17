@@ -33,7 +33,7 @@ export default {
     async asyncData(context) {
         const { data: characters } = await context.$axios.get('/characters', {
             params: {
-                _limit: 2
+                _limit: 10
             }
         })
         return { characters }

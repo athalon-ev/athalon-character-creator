@@ -19,7 +19,9 @@ const getCharacterDatabase = async (dependencies: Dependencies) =>
 
 export const create = R.curry(async (dependencies: Dependencies, accountId: AccountIdentifier, character: Character) => {
     const db = await getCharacterDatabase(dependencies)
-    await db.write(R.concat(R.__, [{ id: dependencies.lib.nanoid.nanoid(), character, accountId }]))
+    const id = dependencies.lib.nanoid.nanoid()
+    await db.write(R.concat(R.__, [{ id, character, accountId }]))
+    return id
 })
 
 export const update = R.curry(async (dependencies: Dependencies, id: string, character: Character) => {
@@ -31,6 +33,7 @@ export const update = R.curry(async (dependencies: Dependencies, id: string, cha
             [R.findIndex(R.propEq('id', id)), R.identity]
         )
     )
+    return id
 })
 
 export const findByAccountId = R.curry(async (dependencies: Dependencies, accountId: string) => {

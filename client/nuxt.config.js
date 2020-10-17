@@ -44,6 +44,7 @@ export default {
     ** Nuxt.js modules
     */
     modules: [
+        'cookie-universal-nuxt',
         // Doc: https://axios.nuxtjs.org/usage
         '@nuxtjs/axios',
         // Doc: https://github.com/nuxt-community/dotenv-module

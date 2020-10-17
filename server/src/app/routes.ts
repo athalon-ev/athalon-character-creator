@@ -35,13 +35,10 @@ export default (dependencies: Dependencies, router: KoaRouter) => {
         ctx.body = await dependencies.services.characterService.get(dependencies, ctx.params.id)
     })
     router.put('/characters/:id', jwtMiddleware, characterExistsMiddleware, allowOnlyUserOrAdminMiddleware, async ctx => {
-        await dependencies.services.characterService.update(dependencies, ctx.params.id, ctx.request.body)
-        ctx.status = 200
-        // ctx.body = await dependencies.services.characterService.getCharacter(dependencies, ctx.params.accountId, ctx.params.characterName)
+        ctx.body = await dependencies.services.characterService.update(dependencies, ctx.params.id, ctx.request.body)
     })
     router.post('/characters', jwtMiddleware, async ctx => {
-        await dependencies.services.characterService.create(dependencies, ctx.state.user.uid, ctx.request.body)
-        ctx.status = 201
+        ctx.body = await dependencies.services.characterService.create(dependencies, ctx.state.user.uid, ctx.request.body)
     })
     router.get('/characters/:id/export/mybb', async ctx => {
         // ctx.body = await dependencies.services.characterService.getCharacter(dependencies, ctx.params.accountId)

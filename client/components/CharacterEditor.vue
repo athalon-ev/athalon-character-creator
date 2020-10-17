@@ -286,6 +286,14 @@ const copyToClipboard = (str) => {
 export default {
     components: { SkillAttributes, MinecraftSkinImage },
     props: {
+        new: {
+            type: Boolean,
+            default: true,
+        },
+        id: {
+            type: [String, Boolean],
+            default: null,
+        },
         availableSkillpoints: {
             type: Number,
             default: 250,
@@ -351,8 +359,24 @@ export default {
         exportCharacter() {
             copyToClipboard(exportCharacter(this.character, this.skillUpperbound))
         },
-        saveCharacter() {
-            console.log(this.character)
+        async saveCharacter() {
+            const user = this.$cookies.get('user')
+            if (!user) return
+            const settings = {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                }
+            }
+            this.loading = true
+            try {
+                const { data: id } = this.id
+                    ? await this.$axios.put(`/characters/${this.id}`, this.character, settings)
+                    : await this.$axios.post('/characters', this.character, settings)
+                this.$router.push(`/characters/${id}`)
+            } catch (error) {
+
+            }
+            this.loading = false
         },
         randomize() {
             this.character.weight = randomFromRange(50, 120).toFixed(1)

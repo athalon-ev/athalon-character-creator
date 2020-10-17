@@ -1,6 +1,6 @@
 <template>
     <div class="h-full flex justify-center items-center">
-        <div class="w-1/5 bg-white shadow rounded p-8">
+        <div class="md:w-1/2 lg:w-1/3 xl:w-1/4 bg-white shadow rounded p-8">
             <h2 class="text-xl font-bold mb-4">
                 Login
             </h2>
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import * as R from 'ramda'
 export default {
     data: () => ({
         error: null,
@@ -34,7 +35,11 @@ export default {
         async login() {
             try {
                 const { data: user } = await this.$axios.post('/accounts/login', this.credentials)
-                console.log(user)
+                const essentialUserData = R.pick(['token', 'slug', 'avatar', 'username'], user)
+                this.$cookies.set('user', essentialUserData, {
+                    path: '/'
+                })
+                this.$router.push('/')
             } catch (error) {
                 this.error = error
             }
