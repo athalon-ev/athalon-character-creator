@@ -18,11 +18,16 @@
                     </nuxt-link>
                 </div>
                 <div v-for="character in characters" :key="character.id" class="p-4 w-1/4">
-                    <nuxt-link :to="`/characters/${character.id}`" class="h-full w-full flex hover:text-white p-2 hover:bg-blue-600 transition shadow rounded">
+                    <nuxt-link v-if="character.character" :to="`/characters/${character.id}`" class="h-full w-full flex hover:text-white p-2 hover:bg-blue-600 transition shadow rounded">
                         <MinecraftSkinImage v-if="character.character.minecraftName" :name="character.character.minecraftName" />
                         {{ character.character.name }}
                     </nuxt-link>
                 </div>
+            </div>
+            <div class="container flex justify-center">
+                <v-btn color="primary" @click="loadMore">
+                    Mehr laden
+                </v-btn>
             </div>
         </div>
     </div>
@@ -31,20 +36,34 @@
 <script>
 import MinecraftSkinImage from '~/components/MinecraftSkinImage'
 
+const loadCharacters = axios => async ({ limit = 10, offset = 0 }) => {
+    const { data: characters } = await axios.get('/characters', {
+        params: {
+            _limit: limit,
+            _offset: offset,
+        }
+    })
+    return characters
+}
+
 export default {
     components: {
         MinecraftSkinImage,
     },
     async asyncData(context) {
-        const { data: characters } = await context.$axios.get('/characters', {
-            params: {
-                _limit: 10
-            }
-        })
-        return { characters }
+        const characters = await loadCharacters(context.$axios)({ limit: 2, offset: 0 })
+        return { characters, offset: 0 }
     },
     data: () => ({
-        characters: []
-    })
+        characters: [],
+        limit: 0,
+        offset: 0,
+    }),
+    methods: {
+        async loadMore() {
+            this.offset += 2
+            this.characters = [...this.characters, ...await loadCharacters(this.$axios)({ limit: 2, offset: this.offset })]
+        },
+    },
 }
 </script>

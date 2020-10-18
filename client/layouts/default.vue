@@ -42,8 +42,11 @@
                     </v-btn>
                 </template>
                 <v-list>
+                    <v-list-item @click="logout">
+                        <v-list-item-title>Logout</v-list-item-title>
+                    </v-list-item>
                     <v-list-item>
-                        <v-list-item-title>Miau</v-list-item-title>
+                        <v-list-item-title>Meine Charaktäre</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -58,11 +61,22 @@
 
 <script>
 export default {
-    computed: {
-        user() {
-            return this.$cookies.get('user')
+    data: () => ({
+        user: null,
+    }),
+    created() {
+        this.setUser()
+        this.$root.$on('loggedIn', this.setUser)
+    },
+    methods: {
+        setUser() {
+            this.user = this.$cookies.get('user')
+        },
+        logout() {
+            this.$cookies.remove('user', { path: '/' })
+            this.setUser()
         }
-    }
+    },
 }
 
 </script>

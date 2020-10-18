@@ -4,6 +4,9 @@ export default {
     /*
     ** Headers of the page
     */
+    server: {
+        host: '0.0.0.0'
+    },
     head: {
         title: process.env.npm_package_name || '',
         meta: [
@@ -55,7 +58,7 @@ export default {
     ** See https://axios.nuxtjs.org/options
     */
     axios: {
-        baseURL: 'http://localhost:8080'
+        baseURL: 'http://home.miezekatz.de:8080/'
     },
     vuetify: {
         theme: {
