@@ -6,17 +6,20 @@
             </h2>
         </div>
         <div class="my-8 w-full bg-white shadow">
-            <div class="container flex">
-                <div class="p-4 w-1/5">
+            <div class="container flex flex-wrap">
+                <div class="p-4 w-1/4">
                     <nuxt-link to="/characters/create" nuxt class="h-full w-full flex flex-column hover:text-white items-center justify-center py-8 hover:bg-blue-600 transition shadow rounded text-center">
-                        <v-icon class="block">mdi-head-plus-outline</v-icon>
+                        <v-icon class="block">
+                            mdi-head-plus-outline
+                        </v-icon>
                         <p>
                             Neuen Charakter anlegen
                         </p>
                     </nuxt-link>
                 </div>
-                <div v-for="character in characters" :key="character.id" class="p-4 w-1/5">
+                <div v-for="character in characters" :key="character.id" class="p-4 w-1/4">
                     <nuxt-link :to="`/characters/${character.id}`" class="h-full w-full flex hover:text-white p-2 hover:bg-blue-600 transition shadow rounded">
+                        <MinecraftSkinImage v-if="character.character.minecraftName" :name="character.character.minecraftName" />
                         {{ character.character.name }}
                     </nuxt-link>
                 </div>
@@ -26,10 +29,12 @@
 </template>
 
 <script>
+import MinecraftSkinImage from '~/components/MinecraftSkinImage'
+
 export default {
-    data: () => ({
-        characters: []
-    }),
+    components: {
+        MinecraftSkinImage,
+    },
     async asyncData(context) {
         const { data: characters } = await context.$axios.get('/characters', {
             params: {
@@ -37,6 +42,9 @@ export default {
             }
         })
         return { characters }
-    }
+    },
+    data: () => ({
+        characters: []
+    })
 }
 </script>

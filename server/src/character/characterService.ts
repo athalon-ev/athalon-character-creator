@@ -36,6 +36,18 @@ export const update = R.curry(async (dependencies: Dependencies, id: string, cha
     return id
 })
 
+export const remove = R.curry(async (dependencies: Dependencies, id: string) => {
+    const db = await getCharacterDatabase(dependencies)
+    await db.write(
+        R.converge(
+            // @ts-ignore
+            R.remove(R.__, 1),
+            [R.findIndex(R.propEq('id', id)), R.identity]
+        )
+    )
+    return id
+})
+
 export const findByAccountId = R.curry(async (dependencies: Dependencies, accountId: string) => {
     const db = await getCharacterDatabase(dependencies)
     return db(R.filter(R.whereEq({ accountId: parseInt(accountId) })))

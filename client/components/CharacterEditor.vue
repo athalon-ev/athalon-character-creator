@@ -233,6 +233,9 @@
                     <v-btn color="primary" @click="saveCharacter">
                         Charakter speichern
                     </v-btn>
+                    <v-btn v-if="id" color="error" @click="deleteCharacter">
+                        Charakter löschen
+                    </v-btn>
                 </div>
                 <div class="text-center w-1/3">
                     <p class="text-4xl font-bold mb-4">
@@ -373,6 +376,24 @@ export default {
                     ? await this.$axios.put(`/characters/${this.id}`, this.character, settings)
                     : await this.$axios.post('/characters', this.character, settings)
                 this.$router.push(`/characters/${id}`)
+            } catch (error) {
+
+            }
+            this.loading = false
+        },
+        async deleteCharacter() {
+            if (!this.id) return
+            const user = this.$cookies.get('user')
+            if (!user) return
+            const settings = {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                }
+            }
+            this.loading = true
+            try {
+                await this.$axios.delete(`/characters/${this.id}`, settings)
+                this.$router.push('/')
             } catch (error) {
 
             }

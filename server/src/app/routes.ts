@@ -37,6 +37,9 @@ export default (dependencies: Dependencies, router: KoaRouter) => {
     router.put('/characters/:id', jwtMiddleware, characterExistsMiddleware, allowOnlyUserOrAdminMiddleware, async ctx => {
         ctx.body = await dependencies.services.characterService.update(dependencies, ctx.params.id, ctx.request.body)
     })
+    router.del('/characters/:id', jwtMiddleware, characterExistsMiddleware, allowOnlyUserOrAdminMiddleware, async ctx => {
+        ctx.body = await dependencies.services.characterService.remove(dependencies, ctx.params.id)
+    })
     router.post('/characters', jwtMiddleware, async ctx => {
         ctx.body = await dependencies.services.characterService.create(dependencies, ctx.state.user.uid, ctx.request.body)
     })
