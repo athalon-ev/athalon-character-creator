@@ -32,6 +32,7 @@ export default {
     ** Plugins to load before mounting the App
     */
     plugins: [
+        '~/plugins/sticky.client'
     ],
     /*
     ** Nuxt.js dev-modules
@@ -58,7 +59,7 @@ export default {
     ** See https://axios.nuxtjs.org/options
     */
     axios: {
-        baseURL: 'http://home.miezekatz.de:8080/'
+        baseURL: 'http://localhost:8080/'
     },
     vuetify: {
         theme: {

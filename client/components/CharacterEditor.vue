@@ -170,26 +170,28 @@
                         {{ weaponBonusMalus }}
                     </div>
                 </div>
-                <v-progress-linear
-                    class="rounded-full mb-4"
-                    color="primary"
-                    height="25"
-                    :value="usedAttributepointsPercentage"
-                >
-                    <div class="text-white">
-                        {{ usedAttributepoints }} / {{ availableAttributepoints }} Attributspunkte
-                    </div>
-                </v-progress-linear>
-                <v-progress-linear
-                    class="rounded-full"
-                    color="primary"
-                    height="25"
-                    :value="usedSkillpointsPercentage"
-                >
-                    <div class="text-white">
-                        {{ usedSkillpoints }} / {{ availableSkillpoints }} Fertigkeitspunkte
-                    </div>
-                </v-progress-linear>
+                <div v-sticky sticky-offset="{top: 50}" class="bg-white py-2">
+                    <v-progress-linear
+                        class="rounded-full mb-4"
+                        color="primary"
+                        height="25"
+                        :value="usedAttributepointsPercentage"
+                    >
+                        <div class="text-white">
+                            {{ usedAttributepoints }} / {{ availableAttributepoints }} Attributspunkte
+                        </div>
+                    </v-progress-linear>
+                    <v-progress-linear
+                        class="rounded-full"
+                        color="primary"
+                        height="25"
+                        :value="usedSkillpointsPercentage"
+                    >
+                        <div class="text-white">
+                            {{ usedSkillpoints }} / {{ availableSkillpoints }} Fertigkeitspunkte
+                        </div>
+                    </v-progress-linear>
+                </div>
                 <SkillAttributes
                     :all="character.skillpoints"
                     v-model="character.skillpoints.strength"
