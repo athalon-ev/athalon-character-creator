@@ -13,6 +13,7 @@ import * as jwt from 'jsonwebtoken'
 import * as accountService from './account/accountService'
 import * as characterService from './character/characterService'
 import * as databaseService from './database/databaseService'
+import * as minecraftAvatarService from './minecraft/avatar'
 
 import * as lowdb from 'lowdb/lib/fp'
 import * as LowDbFileAsyncAdapter from 'lowdb/adapters/FileAsync'
@@ -37,6 +38,7 @@ const getContainer = () => ({
         accountService,
         characterService,
         databaseService,
+        minecraftAvatarService,
     },
     server: {
         middlewares: {
@@ -45,6 +47,9 @@ const getContainer = () => ({
         },
     },
     config: {
+        miencraftAvatarClient: axios.create({
+            baseURL: 'https://crafatar.com',
+        }),
         jwtSecret: '4thalonS3cretS4uce3',
         charactersFolderPath: path.join(rootPath, 'data/characters'),
         charactersDatabasePath: path.join(rootPath, 'data/characters.json'),
