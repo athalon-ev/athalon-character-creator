@@ -21,6 +21,8 @@ export const create = R.curry(async (dependencies: Dependencies, accountId: Acco
     const db = await getCharacterDatabase(dependencies)
     const id = dependencies.lib.nanoid.nanoid()
     await db.write(R.concat(R.__, [{ id, character, accountId }]))
+    const uuid = await dependencies.services.minecraftAvatarService.getUuidByUsername(dependencies, character.minecraftName)
+    await dependencies.services.minecraftAvatarService.saveAvatar(dependencies, uuid, id)
     return id
 })
 

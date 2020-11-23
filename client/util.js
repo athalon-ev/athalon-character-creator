@@ -78,6 +78,8 @@ Alter: ${character.age} Jahre    | Größe: ${character.size}m     | Gewicht: ${
 Haarfarbe: ${character.haircolor}
 Augenfarbe: ${character.eyecolor}
 
+${character.physical}
+
 [b]➤ Angewohnheiten[/b]
 ${character.habits}
 

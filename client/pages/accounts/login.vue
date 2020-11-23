@@ -39,6 +39,7 @@ export default {
                 this.$cookies.set('user', essentialUserData, {
                     path: '/'
                 })
+                this.$store.commit('setUser', user)
                 this.$root.$emit('loggedIn', user)
                 this.$router.push('/')
             } catch (error) {

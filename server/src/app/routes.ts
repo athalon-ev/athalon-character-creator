@@ -14,7 +14,10 @@ const parseQuery = (query: Query) => ({
 export default (dependencies: Dependencies, router: KoaRouter) => {
     const jwtMiddleware = dependencies.lib.KoaJWT({ secret: dependencies.config.jwtSecret })
     const allowOnlyUserOrAdminMiddleware = async (ctx: Koa.Context, next: Koa.Next) => {
-        if (!(ctx.state.user.uid == ctx.state.character.accountId || ctx.state.user.gid == 4)) ctx.throw(403, 'no access')
+        if (!(
+            ctx.state.user.uid == ctx.state.character.accountId
+            || dependencies.config.adminGroupIds.includes(parseInt(ctx.state.user.gid)))
+        ) ctx.throw(403, 'no access')
         await next()
     }
     const characterExistsMiddleware = async (ctx: Koa.Context, next: Koa.Next) => {

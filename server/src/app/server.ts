@@ -35,6 +35,10 @@ export default (dependencies: Dependencies, routes: typeof Routes) => {
         if (err.response) err.message = err.response.data
         console.error(err)
     })
+    app.use(dependencies.lib.KoaStatic({
+        rootDir: dependencies.config.charactersFolderPath,
+        rootPath: '/images'
+    }))
 
     const router = new KoaRouter({ prefix: config.server.pathPrefix })
     routes(dependencies, router)
