@@ -45,7 +45,7 @@
                     <v-list-item @click="logout">
                         <v-list-item-title>Logout</v-list-item-title>
                     </v-list-item>
-                    <v-list-item to="/" nuxt>
+                    <v-list-item :to="`/accounts/${user.id}`" nuxt>
                         <v-list-item-title>Meine Charaktäre</v-list-item-title>
                     </v-list-item>
                 </v-list>

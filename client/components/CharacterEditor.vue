@@ -96,14 +96,8 @@
                 <div class="flex justify-between">
                     <div class="sm:w-1/2 pr-4">
                         <v-select name="nationality" label="Nationalität" v-model="character.nationality" item-value="name" :items="nations">
-                            <div slot="item" slot-scope="{ item }" class="flex items-center">
-                                <v-img :src="item.banner" :width="32" class="mr-2" />
-                                {{ item.name }}
-                            </div>
-                            <div slot="selection" slot-scope="{ item }" class="flex items-center">
-                                <v-img :src="item.banner" :width="32" class="mr-2" />
-                                {{ item.name }}
-                            </div>
+                            <NationalityBanner slot="item" slot-scope="{ item }" :nation="item.name" />
+                            <NationalityBanner slot="selection" slot-scope="{ item }" :nation="item.name" />
                             <v-btn color="primary" icon slot="append" small v-if="character.nationality" :href="getNationUrl(character.nationality)" target="_blank">
                                 <v-icon>mdi-map-search</v-icon>
                             </v-btn>
@@ -273,6 +267,7 @@
 import * as R from 'ramda'
 import SkillAttributes from './SkillAttributes'
 import MinecraftSkinImage from './MinecraftSkinImage'
+import NationalityBanner from './NationalityBanner'
 import characterData from '~/character-data'
 import { randomItem, getNationByName, availableCities, randomFromRange, exportCharacter, getWeaponBonusMalus, getHealthpoints, emptyCharacter } from '~/util'
 
@@ -289,7 +284,7 @@ const copyToClipboard = (str) => {
 }
 
 export default {
-    components: { SkillAttributes, MinecraftSkinImage },
+    components: { SkillAttributes, MinecraftSkinImage, NationalityBanner },
     props: {
         new: {
             type: Boolean,

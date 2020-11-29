@@ -17,24 +17,7 @@
                         </p>
                     </nuxt-link>
                 </div>
-                <div v-for="character in characters" :key="character.id" class="p-4 w-1/3">
-                    <nuxt-link v-if="character.character" :to="`/characters/${character.id}`" class="transition duration-150 h-full w-full flex flex-column bg-white hover:text-white hover:bg-blue-600 shadow rounded">
-                        <div class="p-4 flex">
-                            <img v-if="character.character.minecraftName" :src="`http://localhost:8080/images/${character.id}.png`" class="mr-4">
-                            <div>
-                                <p class="text-lg font-bold mb-4">{{ character.character.name }}</p>
-                                <v-btn color="delete" icon @click.prevent.stop="deleteCharacter(character.id)">
-                                    <v-icon>mdi-delete</v-icon>
-                                </v-btn>
-                            </div>
-                        </div>
-                        <div class="self-end w-full flex justify-between text-center">
-                            <div v-for="attribute in character.character.skillpoints" :key="attribute.name" class="font-bold flex-auto" :class="`bg${attribute.colorCreator}400 text${attribute.colorCreator}800`">
-                                {{ attribute.attribute }}
-                            </div>
-                        </div>
-                    </nuxt-link>
-                </div>
+                <CharacterCard v-for="character in characters" :key="character.id" :character="character" class="w-1/3" />
             </div>
             <div class="container flex justify-center">
                 <v-btn color="primary" @click="loadMore">
@@ -47,6 +30,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import CharacterCard from '~/components/CharacterCard'
 
 const loadCharacters = axios => async ({ limit = 10, offset = 0 }) => {
     const { data: characters } = await axios.get('/characters', {
@@ -59,8 +43,9 @@ const loadCharacters = axios => async ({ limit = 10, offset = 0 }) => {
 }
 
 export default {
-    // components: {
-    // },
+    components: {
+        CharacterCard,
+    },
     async asyncData(context) {
         const characters = await loadCharacters(context.$axios)({ limit: 10, offset: 0 })
         return { characters, offset: 0 }
