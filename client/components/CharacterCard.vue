@@ -2,7 +2,7 @@
     <div class="p-4">
         <nuxt-link v-if="character.character" :to="link || `/characters/${character.id}`" class="transition duration-150 h-full w-full flex flex-column bg-white hover:text-white hover:bg-blue-600 shadow rounded">
             <div class="p-4 flex">
-                <img v-if="character.character.minecraftName" :src="`http://localhost:8080/images/${character.id}.png`" class="mr-4">
+                <img v-if="character.character.minecraftName" :src="$withBase(`images/${character.id}.png`)" class="mr-4">
                 <div>
                     <p class="text-lg font-bold mb-4">
                         {{ character.character.name }}

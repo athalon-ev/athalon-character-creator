@@ -8,7 +8,7 @@
         <div class="my-8 w-full bg-gray-200 shadow">
             <div class="container flex flex-wrap">
                 <div class="p-4 w-1/3">
-                    <nuxt-link to="/characters/create" nuxt class="transition duration-150 bg-white h-full w-full flex flex-column hover:text-white items-center justify-center py-8 hover:bg-blue-600 shadow rounded text-center">
+                    <nuxt-link to="/characters/create" nuxt class="character-create-card hover:text-shadow-lg transition duration-150 bg-white h-full w-full flex flex-column hover:text-white items-center justify-center py-8 shadow rounded text-center">
                         <v-icon class="block">
                             mdi-head-plus-outline
                         </v-icon>
@@ -32,22 +32,12 @@
 import { mapState } from 'vuex'
 import CharacterCard from '~/components/CharacterCard'
 
-const loadCharacters = axios => async ({ limit = 10, offset = 0 }) => {
-    const { data: characters } = await axios.get('/characters', {
-        params: {
-            _limit: limit,
-            _offset: offset,
-        }
-    })
-    return characters
-}
-
 export default {
     components: {
         CharacterCard,
     },
     async asyncData(context) {
-        const characters = await loadCharacters(context.$axios)({ limit: 10, offset: 0 })
+        const characters = await context.$api.getCharacters({ limit: 10, offset: 0 })
         return { characters, offset: 0 }
     },
     data: () => ({
@@ -61,7 +51,7 @@ export default {
     methods: {
         async loadMore() {
             this.offset += 2
-            this.characters = [...this.characters, ...await loadCharacters(this.$axios)({ limit: 2, offset: this.offset })]
+            this.characters = [...this.characters, ...await this.$api.getCharacters({ limit: 10, offset: this.offset })]
         },
         async deleteCharacter(id) {
             await this.$axios.delete(`characters/${id}`, {
@@ -73,3 +63,15 @@ export default {
     },
 }
 </script>
+
+<style lang="stylus">
+.character-create-card
+    background-image linear-gradient(to top, transparent, var(--color-white)), url(https://minecraft-statistic.net/img/screen/server/203190/afceda495a25f7c6783ec106dbdb246f.jpg)
+    background-color: black
+    background-size cover
+    background-position 0 12em
+    transition-property initial !important
+    &:hover
+        background-position 0 0
+        // border 10px solid black
+</style>

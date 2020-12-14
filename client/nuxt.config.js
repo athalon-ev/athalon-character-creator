@@ -32,8 +32,16 @@ export default {
     ** Plugins to load before mounting the App
     */
     plugins: [
-        '~/plugins/sticky.client'
+        '~/plugins/sticky.client',
+        '~/plugins/withBase',
+        '~/plugins/api',
     ],
+    publicRuntimeConfig: {
+        // baseURL: process.env.SERVER_URL,
+        axios: {
+            baseURL: process.env.SERVER_URL
+        }
+    },
     /*
     ** Nuxt.js dev-modules
     */
@@ -51,8 +59,6 @@ export default {
         'cookie-universal-nuxt',
         // Doc: https://axios.nuxtjs.org/usage
         '@nuxtjs/axios',
-        // Doc: https://github.com/nuxt-community/dotenv-module
-        '@nuxtjs/dotenv'
     ],
     /*
     ** Axios module configuration

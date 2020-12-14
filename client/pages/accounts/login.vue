@@ -36,11 +36,12 @@ export default {
             try {
                 const { data: user } = await this.$axios.post('/accounts/login', this.credentials)
                 const essentialUserData = R.pick(['token', 'slug', 'avatar', 'username', 'id'], user)
-                this.$cookies.set('user', { ...essentialUserData, id: user.uid }, {
+                const userData = { ...essentialUserData, id: user.uid }
+                this.$cookies.set('user', userData, {
                     path: '/'
                 })
-                this.$store.commit('setUser', user)
-                this.$root.$emit('loggedIn', user)
+                this.$store.commit('setUser', userData)
+                this.$root.$emit('loggedIn', userData)
                 this.$router.push('/')
             } catch (error) {
                 this.error = error

@@ -23,7 +23,7 @@
         </v-tabs>
         <v-tabs-items v-model="tab">
             <v-tab-item class="p-4">
-                <v-btn color="primary" outlined @click="randomize" class="top-0 right-0 absolute m-4">
+                <v-btn v-if="isNew" color="primary" outlined @click="randomize" class="top-0 right-0 absolute m-4">
                     <v-icon class="lg:mr-2">
                         mdi-dice-6
                     </v-icon>
@@ -188,30 +188,35 @@
                 </div>
                 <SkillAttributes
                     :all="character.skillpoints"
+                    :used-skillpoints="usedSkillpoints"
                     v-model="character.skillpoints.strength"
                     name="Stärke" color="-red-"
                     v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
+                    :used-skillpoints="usedSkillpoints"
                     v-model="character.skillpoints.constitution"
                     name="Konstitution" color="-orange-"
                     v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
+                    :used-skillpoints="usedSkillpoints"
                     v-model="character.skillpoints.aptness"
                     name="Geschick" color="-green-"
                     v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
+                    :used-skillpoints="usedSkillpoints"
                     v-model="character.skillpoints.intelligence"
                     name="Intelligenz" color="-blue-"
                     v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
+                    :used-skillpoints="usedSkillpoints"
                     v-model="character.skillpoints.mind"
                     name="Geist" color="-purple-"
                     v-bind="$props"
@@ -286,7 +291,7 @@ const copyToClipboard = (str) => {
 export default {
     components: { SkillAttributes, MinecraftSkinImage, NationalityBanner },
     props: {
-        new: {
+        isNew: {
             type: Boolean,
             default: true,
         },
