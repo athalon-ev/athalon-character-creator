@@ -1,11 +1,13 @@
 export interface Query {
-    _limit?: string
-    _offset?: string
-    _properties?: string
+    limit?: string
+    offset?: string
+    properties?: string
+    filter?: string
 }
 
 export interface ParsedQuery {
-    _limit: number
-    _offset: number
-    _properties: string[]
+    limit: number
+    offset: number
+    filter: string[][] | null
+    properties: string[]
 }

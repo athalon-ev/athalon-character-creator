@@ -189,6 +189,7 @@
                 <SkillAttributes
                     :all="character.skillpoints"
                     :used-skillpoints="usedSkillpoints"
+                    :used-attributepoints="usedAttributepoints"
                     v-model="character.skillpoints.strength"
                     name="Stärke" color="-red-"
                     v-bind="$props"
@@ -196,6 +197,7 @@
                 <SkillAttributes
                     :all="character.skillpoints"
                     :used-skillpoints="usedSkillpoints"
+                    :used-attributepoints="usedAttributepoints"
                     v-model="character.skillpoints.constitution"
                     name="Konstitution" color="-orange-"
                     v-bind="$props"
@@ -203,6 +205,7 @@
                 <SkillAttributes
                     :all="character.skillpoints"
                     :used-skillpoints="usedSkillpoints"
+                    :used-attributepoints="usedAttributepoints"
                     v-model="character.skillpoints.aptness"
                     name="Geschick" color="-green-"
                     v-bind="$props"
@@ -210,6 +213,7 @@
                 <SkillAttributes
                     :all="character.skillpoints"
                     :used-skillpoints="usedSkillpoints"
+                    :used-attributepoints="usedAttributepoints"
                     v-model="character.skillpoints.intelligence"
                     name="Intelligenz" color="-blue-"
                     v-bind="$props"
@@ -217,6 +221,7 @@
                 <SkillAttributes
                     :all="character.skillpoints"
                     :used-skillpoints="usedSkillpoints"
+                    :used-attributepoints="usedAttributepoints"
                     v-model="character.skillpoints.mind"
                     name="Geist" color="-purple-"
                     v-bind="$props"

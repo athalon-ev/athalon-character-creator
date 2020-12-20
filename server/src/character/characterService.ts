@@ -65,7 +65,10 @@ export const find = R.curry(async (dependencies: Dependencies, query: ParsedQuer
     const db = await getCharacterDatabase(dependencies)
     console.log(query)
     return db(R.pipe(
-        R.slice(query._offset, query._offset + query._limit),
-        R.unless(() => R.isEmpty(query._properties), R.map(pickPath(query._properties)))
+        /** @ts-ignore */
+        R.unless(() => R.isNil(query.filter), R.filter(R.allPass(R.map(pred => R.pathEq(R.split('.', pred[0]), pred[1]), query.filter || [])))),
+        // _filter=id=3,bla=2 - [[id.bla.test, 3], [bla, 2]]
+        R.slice(query.offset, query.offset + query.limit),
+        R.unless(() => R.isEmpty(query.properties), R.map(pickPath(query.properties)))
     ))
 })

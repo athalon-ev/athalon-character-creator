@@ -2,13 +2,19 @@ import type { Dependencies } from '../dependencies'
 import type * as Koa from 'koa'
 import type * as KoaRouter from '@koa/router'
 import type { ParsedQuery, Query } from './appTypes'
-// import * as R from 'ramda'
+import * as R from 'ramda'
+
+const parseFilter = R.pipe(
+    R.split(','),
+    R.map(R.split('='))
+)
 
 const parseQuery = (query: Query) => ({
     ...query,
-    _limit: parseInt(query._limit || '') || 10,
-    _offset: parseInt(query._offset || '') || 0,
-    _properties: (query._properties || '').split(',').filter(i => i.length),
+    limit: query.limit == '0' ? Infinity : parseInt(query.limit || '') || 10,
+    offset: parseInt(query.offset || '') || 0,
+    properties: (query.properties || '').split(',').filter(i => i.length),
+    filter: query.filter ? parseFilter(query.filter) : null
 })
 
 export default (dependencies: Dependencies, router: KoaRouter) => {
@@ -54,6 +60,10 @@ export default (dependencies: Dependencies, router: KoaRouter) => {
     })
     router.get('/accounts', async ctx => {
         ctx.body = await dependencies.services.accountService.getUsers(dependencies)
+        // ctx.body = await dependencies.services.characterService.getCharactersByIdFromFiles(dependencies, ctx.params.id)
+    })
+    router.get('/accounts/:id', async ctx => {
+        ctx.body = await dependencies.services.accountService.getUser(dependencies, ctx.params.id)
         // ctx.body = await dependencies.services.characterService.getCharactersByIdFromFiles(dependencies, ctx.params.id)
     })
     router.get('/accounts/:id/characters', async ctx => {

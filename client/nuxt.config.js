@@ -39,7 +39,7 @@ export default {
     publicRuntimeConfig: {
         // baseURL: process.env.SERVER_URL,
         axios: {
-            baseURL: process.env.SERVER_URL
+            baseURL: process.env.SERVER_URL || 'http://localhost:8080/'
         }
     },
     /*

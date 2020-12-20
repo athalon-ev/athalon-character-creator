@@ -3,13 +3,18 @@ export default (ctx, inject) => {
 }
 
 const api = ctx => ({
-    getCharacters: async ({ limit = 10, offset = 0 }) => {
+    getCharacters: async (query) => {
         const { data: characters } = await ctx.$axios.get('/characters', {
             params: {
-                _limit: limit,
-                _offset: offset,
+                limit: 10,
+                offset: 0,
+                ...query,
             }
         })
         return characters
+    },
+    getAccount: async id => {
+        const { data: account } = await ctx.$axios.get(`/accounts/${id}`)
+        return account
     }
 })

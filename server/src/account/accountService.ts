@@ -48,6 +48,11 @@ export const getUsers = R.curry(async (dependencies: Dependencies) => {
     return data
 })
 
+export const getUser = R.curry(async (dependencies: Dependencies, id: number) => {
+    const users = await getUsers(dependencies)
+    return R.find(R.propEq('uid', id), users)
+})
+
 export const getGroups = R.curry(async (dependencies: Dependencies) => {
     const { data } = await dependencies.config.forumClient.get(addApiKey(dependencies, 'groups.php'))
     return data

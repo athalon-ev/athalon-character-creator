@@ -2,13 +2,23 @@
     <div class="skill-skills my-4 rounded" :class="`bg${color}100`">
         <h3 class="pr-2 rounded font-bold justify-between uppercase flex items-center" :class="`text${color}400 bg${color}200`">
             <div class="flex items-center">
-                <v-btn text :disabled="!canDecrement" @click="changeAttribute(-5)" :class="readonly && 'invisible'">
+                <v-btn text icon :disabled="!canDecrement(5)" @click="changeAttribute(-5)" :class="readonly && 'invisible'">
                     <v-icon :class="`text${color}400`">
                         mdi-arrow-down-bold
                     </v-icon>
                 </v-btn>
+                <v-btn text icon :disabled="!canDecrement(1)" @click="changeAttribute(-1)" :class="readonly && 'invisible'">
+                    <v-icon :class="`text${color}400`">
+                        mdi-arrow-down
+                    </v-icon>
+                </v-btn>
                 {{ value.attribute }}
-                <v-btn text :disabled="!canIncrement" @click="changeAttribute(5)" :class="readonly && 'invisible'">
+                <v-btn text icon :disabled="!canIncrement(1)" @click="changeAttribute(1)" :class="readonly && 'invisible'">
+                    <v-icon :class="`text${color}400`">
+                        mdi-arrow-up
+                    </v-icon>
+                </v-btn>
+                <v-btn text icon :disabled="!canIncrement(5)" @click="changeAttribute(5)" :class="readonly && 'invisible'">
                     <v-icon :class="`text${color}400`">
                         mdi-arrow-up-bold
                     </v-icon>
@@ -83,6 +93,7 @@ export default {
         color: String,
         readonly: Boolean,
         usedSkillpoints: Number,
+        usedAttributepoints: Number,
         availableSkillpoints: {
             type: Number,
             default: 250,
@@ -112,14 +123,14 @@ export default {
         bonusMalusText() {
             return this.bonusMalus > 0 ? `+${this.bonusMalus}` : this.bonusMalus
         },
-        canIncrement() {
-            return this.usedSkillpoints < this.availableSkillpoints && this.value.attribute < this.skillUpperbound
-        },
-        canDecrement() {
-            return this.usedSkillpoints > 0 && this.value.attribute > 10
-        },
     },
     methods: {
+        canIncrement(amount = 5) {
+            return this.usedAttributepoints < this.availableAttributepoints && (this.value.attribute + amount) <= this.attributeUpperbound
+        },
+        canDecrement(amount = 5) {
+            return this.usedAttributepoints > 0 && (this.value.attribute - amount) >= 10
+        },
         changeAttribute(value) {
             this.value.attribute += value
             this.refreshSkills()
@@ -154,13 +165,7 @@ export default {
         },
         removeSkill({ name }) {
             this.value.skills = R.filter(R.complement(R.propEq('name', name)), this.value.skills)
-        },
-        increment() {
-            this.value.attribute += 5
-        },
-        decrement() {
-            this.value.attribute -= 5
-        },
+        }
     }
 }
 </script>
