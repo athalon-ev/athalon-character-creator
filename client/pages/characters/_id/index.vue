@@ -50,7 +50,7 @@
                         <div class="text-gray-700 font-bold mt-4">
                             Alter
                         </div>
-                        {{ character.character.age || '--' }}
+                        {{ character.character.age || '--' }} Jahre
                         <div class="text-gray-700 font-bold mt-4">
                             Haarfarbe
                         </div>

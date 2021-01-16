@@ -18,7 +18,7 @@
                 Attribute
             </v-tab>
             <v-tab>
-                Export
+                Speichern
             </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
@@ -227,37 +227,31 @@
                     v-bind="$props"
                 />
             </v-tab-item>
-            <v-tab-item class="p-4 py-16 flex justify-between">
-                <div class="text-center w-1/3">
-                    <p class="text-4xl font-bold mb-4">
-                        1.
+            <v-tab-item class="p-4 py-16 flex flex-wrap justify-center">
+                <div class="lg:w-1/2">
+                    <p class="p-4 shadow rounded bg-gray-200">
+                        Ihr wollt also mit dem Schiff nach <b>Neu Corethon</b> reisen, Hmmm?<br>
+                        Wie war der Name nochmal? <b class="text-blue-600">{{ character.name }}</b>? Na dann wollen wir mal sehen.<br>
+                        <em class="my-1 block text-gray-600">*Der Aufseher des Hafens fährt mit seinen rauen Fingern in einem großen ledergebundenen Buch die Seiten entlang*</em><br>
+                        Ah! Hier haben wir {{ character.gender == 'Männlich' ? 'ihn' : 'sie' }}.<br>
+                        <em class="my-1 block text-gray-600">*Gemächlich nimmt der Grauhaarige den mächtigen Stempel zur Hand und presst damit einmal im Buch und dann auf dem Reisedokument sein Symbol auf*</em><br>
+                        Es ist alles für euch vorbereitet. Dann wünsche ich gute Fahrt!<br>
+                        <em class="my-1 block text-gray-600">*Er reicht dir die Papiere und winkt dir nach*</em><br>
                     </p>
-                    <p>Gute Arbeit! Der Text für deinen Charakter wird beim Klick automatisch in die Zwischenablage kopiert</p>
-                    <v-btn color="primary" @click="exportCharacter">
+                </div>
+                <div class="w-full flex flex-wrap justify-center">
+                    <p class="text-4xl w-full font-bold my-8 text-center">
+                        Bereit für das Abenteuer?
+                    </p>
+                    <v-btn class="mx-2" v-if="!isNew" color="primary" @click="exportCharacter">
                         Charakterdaten Kopieren
                     </v-btn>
-                    <v-btn color="primary" @click="saveCharacter">
-                        Charakter speichern
+                    <v-btn class="mx-2" color="primary" @click="saveCharacter">
+                        Charakter {{ isNew ? 'erstellen' : 'speichern' }}
                     </v-btn>
-                    <v-btn v-if="id" color="error" @click="deleteCharacter">
+                    <v-btn class="mx-2" v-if="id && !isNew" color="error" @click="deleteCharacter">
                         Charakter löschen
                     </v-btn>
-                </div>
-                <div class="text-center w-1/3">
-                    <p class="text-4xl font-bold mb-4">
-                        2.
-                    </p>
-                    <p>Wenn du dich noch nicht registriert hast, ist das jetzt der Zeitpunkt. Der Button öffnet das Forum in einem neuen Tab</p>
-                    <p />
-                    <v-btn color="primary" href="https://board.athalon.net/newthread.php?fid=16" target="_blank">
-                        Bewerbung einreichen
-                    </v-btn>
-                </div>
-                <div class="text-center w-1/3">
-                    <p class="text-4xl font-bold mb-4">
-                        3.
-                    </p>
-                    <p>Text mit <kbd>STRG+V</kbd> oder <kbd>CMD+V</kbd> einfügen und auf Absenden klicken - Fertig</p>
                 </div>
             </v-tab-item>
         </v-tabs-items>

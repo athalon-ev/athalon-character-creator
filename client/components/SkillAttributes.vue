@@ -49,6 +49,7 @@
                 hide-details
                 class="mr-4 w-16"
                 :solo="!readonly" dense v-model="skill.points" type="number"
+                @input="refreshSkills"
                 min="0" :max="skillUpperbound - (getSkillBasePoints(value.attribute, skill) + bonusMalus)"
                 v-if="!skill.categories.length"
             />
@@ -123,6 +124,9 @@ export default {
         bonusMalusText() {
             return this.bonusMalus > 0 ? `+${this.bonusMalus}` : this.bonusMalus
         },
+        skillpointsLeft() {
+            return this.availableSkillpoints - this.usedSkillpoints
+        }
     },
     methods: {
         canIncrement(amount = 5) {
@@ -136,9 +140,15 @@ export default {
             this.refreshSkills()
         },
         refreshSkills() {
+            // this.usedSkillpoints
+            // this.availableSkillpoints
             this.value.skills = R.map(skill => ({
-                points: R.clamp(0, this.skillUpperbound - (getSkillBasePoints(this.value.attribute, skill) + this.bonusMalus), parseInt(skill.points)),
-                ...skill
+                ...skill,
+                points: R.clamp(
+                    0,
+                    Math.max(0, this.skillUpperbound - (getSkillBasePoints(this.value.attribute, skill) + this.bonusMalus)),
+                    parseInt(skill.points || 0)
+                ),
             }), this.value.skills)
         },
         getCategories(category) {
@@ -165,7 +175,10 @@ export default {
         },
         removeSkill({ name }) {
             this.value.skills = R.filter(R.complement(R.propEq('name', name)), this.value.skills)
-        }
+        },
+        // capSkillpoints() {
+        //     this.skill.points =
+        // }
     }
 }
 </script>
