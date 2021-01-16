@@ -23,12 +23,18 @@
         </v-tabs>
         <v-tabs-items v-model="tab">
             <v-tab-item class="p-4">
-                <v-btn v-if="isNew" color="primary" outlined @click="randomize" class="top-0 right-0 absolute m-4">
-                    <v-icon class="lg:mr-2">
-                        mdi-dice-6
-                    </v-icon>
-                    <span class="hidden lg:block">Lass den Zufall entscheiden</span>
-                </v-btn>
+                <v-alert v-if="!user && isNew" type="warning" :value="true">
+                    <b>Achtung!</b> Aktuell benötigst du einen <a class="font-bold" href="https://board.athalon.de/member.php?action=register">Athalon Forenaccount</a> um den Charakter abspeichern zu können.<br>
+                    Registriere dich oder logge dich zuerst ein.
+                </v-alert>
+                <div class="flex justify-end w-full">
+                    <v-btn v-if="isNew" class="self-end" color="primary" outlined @click="randomize">
+                        <v-icon class="lg:mr-2">
+                            mdi-dice-6
+                        </v-icon>
+                        <span class="hidden lg:block">Lass den Zufall entscheiden</span>
+                    </v-btn>
+                </div>
                 <v-text-field v-model="character.name" name="name" label="Name" class="sm:w-1/2" />
                 <v-text-field v-model="character.minecraftName" name="minecraft-name" label="Minecraft Name" class="sm:w-1/2" />
                 <p class="text-gray-700">
@@ -357,6 +363,9 @@ export default {
         },
         healthpoints() {
             return getHealthpoints(this.character.skillpoints.constitution.attribute)
+        },
+        user() {
+            return this.$cookies.get('user')
         }
     },
     methods: {
