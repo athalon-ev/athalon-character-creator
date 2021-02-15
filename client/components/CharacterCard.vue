@@ -7,7 +7,7 @@
                     <p class="text-lg font-bold mb-4">
                         {{ character.character.name }}
                     </p>
-                    <NationalityBanner :nation="character.character.nationality" />
+                    <NationalityBanner v-if="character.character.nationality" :nation="character.character.nationality" />
                     <slot />
                     <!-- <v-btn color="red" @click.prevent.stop="deleteCharacter(character.id)">
                         <v-icon>mdi-delete</v-icon>

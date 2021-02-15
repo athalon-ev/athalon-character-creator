@@ -1,12 +1,12 @@
 <template>
     <div class="h-full">
-        <div class="container my-8">
+        <div class="container mx-auto my-8">
             <h2 class="text-2xl m-4 text-white">
                 {{ isMe ? 'Deine Charaktäre' : `Charaktäre von ${account.username}` }}
             </h2>
         </div>
         <div class="my-8 w-full bg-gray-200 shadow">
-            <div class="container flex flex-wrap">
+            <div class="container mx-auto flex flex-wrap">
                 <div class="p-4 w-1/3">
                     <NewCharacterCard />
                 </div>

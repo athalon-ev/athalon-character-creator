@@ -18,7 +18,7 @@ export default {
     },
     computed: {
         banner() {
-            return getNationByName(this.nation).banner
+            return getNationByName(this.nation) && getNationByName(this.nation).banner
         }
     }
 }

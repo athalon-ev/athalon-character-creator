@@ -1,9 +1,9 @@
 <template>
     <div class="h-full">
-        <div class="container my-8">
+        <div class="container mx-auto my-8">
             <h2 class="text-2xl my-4 text-white flex justify-between">
                 <template v-if="character">
-                    Charakterbogen von {{ character.character.name }}
+                    Charakterbogen von {{ character.character.name }} {{ character.accountId }}
                     <v-btn color="primary" small v-if="canEdit" :href="`/characters/${$route.params.id}/edit`">
                         <v-icon class="mr-2">
                             mdi-account-edit
@@ -17,7 +17,7 @@
             </h2>
         </div>
         <div class="my-8 w-full">
-            <div v-if="character" class="container bg-white shadow rounded">
+            <div v-if="character" class="container mx-auto bg-white shadow rounded">
                 <div class="p-4 flex flex-wrap">
                     <div class="text-center text-gray-600 mr-4">
                         <img v-if="character.character.minecraftName" :src="$withBase(`images/${character.id}.png`)" class="mr-4 mb-2">
@@ -42,7 +42,7 @@
                             Herkunft
                         </div>
                         <div class="flex items-center">
-                            <NationalityBanner class="inline-flex" :nation="character.character.nationality" />,
+                            <NationalityBanner v-if="character.character" class="inline-flex" :nation="character.character.nationality" />,
                             <div class="ml-2">
                                 {{ character.character.birthcity }}
                             </div>
@@ -151,7 +151,7 @@
                     </div>
                 </div>
             </div>
-            <div v-else class="container bg-white rounded shadow p-8 flex flex-column items-center justify-center text-center">
+            <div v-else class="container mx-auto bg-white rounded shadow p-8 flex flex-column items-center justify-center text-center">
                 <div class="w-1/2">
                     <v-img class="my-4" :src="require('~/assets/images/no-character.svg')" />
                 </div>
