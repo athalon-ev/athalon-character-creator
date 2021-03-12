@@ -35,6 +35,8 @@ export const update = R.curry(async (dependencies: Dependencies, id: string, cha
             [R.findIndex(R.propEq('id', id)), R.identity]
         )
     )
+    const uuid = await dependencies.services.minecraftAvatarService.getUuidByUsername(dependencies, character.minecraftName)
+    await dependencies.services.minecraftAvatarService.saveAvatar(dependencies, uuid, id)
     return id
 })
 
