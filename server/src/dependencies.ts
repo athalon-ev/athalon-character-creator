@@ -10,11 +10,13 @@ import * as path from 'path'
 import * as filenamify from 'filenamify'
 import * as nanoid from 'nanoid'
 import * as jwt from 'jsonwebtoken'
+import * as canvas from 'canvas'
 
 import * as accountService from './account/accountService'
 import * as characterService from './character/characterService'
 import * as databaseService from './database/databaseService'
 import * as minecraftAvatarService from './minecraft/avatar'
+import * as minecraftAvatarRenderService from './minecraft/avatar-render'
 
 import * as lowdb from 'lowdb/lib/fp'
 import * as LowDbFileAsyncAdapter from 'lowdb/adapters/FileAsync'
@@ -35,12 +37,14 @@ const getContainer = () => ({
         nanoid,
         lowdb,
         LowDbFileAsyncAdapter,
+        canvas,
     },
     services: {
         accountService,
         characterService,
         databaseService,
         minecraftAvatarService,
+        minecraftAvatarRenderService,
     },
     server: {
         middlewares: {
