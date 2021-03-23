@@ -3,31 +3,29 @@ import type { LowdbFpAsync } from 'lowdb'
 import type { ParsedQuery } from '../app/appTypes'
 import * as R from 'ramda'
 
-import type { AccountIdentifier, Character, Account, StoredCharacter } from './characterTypes'
+import type { Character, Account, StoredCharacter, Skin } from '../types'
 
 interface DbSchema {
     characters: StoredCharacter[]
     accounts: Account[]
+    skins: Skin[]
 }
 
-const pickPath = R.curry((paths: string[], obj) => 
+const pickPath = R.curry((paths: string[], obj) =>
     R.reduce((o, p) => R.assocPath(p.split('.'), R.path(p.split('.'), obj), o), {}, paths))
-
-const getCharacterDatabase = async (dependencies: Dependencies) =>
-    (await dependencies.services.databaseService.getDb(dependencies, dependencies.config.charactersDatabasePath) as LowdbFpAsync<DbSchema>)
-    ('characters', [])
-
-export const create = R.curry(async (dependencies: Dependencies, accountId: AccountIdentifier, character: Character) => {
-    const db = await getCharacterDatabase(dependencies)
+export const create = R.curry(async (dependencies: Dependencies, accountId: string, character: Character) => {
+    const characterDb = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
+    // const skinDb = await getSkinDatabase(dependencies)
     const id = dependencies.lib.nanoid.nanoid()
-    await db.write(R.concat(R.__, [{ id, character, accountId }]))
-    const uuid = await dependencies.services.minecraftAvatarService.getUuidByUsername(dependencies, character.minecraftName)
-    await dependencies.services.minecraftAvatarService.saveAvatar(dependencies, uuid, id)
+    const skinId = '8'
+    await characterDb.write(R.concat(R.__, [{ id, character, accountId, skins: [skinId] }]))
+    // const uuid = await dependencies.services.minecraftAvatarService.getUuidByUsername(dependencies, character.minecraftName)
+    // await dependencies.services.minecraftAvatarService.saveAvatar(dependencies, uuid, id)
     return id
 })
 
 export const update = R.curry(async (dependencies: Dependencies, id: string, character: Character) => {
-    const db = await getCharacterDatabase(dependencies)
+    const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
     await db.write(
         R.converge(
             // @ts-ignore
@@ -35,13 +33,11 @@ export const update = R.curry(async (dependencies: Dependencies, id: string, cha
             [R.findIndex(R.propEq('id', id)), R.identity]
         )
     )
-    const uuid = await dependencies.services.minecraftAvatarService.getUuidByUsername(dependencies, character.minecraftName)
-    await dependencies.services.minecraftAvatarService.saveAvatar(dependencies, uuid, id)
     return id
 })
 
 export const remove = R.curry(async (dependencies: Dependencies, id: string) => {
-    const db = await getCharacterDatabase(dependencies)
+    const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
     await db.write(
         R.converge(
             // @ts-ignore
@@ -53,18 +49,18 @@ export const remove = R.curry(async (dependencies: Dependencies, id: string) => 
 })
 
 export const findByAccountId = R.curry(async (dependencies: Dependencies, accountId: string) => {
-    const db = await getCharacterDatabase(dependencies)
+    const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
     return db(R.filter(R.whereEq({ accountId: parseInt(accountId) })))
 })
 
 export const get = R.curry(async (dependencies: Dependencies, id: string) => {
-    const db = await getCharacterDatabase(dependencies)
+    const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
     const characters = await db(R.filter(R.whereEq({ id })))
     return R.head(characters)
 })
 
 export const find = R.curry(async (dependencies: Dependencies, query: ParsedQuery) => {
-    const db = await getCharacterDatabase(dependencies)
+    const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
     console.log(query)
     return db(R.pipe(
         /** @ts-ignore */

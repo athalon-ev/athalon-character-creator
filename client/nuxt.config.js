@@ -39,7 +39,7 @@ export default {
     publicRuntimeConfig: {
         // baseURL: process.env.SERVER_URL,
         axios: {
-            baseURL: process.env.SERVER_URL || 'http://localhost:8080/'
+            baseURL: process.env.SERVER_URL || 'https://character.athalon.de/api/'
         }
     },
     /*
@@ -65,7 +65,7 @@ export default {
     ** See https://axios.nuxtjs.org/options
     */
     axios: {
-        baseURL: 'http://localhost:8080/'
+        baseURL: 'https://character.athalon.de/api/'
     },
     vuetify: {
         theme: {

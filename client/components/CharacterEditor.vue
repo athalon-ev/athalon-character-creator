@@ -8,6 +8,9 @@
             <v-tab>
                 Hauptdaten
             </v-tab>
+            <v-tab v-if="!isNew">
+                Skins
+            </v-tab>
             <v-tab>
                 Persönliches
             </v-tab>
@@ -40,9 +43,18 @@
                 <p class="text-gray-700">
                     Hiermit kannst du dein Erscheinungsbild verfeinern, wie willst du auf andere wirken?
                 </p>
-                <div class="sm:flex">
+                <div class="sm:flex my-8">
                     <div class="sm:w-1/6 pr-4">
                         <MinecraftSkinImage :name="character.minecraftName" />
+                        <div class="text-sm mt-2">
+                            <v-icon v-if="isNew" class="text-blue-400">mdi-information</v-icon>
+                            <span v-if="isNew">
+                                Den Skin kannst du nach der Erstellung ändern
+                            </span>
+                            <span v-else>
+                                <v-btn color="primary" small @click="tab++">Skin bearbeiten</v-btn>
+                            </span>
+                        </div>
                     </div>
                     <div class="sm:w-2/6 pr-4">
                         <v-text-field v-model="character.age" name="age" type="number" :min="5" :max="200" label="Alter" suffix="Jahre" />
@@ -112,6 +124,47 @@
                     <div class="sm:w-1/2">
                         <v-combobox name="birthcity" label="Geburtsort" v-model="character.birthcity" :items="cities" />
                     </div>
+                </div>
+            </v-tab-item>
+            <v-tab-item v-if="!isNew" class="p-4 bg-gray-200">
+                <div class="grid md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <div class="cursor-pointer transition duration-150 flex items-center flex-column bg-white hover:text-white hover:bg-blue-600 shadow rounded p-4 text-center">
+                        <MinecraftSkinImage class="h-64 w-32" :name="character.minecraftName" />
+                        <div>Aktueller Minecraft Skin</div>
+                    </div>
+                </div>
+                <div class="my-4 bg-white shadow rounded p-4 text-center">
+                    <v-file-input
+                        v-model="newSkin.file"
+                        @change="updateSkin"
+                        accept="image/png"
+                        label="Minecraft kompatiblen Skin im png Format auswählen"
+                        outlined
+                        color="primary"
+                        prepend-icon="mdi-account-plus-outline"
+                    >
+                        <template v-slot:selection="{ text }">
+                            <v-chip
+                                color="primary"
+                                dark
+                                label
+                                small
+                            >
+                                {{ text }}
+                            </v-chip>
+                        </template>
+                    </v-file-input>
+                    <v-text-field v-model="newSkin.name" name="name" label="Skin Name" />
+                    <div v-if="newSkin.base64" class="text-left font-bold">
+                        Skin Vorschau
+                        <img :src="newSkin.base64" class="w-48" alt="">
+                    </div>
+                    <v-btn color="primary" :disabled="!(newSkin.file && newSkin.name)" @click="uploadSkin">
+                        <v-icon class="block mr-2">
+                            mdi-account-plus-outline
+                        </v-icon>
+                        <div>Neuen Skin hochladen</div>
+                    </v-btn>
                 </div>
             </v-tab-item>
             <v-tab-item class="p-4">
@@ -293,6 +346,13 @@ const copyToClipboard = (str) => {
     document.body.removeChild(el)
 }
 
+const fileToBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+})
+
 export default {
     components: { SkillAttributes, MinecraftSkinImage, NationalityBanner },
     props: {
@@ -326,6 +386,11 @@ export default {
         },
     },
     data: () => ({
+        newSkin: {
+            file: null,
+            name: null,
+            base64: null,
+        },
         section: 'character',
         tab: 'Hauptdaten',
         characterData,
@@ -369,6 +434,18 @@ export default {
         }
     },
     methods: {
+        async updateSkin() {
+            if (this.newSkin.file) this.newSkin.name = this.newSkin.file.name.replace(/\.png/i, '').replace(/-/g, ' ')
+            if (this.newSkin.file) this.newSkin.base64 = await fileToBase64(this.newSkin.file)
+            else this.newSkin.base64 = ''
+        },
+        async uploadSkin() {
+            this.newSkin = {
+                name: '',
+                file: null,
+                base64: null,
+            }
+        },
         exportCharacter() {
             copyToClipboard(exportCharacter(this.character, this.skillUpperbound))
         },

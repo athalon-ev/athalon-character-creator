@@ -1,9 +1,9 @@
 import * as fs from 'fs-extra'
 import axios from 'axios'
 import * as Koa from 'koa'
-import * as cors from '@koa/cors'
+import * as KoaCors from '@koa/cors'
 import * as KoaRouter from '@koa/router'
-import * as bodyParser from 'koa-bodyparser'
+import * as KoaBody from 'koa-body'
 import * as KoaJWT from 'koa-jwt'
 import * as KoaStatic from 'koa-static-server'
 import * as path from 'path'
@@ -14,12 +14,14 @@ import * as canvas from 'canvas'
 
 import * as accountService from './account/accountService'
 import * as characterService from './character/characterService'
+import * as skinService from './skin/skinService'
 import * as databaseService from './database/databaseService'
-import * as minecraftAvatarService from './minecraft/avatar'
+import * as minecraftApi from './minecraft/minecraftApi'
 import * as minecraftAvatarRenderService from './minecraft/avatar-render'
 
 import * as lowdb from 'lowdb/lib/fp'
 import * as LowDbFileAsyncAdapter from 'lowdb/adapters/FileAsync'
+
 const rootPath = path.resolve(__dirname, '..')
 
 const getContainer = () => ({
@@ -42,24 +44,21 @@ const getContainer = () => ({
     services: {
         accountService,
         characterService,
+        skinService,
         databaseService,
-        minecraftAvatarService,
+        minecraftApi,
         minecraftAvatarRenderService,
     },
     server: {
         middlewares: {
-            cors,
-            bodyParser,
+            KoaCors,
+            KoaBody,
         },
     },
     config: {
         adminGroupIds: [4, 19],
-        mojangApiClient: axios.create({
-            baseURL: 'https://api.mojang.com/users/profiles/minecraft'
-        }),
-        minecraftAvatarClient: axios.create({
-            baseURL: 'https://crafatar.com',
-        }),
+        mojangApiClient: axios.create({ baseURL: 'https://api.mojang.com/' }),
+        sessionApiClient: axios.create({ baseURL: 'https://sessionserver.mojang.com/' }),
         jwtSecret: '4thalonS3cretS4uce3',
         charactersFolderPath: path.join(rootPath, 'data/characters'),
         charactersDatabasePath: path.join(rootPath, 'data/characters.json'),

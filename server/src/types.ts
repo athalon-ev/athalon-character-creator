@@ -42,16 +42,27 @@ export interface Character {
 }
 
 export interface Account {
-    id: AccountIdentifier
+    id: string
     type: 'board' | 'guest'
     /** a guest password, except that it is just for one character */
     token?: string
 }
 
+export interface Skin {
+    id: string
+    renderedSkinpath: string
+    originalSkinpath: string
+    name: string
+    accountId: string
+    characterId: string
+}
+
 export interface StoredCharacter {
     id: string
+    accountId: string
     character: Character
-    accountId: AccountIdentifier
+    /** store ids of skins */
+    skins: string[]
 }
 
 export type AccountIdentifier = string | number
