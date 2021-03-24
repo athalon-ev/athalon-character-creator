@@ -38,7 +38,7 @@ export interface Character {
     whyLeft: string
     leftWhat: string
     goals: string
-    skillpoints: Record<'strength' | 'constitution' | 'aptness' | 'intelligence' | 'mind', Skillpoint[]>
+    skillpoints: Record<'strength' | 'constitution' | 'aptness' | 'intelligence' | 'mind', Attribute>
 }
 
 export interface Account {
@@ -48,13 +48,20 @@ export interface Account {
     token?: string
 }
 
-export interface Skin {
-    id: string
-    renderedSkinpath: string
-    originalSkinpath: string
+export interface SkinNonFileInfo {
     name: string
     accountId: string
     characterId: string
+}
+
+export interface StoredSkin extends SkinNonFileInfo {
+    id: string
+    renderedSkinPath: string
+    originalSkinPath: string
+}
+
+export type SkinDTO = SkinNonFileInfo & {
+    originalSkin: Buffer
 }
 
 export interface StoredCharacter {
@@ -64,5 +71,3 @@ export interface StoredCharacter {
     /** store ids of skins */
     skins: string[]
 }
-
-export type AccountIdentifier = string | number

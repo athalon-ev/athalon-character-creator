@@ -17,7 +17,9 @@ import * as characterService from './character/characterService'
 import * as skinService from './skin/skinService'
 import * as databaseService from './database/databaseService'
 import * as minecraftApi from './minecraft/minecraftApi'
-import * as minecraftAvatarRenderService from './minecraft/avatar-render'
+import * as skinRenderer from './skin/skinRenderer'
+
+import * as middlewares from './http/middlewares'
 
 import * as lowdb from 'lowdb/lib/fp'
 import * as LowDbFileAsyncAdapter from 'lowdb/adapters/FileAsync'
@@ -47,13 +49,7 @@ const getContainer = () => ({
         skinService,
         databaseService,
         minecraftApi,
-        minecraftAvatarRenderService,
-    },
-    server: {
-        middlewares: {
-            KoaCors,
-            KoaBody,
-        },
+        skinRenderer,
     },
     config: {
         adminGroupIds: [4, 19],
@@ -70,6 +66,11 @@ const getContainer = () => ({
             port: parseInt(process.env.PORT || '80'),
             host: process.env.HOST || '0.0.0.0',
             pathPrefix: '',
+            globalMiddlewares: {
+                KoaCors,
+                KoaBody,
+            },
+            routeMiddlewares: middlewares,
         }
     },
 })

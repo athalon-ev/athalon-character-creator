@@ -14,10 +14,10 @@ const useMiddlewares = (dependencies: Dependencies) =>
         R.map(useMiddleware(dependencies)(app))
 
 export default (dependencies: Dependencies, routes: typeof Routes) => {
-    const { lib: { Koa, KoaRouter, console }, config, server } = dependencies
+    const { lib: { Koa, KoaRouter, console }, config } = dependencies
     const app = new Koa()
     // @ts-ignore
-    useMiddlewares(dependencies)(app)(server.middlewares)
+    useMiddlewares(dependencies)(app)(config.server.globalMiddlewares)
     app.use(async (ctx, next) => {
         try {
             await next()

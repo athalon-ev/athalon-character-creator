@@ -224,6 +224,5 @@ export const drawModel = async (img: string | Buffer, scale: number, overlay: bo
     ctx.drawImage(headRight, x + y, z - y - 0.5, headRight.width + 0.5, headRight.height + 1)
 
     const buffer = promisify<Buffer>(canvas.toBuffer.bind(canvas))
-    const res = await buffer()
-    return fs.writeFile('./t.jpg', res)
+    return buffer()
 }

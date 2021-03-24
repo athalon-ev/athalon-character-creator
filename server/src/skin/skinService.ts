@@ -1,20 +1,29 @@
 import type { Dependencies } from '../dependencies'
 import * as R from 'ramda'
+import type { Skin, SkinDTO } from '../types'
 
-// import type { Skin } from '../types'
-
-export const create = R.curry(async (dependencies: Dependencies, name: string, accountId: string, characterId: string) => {
-    const skinDb = await dependencies.services.databaseService.getSkinDatabase(dependencies)
+export const create = R.curry(async (dependencies: Dependencies, skin: SkinDTO,) => {
+    const db = await dependencies.services.databaseService.getSkinDatabase(dependencies)
     const id = dependencies.lib.nanoid.nanoid()
-    await skinDb.write(R.concat(R.__, [{ id, name, accountId, characterId, renderedSkinpath, originalSkinpath }]))
+    const renderedSkin = await dependencies.services.skinRenderer.drawModel(skin.originalSkin, 5, true, true, false)
+    await dependencies.lib.fs.writeFile(`${dependencies.config.charactersFolderPath}/skin.png`, b)
+
+    await dependencies.services.databaseService.create(db, )
     return id
 })
 
-export const syncSkinForName = async (dependencies: Dependencies, minecraftName: string, path: string) => {
+export const getOnlineSkinForName = async (dependencies: Dependencies, minecraftName: string) => {
     const uuid = await dependencies.services.minecraftApi.getUUIDForName(dependencies, minecraftName)
-    const skin = await dependencies.services.minecraftApi.getSkinBuffer(dependencies, uuid)
-    return dependencies.lib.fs.writeFile(path, skin)
+    return dependencies.services.minecraftApi.getSkinBuffer(dependencies, uuid)
 }
+// return dependencies.lib.fs.writeFile(path, skin)
+
+export const render = async (dependencies: Dependencies, skin: string | Buffer, slim: boolean) =>
+    dependencies.services.skinRenderer.drawModel(skin, 5, true, true, slim)
+
+const b = await dependencies.services.skinService.getOnlineSkinForName(dependencies, 'Katonia')
+await dependencies.lib.fs.writeFile(`${dependencies.config.charactersFolderPath}/skin.png`, b)
+await dependencies.services.skinService.renderAndSave(dependencies, b)
 
 // export const write
 
