@@ -7,6 +7,7 @@ export const create = R.curry(async (dependencies: Dependencies, skin: SkinDTO) 
     const db = await dependencies.services.databaseService.getSkinDatabase(dependencies)
     const id = dependencies.lib.nanoid.nanoid()
     const paths = await renderAndStoreSkin(dependencies, skin.originalSkin, id)
+    // TODO, update character
     await dependencies.services.databaseService.create(db, {
         ...R.omit(['originalSkin'], skin),
         ...paths,
