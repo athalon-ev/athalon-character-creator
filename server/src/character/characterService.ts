@@ -1,14 +1,18 @@
 import type { Dependencies } from '../dependencies'
 import type { ParsedQuery } from '../http/appTypes'
-import * as R from 'ramda'
-
 import type { Character } from '../types'
+import * as R from 'ramda'
 
 export const create = R.curry(async (dependencies: Dependencies, accountId: string, character: Character) => {
     const characterDb = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
     const id = dependencies.lib.nanoid.nanoid()
-    // const await dependencies.services.skinService.getOnlineSkinForName(character.minecraftName)
-    const skinId = '8'
+    const minecraftSkin = await dependencies.services.skinService.getOnlineSkinForName(dependencies, character.minecraftName)
+    const skinId = await dependencies.services.skinService.create(dependencies, {
+        accountId,
+        characterId: id,
+        name: 'original',
+        originalSkin: minecraftSkin,
+    })
     await dependencies.services.databaseService.create(characterDb, { id, character, accountId, skins: [skinId] })
     // const uuid = await dependencies.services.minecraftAvatarService.getUuidByUsername(dependencies, character.minecraftName)
     // await dependencies.services.minecraftAvatarService.saveAvatar(dependencies, uuid, id)

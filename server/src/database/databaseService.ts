@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 import type { LowdbFpAsync, FpReturnAsync } from 'lowdb'
 import type { Dependencies } from '../dependencies'
-import type { StoredCharacter, Skin } from '../types'
+import type { StoredCharacter, StoredSkin } from '../types'
 import type { ParsedQuery } from '../http/appTypes'
 
 export const getDb = R.curry(async (dependencies: Dependencies, filepath: string) =>
@@ -10,7 +10,7 @@ export const getDb = R.curry(async (dependencies: Dependencies, filepath: string
 
 interface DbSchema {
     characters: StoredCharacter[]
-    skins: Skin[]
+    skins: StoredSkin[]
 }
 
 interface Identifibable {
