@@ -16,9 +16,9 @@ export const create = async (dependencies: Dependencies, skin: SkinDTO) => {
     return saveSkin
 }
 
-export const update = R.curry(async (dependencies: Dependencies, id: string, skin: SkinDTO) => {
+export const update = R.curry(async (dependencies: Dependencies, id: string, skin: Partial<SkinDTO>) => {
     const db = await dependencies.services.databaseService.getSkinDatabase(dependencies)
-    const paths = await renderAndStoreSkin(dependencies, skin.originalSkin, id)
+    const paths = skin.originalSkin ? await renderAndStoreSkin(dependencies, skin.originalSkin, id) : {}
     return dependencies.services.databaseService.update(
         db,
         id,

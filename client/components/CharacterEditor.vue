@@ -9,7 +9,7 @@
                 Hauptdaten
             </v-tab>
             <v-tab v-if="!isNew">
-                Skins
+                Kleiderschrank
             </v-tab>
             <v-tab>
                 Persönliches
@@ -127,16 +127,65 @@
                 </div>
             </v-tab-item>
             <v-tab-item v-if="!isNew" class="p-4 bg-gray-200">
+                <h3 class="text-xl font-bold mb-4">Aktueller Kleiderschrank</h3>
                 <div class="grid md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    <div class="cursor-pointer transition duration-150 flex items-center flex-column bg-white hover:text-white hover:bg-blue-600 shadow rounded p-4 text-center">
+                    <div class="flex items-center flex-column bg-white shadow rounded p-4 text-center">
                         <MinecraftSkinImage class="h-64 w-32" :name="character.minecraftName" />
                         <div>Aktueller Minecraft Skin</div>
                     </div>
+                    <div
+                        v-for="skin in skins"
+                        :class="{
+                            'bg-blue-600 text-white': editSkin && skin.id == editSkin.id,
+                            'bg-green-600 text-white skin-active': skin.id == character.activeSkin,
+                        }"
+                        class="cursor-pointer transition duration-150 flex items-center justify-between flex-column bg-white hover:text-white hover:bg-blue-600 shadow rounded text-center break-all overflow-hidden"
+                    >
+                        <div class="p-4 flex flex-column justify-between" @click="editSkin = { ...skin, base64: '', file: null }">
+                            <img :src="$withBase(`images/${skin.renderedSkinPath}`)" class="h-64 w-32" alt="">
+                            <div>{{ skin.name.slice(0, 35) }}</div>
+                        </div>
+                        <div class="flex w-full">
+                            <v-tooltip bottom v-if="!(editSkin && editSkin.id == skin.id)">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <div v-bind="attrs" v-on="on" @click="editSkin = skin" v-ripple class="w-full cursor-pointer bg-white text-black py-2 hover:bg-blue-700 text-blue-600 hover:text-white">
+                                        <v-icon>mdi-human-edit</v-icon>
+                                    </div>
+                                </template>
+                                Skin bearbeiten
+                            </v-tooltip>
+                            <v-tooltip bottom v-if="skin.id != character.activeSkin">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <div @click="activateSkin(skin)" v-bind="attrs" v-on="on" v-ripple class="w-full cursor-pointer bg-white text-black py-2 hover:bg-green-600 text-blue-600 hover:text-white">
+                                        <v-icon>mdi-human-greeting</v-icon>
+                                    </div>
+                                </template>
+                                Für Athalon Auswählen
+                            </v-tooltip>
+                            <v-tooltip bottom v-if="false">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <div v-bind="attrs" v-on="on" v-ripple class="w-full cursor-pointer bg-white text-black py-2 hover:bg-green-600 text-blue-600 hover:text-white">
+                                        <v-icon>mdi-cube-send</v-icon>
+                                    </div>
+                                </template>
+                                Auf Minecraft hochladen
+                            </v-tooltip>
+                            <v-tooltip bottom v-if="skin.id != character.activeSkin">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <div v-bind="attrs" v-on="on" v-ripple class="w-full cursor-pointer bg-white text-black py-2 hover:bg-red-600 text-blue-600 hover:text-white">
+                                        <v-icon>mdi-account-remove</v-icon>
+                                    </div>
+                                </template>
+                                Löschen
+                            </v-tooltip>
+                        </div>
+                    </div>
                 </div>
-                <div class="my-4 bg-white shadow rounded p-4 text-center">
+                <v-form v-if="editSkin" class="my-4 bg-white shadow rounded p-4 text-center">
+                    <h3 class="text-xl font-bold text-left mb-4">Skin <span class="text-blue-600">{{ editSkin.name }}</span> bearbeiten</h3>
                     <v-file-input
-                        v-model="newSkin.file"
-                        @change="updateSkin"
+                        v-model="editSkin.file"
+                        @change="updateSkin(editSkin)"
                         accept="image/png"
                         label="Minecraft kompatiblen Skin im png Format auswählen"
                         outlined
@@ -154,18 +203,60 @@
                             </v-chip>
                         </template>
                     </v-file-input>
-                    <v-text-field v-model="newSkin.name" name="name" label="Skin Name" />
+                    <v-text-field v-model="editSkin.name" name="name" label="Skin Name" :counter="35" :rules="[v => v.length <= 35 || 'Maximum 35 Zeichen']" />
+                    <div class="text-left font-bold">
+                        Skin Vorschau
+                        <div class="flex">
+                            <div class="p-2 checkerboard-bg shadow rounded">
+                                <img :src="editSkin.base64 || $withBase(`images/${editSkin.originalSkinPath}`)" class="w-48" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <v-btn color="primary" :disabled="editSkin.name.length > 35" @click="uploadSkin(editSkin)">
+                        <v-icon class="block mr-2">
+                            mdi-account-edit-outline
+                        </v-icon>
+                        <div>Skin abspeichern</div>
+                    </v-btn>
+                </v-form>
+                <v-form class="my-4 bg-white shadow rounded p-4 text-center">
+                    <h3 class="text-xl font-bold text-left mb-4">Neuen Skin hochladen</h3>
+                    <v-file-input
+                        v-model="newSkin.file"
+                        @change="updateSkin(newSkin)"
+                        accept="image/png"
+                        label="Minecraft kompatiblen Skin im png Format auswählen"
+                        outlined
+                        color="primary"
+                        prepend-icon="mdi-account-plus-outline"
+                    >
+                        <template v-slot:selection="{ text }">
+                            <v-chip
+                                color="primary"
+                                dark
+                                label
+                                small
+                            >
+                                {{ text }}
+                            </v-chip>
+                        </template>
+                    </v-file-input>
+                    <v-text-field v-model="newSkin.name" name="name" label="Skin Name" :counter="35" :rules="[v => v.length <= 35 || 'Maximum 35 Zeichen']" />
                     <div v-if="newSkin.base64" class="text-left font-bold">
                         Skin Vorschau
-                        <img :src="newSkin.base64" class="w-48" alt="">
+                        <div class="flex">
+                            <div class="p-2 checkerboard-bg shadow rounded">
+                                <img :src="newSkin.base64" class="w-48" alt="">
+                            </div>
+                        </div>
                     </div>
-                    <v-btn color="primary" :disabled="!(newSkin.file && newSkin.name)" @click="uploadSkin">
+                    <v-btn color="primary" :disabled="!(newSkin.file && newSkin.name) || newSkin.name.length > 35" @click="uploadSkin(newSkin)">
                         <v-icon class="block mr-2">
                             mdi-account-plus-outline
                         </v-icon>
                         <div>Neuen Skin hochladen</div>
                     </v-btn>
-                </div>
+                </v-form>
             </v-tab-item>
             <v-tab-item class="p-4">
                 <v-textarea v-model="character.ideology" label="Persönlichkeit und Weltanschauung" :rows="5" />
@@ -386,9 +477,11 @@ export default {
         },
     },
     data: () => ({
+        skins: [],
+        editSkin: null,
         newSkin: {
             file: null,
-            name: null,
+            name: '',
             base64: null,
         },
         section: 'character',
@@ -433,35 +526,51 @@ export default {
             return this.$cookies.get('user')
         }
     },
+    async created() {
+        this.skins = (await this.$axios.get(`/characters/${this.id}/skins`)).data
+    },
     methods: {
-        async updateSkin() {
-            if (this.newSkin.file) this.newSkin.name = this.newSkin.file.name.replace(/\.png/i, '').replace(/-/g, ' ')
-            if (this.newSkin.file) this.newSkin.base64 = await fileToBase64(this.newSkin.file)
-            else this.newSkin.base64 = ''
+        async updateSkin(newSkin) {
+            if (newSkin.file && !newSkin.id) newSkin.name = newSkin.file.name.replace(/\.png/i, '').replace(/-/g, ' ')
+            if (newSkin.file) this.$set(newSkin, 'base64', await fileToBase64(newSkin.file))
+            else newSkin.base64 = ''
         },
-        async uploadSkin() {
+        async activateSkin(skin) {
+            this.character.activeSkin = skin.id
+            await this.$axios.put(`/characters/${this.id}`, { activeSkin: skin.id }, this.getAuthHeaders())
+        },
+        async uploadSkin(skin) {
+            const formData = new FormData()
+            formData.append('name', skin.name)
+            skin.file && formData.append('skin', skin.file)
+            const uploadedSkin = skin.id
+                ? (await this.$axios.put(`/characters/${this.id}/skins/${skin.id}`, formData, this.getAuthHeaders())).data
+                : (await this.$axios.post(`/characters/${this.id}/skins`, formData, this.getAuthHeaders())).data
             this.newSkin = {
                 name: '',
                 file: null,
                 base64: null,
             }
+            this.skins = skin.id ? this.skins : [...this.skins, uploadedSkin]
         },
         exportCharacter() {
             copyToClipboard(exportCharacter(this.character, this.skillUpperbound))
         },
-        async saveCharacter() {
+        getAuthHeaders() {
             const user = this.$cookies.get('user')
             if (!user) return
-            const settings = {
+            return {
                 headers: {
                     Authorization: `Bearer ${user.token}`
                 }
             }
+        },
+        async saveCharacter() {
             this.loading = true
             try {
                 const { data: id } = this.id
-                    ? await this.$axios.put(`/characters/${this.id}`, this.character, settings)
-                    : await this.$axios.post('/characters', this.character, settings)
+                    ? await this.$axios.put(`/characters/${this.id}`, this.character, this.getAuthHeaders())
+                    : await this.$axios.post('/characters', this.character, this.getAuthHeaders())
                 this.$router.push(`/characters/${id}`)
             } catch (error) {
 
@@ -470,16 +579,9 @@ export default {
         },
         async deleteCharacter() {
             if (!this.id) return
-            const user = this.$cookies.get('user')
-            if (!user) return
-            const settings = {
-                headers: {
-                    Authorization: `Bearer ${user.token}`
-                }
-            }
             this.loading = true
             try {
-                await this.$axios.delete(`/characters/${this.id}`, settings)
+                await this.$axios.delete(`/characters/${this.id}`, this.getAuthHeaders())
                 this.$router.push('/')
             } catch (error) {
 
@@ -501,3 +603,8 @@ export default {
     }
 }
 </script>
+
+<style lang="stylus">
+// .skin-active
+//     transform scale(1.05)
+</style>

@@ -19,6 +19,9 @@ export default (dependencies: Dependencies, router: KoaRouter) => {
     router.get('/characters/:id', async ctx => {
         ctx.body = await dependencies.services.characterService.get(dependencies, ctx.params.id)
     })
+    router.get('/characters/:id/skins', middlewares.parseQueryMiddleware(), async ctx => {
+        ctx.body = await dependencies.services.skinService.find(dependencies, { ...ctx.parsedQuery, filter: [...ctx.parsedQuery.filter || [], ['characterId', ctx.params.id]] })
+    })
     router.put(
         '/characters/:id',
         middlewares.jwtMiddleware(dependencies),
@@ -59,7 +62,27 @@ export default (dependencies: Dependencies, router: KoaRouter) => {
             if (!ctx.request.files || !ctx.request.files.skin) ctx.throw(400, 'No skin was uploaded')
             const skinFile = ctx.request.files?.skin as unknown as File
             const skin = await dependencies.lib.fs.readFile(skinFile.path)
-            ctx.body = await dependencies.services.characterService.addSkin(dependencies, ctx.params.id, ctx.state.user.uid, skin, ctx.request.body.name)
+            ctx.body = await dependencies.services.characterService.addSkin(
+                dependencies,
+                ctx.params.id,
+                ctx.state.user.uid,
+                skin,
+                ctx.request.body.name
+            )
+        }
+    )
+    router.put(
+        '/characters/:id/skins/:skinId',
+        middlewares.jwtMiddleware(dependencies),
+        middlewares.characterExistsMiddleware(dependencies),
+        middlewares.allowOnlyUserOrAdminMiddleware(dependencies),
+        async ctx => {
+            const skinFile = ctx.request.files?.skin as unknown as File
+            const skin = skinFile && await dependencies.lib.fs.readFile(skinFile.path)
+            ctx.body = await dependencies.services.skinService.update(dependencies, ctx.params.skinId, {
+                name: ctx.request.body.name,
+                ...(skin ? { originalSkin: skin } : {}),
+            })
         }
     )
     router.get('/characters/:id/export/mybb', async ctx => {

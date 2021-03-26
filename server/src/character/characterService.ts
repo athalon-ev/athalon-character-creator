@@ -1,6 +1,6 @@
 import type { Dependencies } from '../dependencies'
 import type { ParsedQuery } from '../http/appTypes'
-import type { Character, SkinDTO } from '../types'
+import type { Character } from '../types'
 import * as R from 'ramda'
 
 export const create = R.curry(async (dependencies: Dependencies, accountId: string, character: Character) => {
@@ -27,18 +27,19 @@ export const create = R.curry(async (dependencies: Dependencies, accountId: stri
 
 export const addSkin = R.curry(async (dependencies: Dependencies, characterId: string, accountId: string, skin: Buffer, name: string) => {
     const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
-    const { id: skinId } = await dependencies.services.skinService.create(dependencies, {
+    const storedSkin = await dependencies.services.skinService.create(dependencies, {
         accountId,
         characterId,
         name,
         originalSkin: skin,
     })
-    return dependencies.services.databaseService.update(
+    await dependencies.services.databaseService.update(
         db,
         characterId,
         // @ts-ignore
-        R.adjust(R.__, R.over(R.lensProp('skins'), R.concat([skinId])))
+        R.adjust(R.__, R.over(R.lensProp('skins'), R.concat([storedSkin.id])))
     )
+    return storedSkin
 })
 
 export const update = R.curry(async (dependencies: Dependencies, id: string, character: Character) => {

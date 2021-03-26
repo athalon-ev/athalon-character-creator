@@ -20,7 +20,7 @@
             <div v-if="character" class="container mx-auto bg-white shadow rounded">
                 <div class="p-4 flex flex-wrap">
                     <div class="text-center text-gray-600 mr-4">
-                        <img v-if="character.character.minecraftName" :src="$withBase(`images/${character.id}.png`)" class="mr-4 mb-2">
+                        <img v-if="character.character.minecraftName" :src="$withBase(`images/${character.character.activeSkin}-3d.png`)" class="mr-4 mb-2">
                         {{ character.character.minecraftName }}
                     </div>
                     <div class="w-full lg:w-auto flex-grow">
