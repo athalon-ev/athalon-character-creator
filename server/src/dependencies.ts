@@ -58,6 +58,7 @@ const getContainer = () => ({
         jwtSecret: '4thalonS3cretS4uce3',
         charactersFolderPath: path.join(rootPath, 'data/characters'),
         charactersDatabasePath: path.join(rootPath, 'data/characters.json'),
+        skinsDatabasePath: path.join(rootPath, 'data/skins.json'),
         forumApiKey: 'Athal0n2020!MybbL0ginK3y',
         forumClient: axios.create({
             baseURL: 'https://board.athalon.de'

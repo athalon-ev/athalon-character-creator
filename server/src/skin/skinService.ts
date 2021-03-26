@@ -1,28 +1,32 @@
-import type { Dependencies } from '../dependencies'
 import * as R from 'ramda'
+import type { Dependencies } from '../dependencies'
 import type { SkinDTO } from '../types'
-import { ParsedQuery } from '../http/appTypes'
+import type { ParsedQuery } from '../http/appTypes'
 
-export const create = R.curry(async (dependencies: Dependencies, skin: SkinDTO) => {
+export const create = async (dependencies: Dependencies, skin: SkinDTO) => {
     const db = await dependencies.services.databaseService.getSkinDatabase(dependencies)
     const id = dependencies.lib.nanoid.nanoid()
     const paths = await renderAndStoreSkin(dependencies, skin.originalSkin, id)
-    // TODO, update character
-    await dependencies.services.databaseService.create(db, {
+    const saveSkin = {
         ...R.omit(['originalSkin'], skin),
         ...paths,
         id,
-    })
-    return id
-})
+    }
+    await dependencies.services.databaseService.create(db, saveSkin)
+    return saveSkin
+}
 
 export const update = R.curry(async (dependencies: Dependencies, id: string, skin: SkinDTO) => {
     const db = await dependencies.services.databaseService.getSkinDatabase(dependencies)
+    const paths = await renderAndStoreSkin(dependencies, skin.originalSkin, id)
     return dependencies.services.databaseService.update(
         db,
         id,
         // @ts-ignore
-        R.mergeLeft(skin)
+        R.mergeLeft({
+            ...R.omit(['originalSkin'], skin),
+            paths,
+        })
     )
 })
 

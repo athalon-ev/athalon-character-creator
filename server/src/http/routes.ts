@@ -1,10 +1,15 @@
 import type { Dependencies } from '../dependencies'
 import type * as KoaRouter from '@koa/router'
+import type { File } from 'formidable'
 
 export default (dependencies: Dependencies, router: KoaRouter) => {
     const middlewares = dependencies.config.server.routeMiddlewares
+    const body = dependencies.config.server.globalMiddlewares.KoaBody
     router.get('/skins', middlewares.parseQueryMiddleware(), async ctx => {
-        // ctx.body = await dependencies.services.skinService.find(dependencies, ctx.parsedQuery)
+        ctx.body = await dependencies.services.skinService.find(dependencies, ctx.parsedQuery)
+    })
+    router.get('/skins/:id', middlewares.parseQueryMiddleware(), async ctx => {
+        ctx.body = await dependencies.services.skinService.get(dependencies, ctx.params.id)
     })
     router.get('/', async (ctx, next) => {
     })
@@ -36,8 +41,27 @@ export default (dependencies: Dependencies, router: KoaRouter) => {
         '/characters',
         middlewares.jwtMiddleware(dependencies),
         async ctx => {
-        ctx.body = await dependencies.services.characterService.create(dependencies, ctx.state.user.uid, ctx.request.body)
-    })
+            ctx.body = await dependencies.services.characterService.create(dependencies, ctx.state.user.uid, ctx.request.body)
+        }
+    )
+    router.post(
+        '/characters/:id/skins',
+        middlewares.jwtMiddleware(dependencies),
+        middlewares.characterExistsMiddleware(dependencies),
+        middlewares.allowOnlyUserOrAdminMiddleware(dependencies),
+        body({
+            multipart: true,
+            formidable: {
+                multiples: false,
+            }
+        }),
+        async ctx => {
+            if (!ctx.request.files || !ctx.request.files.skin) ctx.throw(400, 'No skin was uploaded')
+            const skinFile = ctx.request.files?.skin as unknown as File
+            const skin = await dependencies.lib.fs.readFile(skinFile.path)
+            ctx.body = await dependencies.services.characterService.addSkin(dependencies, ctx.params.id, ctx.state.user.uid, skin, ctx.request.body.name)
+        }
+    )
     router.get('/characters/:id/export/mybb', async ctx => {
         // ctx.body = await dependencies.services.characterService.getCharacter(dependencies, ctx.params.accountId)
     })

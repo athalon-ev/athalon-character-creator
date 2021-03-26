@@ -24,7 +24,7 @@ export const getCharacterDatabase = async (dependencies: Dependencies) =>
     (await dependencies.services.databaseService.getDb(dependencies, dependencies.config.charactersDatabasePath) as LowdbFpAsync<DbSchema>)('characters', [])
 
 export const getSkinDatabase = async (dependencies: Dependencies) =>
-    (await dependencies.services.databaseService.getDb(dependencies, dependencies.config.charactersDatabasePath) as LowdbFpAsync<DbSchema>)('skins', [])
+    (await dependencies.services.databaseService.getDb(dependencies, dependencies.config.skinsDatabasePath) as LowdbFpAsync<DbSchema>)('skins', [])
 
 export const getById = async <T extends Identifibable>(db: FpReturnAsync<T[]>, id: string) =>
     db(R.find(R.whereEq({ id })))

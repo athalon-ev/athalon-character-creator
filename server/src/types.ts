@@ -20,6 +20,7 @@ export interface Attribute {
 
 export interface Character {
     name: string
+    activeSkin: string
     minecraftName: string
     gender: string
     age: number
