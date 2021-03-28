@@ -20,6 +20,7 @@ export interface Attribute {
 
 export interface Character {
     name: string
+    activeSkin: string
     minecraftName: string
     gender: string
     age: number
@@ -38,20 +39,38 @@ export interface Character {
     whyLeft: string
     leftWhat: string
     goals: string
-    skillpoints: Record<'strength' | 'constitution' | 'aptness' | 'intelligence' | 'mind', Skillpoint[]>
+    skillpoints: Record<'strength' | 'constitution' | 'aptness' | 'intelligence' | 'mind', Attribute>
 }
 
 export interface Account {
-    id: AccountIdentifier
+    id: string
     type: 'board' | 'guest'
     /** a guest password, except that it is just for one character */
     token?: string
 }
 
-export interface StoredCharacter {
-    id: string
-    character: Character
-    accountId: AccountIdentifier
+export interface SkinNonFileInfo {
+    name: string
+    accountId: string
+    characterId: string
 }
 
-export type AccountIdentifier = string | number
+export interface StoredSkin extends SkinNonFileInfo {
+    id: string
+    created: Date
+    updated: Date
+    renderedSkinPath: string
+    originalSkinPath: string
+}
+
+export type SkinDTO = SkinNonFileInfo & {
+    originalSkin: Buffer
+}
+
+export interface StoredCharacter {
+    id: string
+    created: Date
+    updated: Date
+    accountId: string
+    character: Character
+}

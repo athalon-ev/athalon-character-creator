@@ -30,30 +30,30 @@ export interface ForumUser {
 
 const addApiKey = (dependencies: Dependencies, path: string) => `${path}?apikey=${dependencies.config.forumApiKey}`
 
-export const login = R.curry(async (dependencies: Dependencies, credentials: LoginCredentials) => {
+export const login = async (dependencies: Dependencies, credentials: LoginCredentials) => {
     const forumUser = await loginWithForumAccount(dependencies, credentials)
     return {
         token: dependencies.lib.jwt.sign(R.pick(['gid', 'uid'], forumUser), dependencies.config.jwtSecret),
         ...forumUser,
     }
-})
+}
 
-export const loginWithForumAccount = R.curry(async (dependencies: Dependencies, credentials: LoginCredentials): Promise<ForumUser> => {
+export const loginWithForumAccount = async (dependencies: Dependencies, credentials: LoginCredentials): Promise<ForumUser> => {
     const { data: result } = await dependencies.config.forumClient.post(addApiKey(dependencies, 'api.php'), credentials)
     return result
-})
+}
 
-export const getUsers = R.curry(async (dependencies: Dependencies) => {
+export const getUsers = async (dependencies: Dependencies) => {
     const { data } = await dependencies.config.forumClient.get(addApiKey(dependencies, 'users.php'))
     return data
-})
+}
 
-export const getUser = R.curry(async (dependencies: Dependencies, id: number) => {
+export const getUser = async (dependencies: Dependencies, id: number) => {
     const users = await getUsers(dependencies)
     return R.find(R.propEq('uid', id), users)
-})
+}
 
-export const getGroups = R.curry(async (dependencies: Dependencies) => {
+export const getGroups = async (dependencies: Dependencies) => {
     const { data } = await dependencies.config.forumClient.get(addApiKey(dependencies, 'groups.php'))
     return data
-})
+}

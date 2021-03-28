@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv'
 import dependencyContainer from './dependencies'
-import server from './app/server'
-import routes from './app/routes'
+import server from './http/server'
+import routes from './http/routes'
 dotenv.config()
 
 const dependencies = dependencyContainer()

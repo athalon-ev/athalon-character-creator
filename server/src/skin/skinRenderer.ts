@@ -72,13 +72,6 @@ const flip = (src: Canvas) => {
 const skewA = 26 / 45 // 0.57777777
 const skewB = skewA * 2 // 1.15555555
 
-// export const saveAvatar = R.curry(async (dependencies: Dependencies, minecraftAccountUuid: string, fileName: string) => {
-//     const avatar = await getAvatar(dependencies, minecraftAccountUuid)
-//     await dependencies.lib.fs.ensureDir(dependencies.config.charactersFolderPath)
-//     const savePath = dependencies.lib.path.join(dependencies.config.charactersFolderPath, `${fileName}.png`)
-//     return dependencies.lib.fs.writeFile(savePath, avatar)
-// })
-
 export const drawModel = async (img: string | Buffer, scale: number, overlay: boolean, isBody: boolean, slim: boolean) => {
     const canvas = createCanvas(scale * 20, scale * (isBody ? 45.1 : 18.5))
 
@@ -224,6 +217,5 @@ export const drawModel = async (img: string | Buffer, scale: number, overlay: bo
     ctx.drawImage(headRight, x + y, z - y - 0.5, headRight.width + 0.5, headRight.height + 1)
 
     const buffer = promisify<Buffer>(canvas.toBuffer.bind(canvas))
-    const res = await buffer()
-    return fs.writeFile('./t.jpg', res)
+    return buffer()
 }
