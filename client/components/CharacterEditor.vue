@@ -130,20 +130,21 @@
                 <h3 class="text-xl font-bold mb-4">Aktueller Kleiderschrank</h3>
                 <div class="grid md:grid-cols-4 lg:grid-cols-6 gap-4">
                     <div class="flex items-center flex-column bg-white shadow rounded p-4 text-center">
-                        <MinecraftSkinImage class="h-64 w-32" :name="character.minecraftName" />
+                        <MinecraftSkinImage class="h-64 w-32 mb-2" :name="character.minecraftName"/>
                         <div>Aktueller Minecraft Skin</div>
                     </div>
                     <div
                         v-for="skin in skins"
+                        :key="skin.updated"
                         :class="{
                             'bg-blue-600 text-white': editSkin && skin.id == editSkin.id,
                             'bg-green-600 text-white skin-active': skin.id == character.activeSkin,
                         }"
                         class="cursor-pointer transition duration-150 flex items-center justify-between flex-column bg-white hover:text-white hover:bg-blue-600 shadow rounded text-center break-all overflow-hidden"
                     >
-                        <div class="p-4 flex flex-column justify-between" @click="editSkin = { ...skin, base64: '', file: null }">
-                            <img :src="$withBase(`images/${skin.renderedSkinPath}`)" class="h-64 w-32" alt="">
-                            <div>{{ skin.name.slice(0, 35) }}</div>
+                        <div class="p-4 flex flex-column justify-between items-center" @click="editSkin = { ...skin, base64: '', file: null }">
+                            <img :src="$withBase(`images/${skin.renderedSkinPath}?ts=${skin.updated}`)" class="h-64 w-32 mb-2" alt="">
+                            <div class="break-words">{{ skin.name.slice(0, 35) }}</div>
                         </div>
                         <div class="flex w-full">
                             <v-tooltip bottom v-if="!(editSkin && editSkin.id == skin.id)">
@@ -172,7 +173,7 @@
                             </v-tooltip>
                             <v-tooltip bottom v-if="skin.id != character.activeSkin">
                                 <template v-slot:activator="{ on, attrs }">
-                                    <div v-bind="attrs" v-on="on" v-ripple class="w-full cursor-pointer bg-white text-black py-2 hover:bg-red-600 text-blue-600 hover:text-white">
+                                    <div @click="deleteSkin(skin)" v-bind="attrs" v-on="on" v-ripple class="w-full cursor-pointer bg-white text-black py-2 hover:bg-red-600 text-blue-600 hover:text-white">
                                         <v-icon>mdi-account-remove</v-icon>
                                     </div>
                                 </template>
@@ -552,6 +553,11 @@ export default {
                 base64: null,
             }
             this.skins = skin.id ? this.skins : [...this.skins, uploadedSkin]
+            this.skins = (await this.$axios.get(`/characters/${this.id}/skins`)).data
+        },
+        async deleteSkin(skin) {
+            await this.$axios.delete(`/characters/${this.id}/skins/${skin.id}`, this.getAuthHeaders())
+            this.skins = (await this.$axios.get(`/characters/${this.id}/skins`)).data
         },
         exportCharacter() {
             copyToClipboard(exportCharacter(this.character, this.skillUpperbound))

@@ -57,6 +57,8 @@ export interface SkinNonFileInfo {
 
 export interface StoredSkin extends SkinNonFileInfo {
     id: string
+    created: Date
+    updated: Date
     renderedSkinPath: string
     originalSkinPath: string
 }
@@ -67,8 +69,8 @@ export type SkinDTO = SkinNonFileInfo & {
 
 export interface StoredCharacter {
     id: string
+    created: Date
+    updated: Date
     accountId: string
     character: Character
-    /** store ids of skins */
-    skins: string[]
 }

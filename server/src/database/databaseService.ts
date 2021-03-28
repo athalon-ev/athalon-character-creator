@@ -56,7 +56,8 @@ export const removeById = async <T extends Identifibable>(db: FpReturnAsync<T[]>
 export const update = async <T extends Identifibable>(db: FpReturnAsync<T[]>, id: string, updateFn: (item: T) => any) => {
     await db.write(
         R.converge(
-            updateFn,
+            // @ts-ignore
+            R.adjust(R.__, updateFn),
             [R.findIndex(R.propEq('id', id)), R.identity]
         )
     )

@@ -10,35 +10,38 @@ export const create = async (dependencies: Dependencies, skin: SkinDTO) => {
     const saveSkin = {
         ...R.omit(['originalSkin'], skin),
         ...paths,
+        updated: new Date(),
+        created: new Date(),
         id,
     }
     await dependencies.services.databaseService.create(db, saveSkin)
     return saveSkin
 }
 
-export const update = R.curry(async (dependencies: Dependencies, id: string, skin: Partial<SkinDTO>) => {
+export const update = async (dependencies: Dependencies, id: string, skin: Partial<SkinDTO>) => {
     const db = await dependencies.services.databaseService.getSkinDatabase(dependencies)
     const paths = skin.originalSkin ? await renderAndStoreSkin(dependencies, skin.originalSkin, id) : {}
     return dependencies.services.databaseService.update(
         db,
         id,
-        // @ts-ignore
         R.mergeLeft({
-            ...R.omit(['originalSkin'], skin),
-            paths,
+            updated: new Date(),
+            ...paths,
+            name: skin.name,
         })
     )
-})
+}
 
-export const remove = R.curry(async (dependencies: Dependencies, id: string) => {
+export const remove = async (dependencies: Dependencies, id: string) => {
     const db = await dependencies.services.databaseService.getSkinDatabase(dependencies)
     return dependencies.services.databaseService.removeById(db, id)
-})
+}
 
 export const renderAndStoreSkin = async (dependencies: Dependencies, skin: Buffer, id: string) => {
     const renderedSkin = await dependencies.services.skinRenderer.drawModel(skin, 5, true, true, false)
     const originalSkinPath = `${id}-original.png`
     const renderedSkinPath = `${id}-3d.png`
+    await dependencies.lib.fs.ensureDir(dependencies.config.charactersFolderPath)
     await dependencies.lib.fs.writeFile(`${dependencies.config.charactersFolderPath}/${originalSkinPath}`, skin)
     await dependencies.lib.fs.writeFile(`${dependencies.config.charactersFolderPath}/${renderedSkinPath}`, renderedSkin)
     return {
@@ -55,17 +58,17 @@ export const getOnlineSkinForName = async (dependencies: Dependencies, minecraft
 export const render = async (dependencies: Dependencies, skin: string | Buffer, slim: boolean) =>
     dependencies.services.skinRenderer.drawModel(skin, 5, true, true, slim)
 
-export const findByAccountId = R.curry(async (dependencies: Dependencies, accountId: string) => {
+export const findByAccountId = async (dependencies: Dependencies, accountId: string) => {
     const db = await dependencies.services.databaseService.getSkinDatabase(dependencies)
     return db(R.filter(R.whereEq({ accountId: parseInt(accountId) })))
-})
+}
 
-export const get = R.curry(async (dependencies: Dependencies, id: string) => {
+export const get = async (dependencies: Dependencies, id: string) => {
     const db = await dependencies.services.databaseService.getSkinDatabase(dependencies)
     return dependencies.services.databaseService.getById(db, id)
-})
+}
 
-export const find = R.curry(async (dependencies: Dependencies, query: ParsedQuery) => {
+export const find = async (dependencies: Dependencies, query: ParsedQuery) => {
     const db = await dependencies.services.databaseService.getSkinDatabase(dependencies)
     return dependencies.services.databaseService.find(db, query)
-})
+}

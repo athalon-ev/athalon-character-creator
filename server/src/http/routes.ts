@@ -12,6 +12,9 @@ export default (dependencies: Dependencies, router: KoaRouter) => {
         ctx.body = await dependencies.services.skinService.get(dependencies, ctx.params.id)
     })
     router.get('/', async (ctx, next) => {
+        ctx.body = {
+            server: 'ok'
+        }
     })
     router.get('/characters', middlewares.parseQueryMiddleware(), async ctx => {
         ctx.body = await dependencies.services.characterService.find(dependencies, ctx.parsedQuery)
@@ -76,6 +79,12 @@ export default (dependencies: Dependencies, router: KoaRouter) => {
         middlewares.jwtMiddleware(dependencies),
         middlewares.characterExistsMiddleware(dependencies),
         middlewares.allowOnlyUserOrAdminMiddleware(dependencies),
+        body({
+            multipart: true,
+            formidable: {
+                multiples: false,
+            }
+        }),
         async ctx => {
             const skinFile = ctx.request.files?.skin as unknown as File
             const skin = skinFile && await dependencies.lib.fs.readFile(skinFile.path)
@@ -83,6 +92,15 @@ export default (dependencies: Dependencies, router: KoaRouter) => {
                 name: ctx.request.body.name,
                 ...(skin ? { originalSkin: skin } : {}),
             })
+        }
+    )
+    router.del(
+        '/characters/:id/skins/:skinId',
+        middlewares.jwtMiddleware(dependencies),
+        middlewares.characterExistsMiddleware(dependencies),
+        middlewares.allowOnlyUserOrAdminMiddleware(dependencies),
+        async ctx => {
+            ctx.body = await dependencies.services.skinService.remove(dependencies, ctx.params.skinId)
         }
     )
     router.get('/characters/:id/export/mybb', async ctx => {

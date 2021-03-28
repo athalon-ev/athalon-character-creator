@@ -3,11 +3,10 @@ import type { Dependencies } from '../dependencies'
 import type Routes from './routes'
 import type * as Koa from 'koa'
 
-// @ts-ignore
-const useMiddleware = dependencies => app => R.pipe(
+const useMiddleware = (dependencies: Dependencies) => (app: Koa<Koa.DefaultState, Koa.DefaultContext>) => R.pipe(
     // @ts-ignore
     R.applyTo(dependencies),
-    middleware => app.use(middleware)
+    (middleware: Koa.Middleware) => app.use(middleware)
 )
 const useMiddlewares = (dependencies: Dependencies) => 
     (app: Koa) =>
