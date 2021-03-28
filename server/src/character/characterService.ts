@@ -27,18 +27,12 @@ export const create = async (dependencies: Dependencies, accountId: string, char
 }
 
 export const addSkin = async (dependencies: Dependencies, characterId: string, accountId: string, skin: Buffer, name: string) => {
-    const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
     const storedSkin = await dependencies.services.skinService.create(dependencies, {
         accountId,
         characterId,
         name,
         originalSkin: skin,
     })
-    await dependencies.services.databaseService.update(
-        db,
-        characterId,
-        R.over(R.lensProp('skins'), R.concat([storedSkin.id]))
-    )
     return storedSkin
 }
 
