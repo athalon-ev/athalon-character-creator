@@ -225,9 +225,7 @@ export default {
                 skillpoint('Fernkampfwaffen', 10, [
                     'Bögen', 'Armbrüste', 'Pulverwaffen', 'Belagerungsgeräte'
                 ]),
-                skillpoint('Steuern', 5, [
-                    'Reiten', 'Gespann', 'Schiff', 'Luftschiff'
-                ]),
+                skillpoint('Reiten', 10),
                 skillpoint('Heimlichkeit', 20),
                 skillpoint('Fingerfertigkeit', 20),
             ],
