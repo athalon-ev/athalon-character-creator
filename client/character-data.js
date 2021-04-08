@@ -137,9 +137,10 @@ export default {
             banner: 'https://wiki.athalon.de/images/3/30/Fallice2020_Neu.png',
             cities: [
                 'Hilton',
-                'Tremban',
-                'Graméntis',
-                'Pas - Baltan',
+                'Pas-Baltan',
+                'Le Tiullé',
+                'Safáloris',
+                'Itiais',
             ],
         },
         {
