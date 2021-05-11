@@ -3,9 +3,18 @@ import type { Dependencies } from '../dependencies'
 import type * as Koa from 'koa'
 import type { Query } from './appTypes'
 
+const parseFilterValue = (value: string) => {
+    if (value == 'true') return true
+    if (value == 'false') return false
+    return value
+}
+
 const parseFilter = R.pipe(
     R.split(','),
-    R.map(R.split('='))
+    R.map(R.pipe(
+        R.split('='),
+        R.over(R.lensProp('1'), parseFilterValue)
+    )),
 )
 
 const parseQuery = (query: Query) => ({
@@ -19,8 +28,8 @@ const parseQuery = (query: Query) => ({
 export const jwtMiddleware = (dependencies: Dependencies) => dependencies.lib.KoaJWT({ secret: dependencies.config.jwtSecret })
 export const allowOnlyUserOrAdminMiddleware = (dependencies: Dependencies) => async (ctx: Koa.Context, next: Koa.Next) => {
     if (!(
-        ctx.state.user.uid == ctx.state.character.accountId
-        || dependencies.config.adminGroupIds.includes(parseInt(ctx.state.user.gid)))
+        ctx.state.user.uid == ctx.state.character.accountId ||
+        dependencies.config.adminGroupIds.includes(parseInt(ctx.state.user.gid)))
     ) ctx.throw(403, 'no access')
     await next()
 }

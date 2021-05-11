@@ -38,7 +38,12 @@
                         <span class="hidden lg:block">Lass den Zufall entscheiden</span>
                     </v-btn>
                 </div>
-                <v-text-field v-model="character.name" name="name" label="Name" class="sm:w-1/2" />
+                <div class="flex justify-between">
+                    <div class="sm:w-1/2">
+                        <v-text-field v-model="character.name" name="name" label="Name" />
+                    </div>
+                    <v-switch label="Charakter in öffentlicher Liste anzeigen" v-model="character.isPublic" />
+                </div>
                 <v-text-field v-model="character.minecraftName" name="minecraft-name" label="Minecraft Name" class="sm:w-1/2" />
                 <p class="text-gray-700">
                     Hiermit kannst du dein Erscheinungsbild verfeinern, wie willst du auf andere wirken?

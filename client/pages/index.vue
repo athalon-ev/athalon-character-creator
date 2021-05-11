@@ -32,7 +32,7 @@ export default {
         NewCharacterCard,
     },
     async asyncData(context) {
-        const characters = await context.$api.getCharacters({ limit: 0, offset: 0 })
+        const characters = await context.$api.getCharacters({ limit: 0, offset: 0, filter: 'isPublic=true' })
         return { characters, offset: 0 }
     },
     data: () => ({
