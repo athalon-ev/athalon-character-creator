@@ -185,6 +185,11 @@ export default {
         NationalityBanner,
         SkillAttributes,
     },
+    head() {
+        return {
+            title: `📜 ${this.character.character.name} Charakterbogen`
+        }
+    },
     async asyncData(ctx) {
         const { data: character } = await ctx.$axios.get(`characters/${ctx.route.params.id}`)
         return { character }

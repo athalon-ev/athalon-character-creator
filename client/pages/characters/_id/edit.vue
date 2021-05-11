@@ -34,6 +34,11 @@
 import CharacterEditor from '~/components/CharacterEditor'
 export default {
     components: { CharacterEditor },
+    head() {
+        return {
+            title: `✏️ ${this.character.character.name} bearbeiten`
+        }
+    },
     data: () => ({
         character: null
     }),

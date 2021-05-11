@@ -24,6 +24,11 @@
 <script>
 import * as R from 'ramda'
 export default {
+    head() {
+        return {
+            title: 'Login | Athalon Charakterdatenbank'
+        }
+    },
     data: () => ({
         error: null,
         credentials: {

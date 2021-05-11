@@ -22,6 +22,11 @@ import NewCharacterCard from '~/components/NewCharacterCard'
 import CharacterCard from '~/components/CharacterCard'
 
 export default {
+    head() {
+        return {
+            title: `Profil von ${this.account.username}`
+        }
+    },
     components: {
         CharacterCard,
         NewCharacterCard,
