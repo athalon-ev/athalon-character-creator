@@ -1,5 +1,9 @@
 <template>
-    <v-form class="shadow bg-white rounded relative">
+    <v-alert v-if="!user && isNew" type="warning" :value="true">
+        <b>Achtung!</b> Aktuell benötigst du einen <a class="font-bold" href="https://board.athalon.de/member.php?action=register">Athalon Forenaccount</a> um den Charakter abspeichern zu können.<br>
+        Registriere dich oder logge dich zuerst ein.
+    </v-alert>
+    <v-form v-else class="shadow bg-white rounded relative">
         <v-tabs
             v-model="tab"
             background-color="primary"
@@ -26,10 +30,6 @@
         </v-tabs>
         <v-tabs-items v-model="tab">
             <v-tab-item class="p-4">
-                <v-alert v-if="!user && isNew" type="warning" :value="true">
-                    <b>Achtung!</b> Aktuell benötigst du einen <a class="font-bold" href="https://board.athalon.de/member.php?action=register">Athalon Forenaccount</a> um den Charakter abspeichern zu können.<br>
-                    Registriere dich oder logge dich zuerst ein.
-                </v-alert>
                 <div class="flex justify-end w-full">
                     <v-btn v-if="isNew" class="self-end" color="primary" outlined @click="randomize">
                         <v-icon class="lg:mr-2">

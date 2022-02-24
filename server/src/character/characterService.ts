@@ -6,7 +6,7 @@ import * as R from 'ramda'
 export const create = async (dependencies: Dependencies, accountId: string, character: Character) => {
     const characterDb = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
     const id = dependencies.lib.nanoid.nanoid()
-    const minecraftSkin = await dependencies.services.skinService.getOnlineSkinForName(dependencies, character.minecraftName)
+    const minecraftSkin = await dependencies.services.skinService.getOnlineSkinForName(dependencies, character.minecraftName || 'Eragh')
     const { id: skinId } = await dependencies.services.skinService.create(dependencies, {
         accountId,
         characterId: id,
