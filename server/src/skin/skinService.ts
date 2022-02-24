@@ -52,7 +52,11 @@ export const renderAndStoreSkin = async (dependencies: Dependencies, skin: Buffe
 
 export const getOnlineSkinForName = async (dependencies: Dependencies, minecraftName: string) => {
     const uuid = await dependencies.services.minecraftApi.getUUIDForName(dependencies, minecraftName)
-    return dependencies.services.minecraftApi.getSkinBuffer(dependencies, uuid)
+    try {
+        return await dependencies.services.minecraftApi.getSkinBuffer(dependencies, uuid)
+    } catch (error) {
+        return await dependencies.services.minecraftApi.getSkinBuffer(dependencies, '14e4e1cc61a145bd9a0dddcb6f5092cc')
+    }
 }
 
 export const render = async (dependencies: Dependencies, skin: string | Buffer, slim: boolean) =>
