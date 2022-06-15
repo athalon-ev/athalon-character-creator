@@ -31,6 +31,7 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^6.1.0",
     "eslint-plugin-nuxt": ">=0.4.2",
+    "eslint-plugin-only-warn": "^1.0.3",
     "tailwind-css-variables": "^2.0.3",
     "tailwindcss-textshadow": "^2.1.3"
   }

@@ -1,5 +1,6 @@
 module.exports = {
   root: true,
+  plugins: ['only-warn'],
   env: {
     browser: true,
     node: true

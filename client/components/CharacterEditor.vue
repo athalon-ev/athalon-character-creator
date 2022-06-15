@@ -320,10 +320,13 @@
                         {{ weaponBonusMalus }}
                     </div>
                 </div>
+                <v-alert v-if="leftoverAttributepoints || leftoverSkillpoints" class="mt-2" type="error">
+                    Bitte beachte, dass alle Attributs-, und Fertigkeitspunkte vergeben werden müssen
+                </v-alert>
                 <div v-sticky sticky-offset="{top: 50}" class="bg-white py-2">
                     <v-progress-linear
                         class="rounded-full mb-4"
-                        color="primary"
+                        :color="leftoverAttributepoints ? 'primary' : 'green'"
                         height="25"
                         :value="usedAttributepointsPercentage"
                     >
@@ -333,7 +336,7 @@
                     </v-progress-linear>
                     <v-progress-linear
                         class="rounded-full"
-                        color="primary"
+                        :color="leftoverSkillpoints ? 'primary' : 'green'"
                         height="25"
                         :value="usedSkillpointsPercentage"
                     >
@@ -399,10 +402,14 @@
                     <p class="text-4xl w-full font-bold my-8 text-center">
                         Bereit für das Abenteuer?
                     </p>
+                    <v-alert v-if="isNew && (leftoverAttributepoints || leftoverSkillpoints)" class="mt-2" type="error">
+                        Oh! Da fehlt noch etwas.
+                        Bitte beachte, dass alle Attributs-, und Fertigkeitspunkte vergeben werden müssen.
+                    </v-alert>
                     <v-btn class="mx-2" v-if="!isNew" color="primary" @click="exportCharacter">
                         Charakterdaten Kopieren
                     </v-btn>
-                    <v-btn class="mx-2" color="primary" @click="saveCharacter">
+                    <v-btn :disabled="leftoverAttributepoints || leftoverSkillpoints" class="mx-2" color="primary" @click="saveCharacter">
                         Charakter {{ isNew ? 'erstellen' : 'speichern' }}
                     </v-btn>
                     <v-btn class="mx-2" v-if="id && !isNew" color="error" @click="deleteCharacter">
@@ -512,6 +519,12 @@ export default {
         },
         usedSkillpointsPercentage() {
             return 100 / this.availableSkillpoints * this.usedSkillpoints
+        },
+        leftoverSkillpoints() {
+            return Math.max(0, this.availableSkillpoints - this.usedSkillpoints)
+        },
+        leftoverAttributepoints() {
+            return Math.max(0, this.availableAttributepoints - this.usedAttributepoints)
         },
         usedSkillpoints() {
             return R.pipe(

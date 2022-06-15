@@ -39,7 +39,7 @@ export default {
                 availableSkillpoints: 250,
                 availableAttributepoints: 250,
                 attributeUpperbound: 65,
-                skillUpperbound: 65,
+                skillUpperbound: 55,
             }
         }
     }

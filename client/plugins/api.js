@@ -13,7 +13,7 @@ const api = ctx => ({
         })
         return characters
     },
-    getAccount: async id => {
+    getAccount: async (id) => {
         const { data: account } = await ctx.$axios.get(`/accounts/${id}`)
         return account
     }
