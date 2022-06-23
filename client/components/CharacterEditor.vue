@@ -409,7 +409,7 @@
                     <v-btn class="mx-2" v-if="!isNew" color="primary" @click="exportCharacter">
                         Charakterdaten Kopieren
                     </v-btn>
-                    <v-btn :disabled="leftoverAttributepoints || leftoverSkillpoints" class="mx-2" color="primary" @click="saveCharacter">
+                    <v-btn :disabled="leftoverAttributepoints || leftoverSkillpoints ? true : false" class="mx-2" color="primary" @click="saveCharacter">
                         Charakter {{ isNew ? 'erstellen' : 'speichern' }}
                     </v-btn>
                     <v-btn class="mx-2" v-if="id && !isNew" color="error" @click="deleteCharacter">
