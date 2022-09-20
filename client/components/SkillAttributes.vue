@@ -109,7 +109,7 @@ export default {
         },
         skillUpperbound: {
             type: Number,
-            default: 55,
+            default: 65,
         },
     },
     data: () => ({
