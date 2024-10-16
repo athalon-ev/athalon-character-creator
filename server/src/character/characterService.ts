@@ -1,69 +1,67 @@
 import type { Dependencies } from '../dependencies'
-import type { LowdbFpAsync } from 'lowdb'
-import type { ParsedQuery } from '../app/appTypes'
+import type { ParsedQuery } from '../http/appTypes'
+import type { Character } from '../types'
 import * as R from 'ramda'
 
-import type { AccountIdentifier, Character, Account, StoredCharacter } from './characterTypes'
-
-interface DbSchema {
-    characters: StoredCharacter[]
-    accounts: Account[]
+export const create = async (dependencies: Dependencies, accountId: string, character: Character) => {
+    const characterDb = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
+    const id = dependencies.lib.nanoid.nanoid()
+    const minecraftSkin = await dependencies.services.skinService.getOnlineSkinForName(dependencies, character.minecraftName || 'Eragh')
+    const { id: skinId } = await dependencies.services.skinService.create(dependencies, {
+        accountId,
+        characterId: id,
+        name: 'original',
+        originalSkin: minecraftSkin,
+    })
+    await dependencies.services.databaseService.create(characterDb, {
+        id,
+        created: new Date(),
+        updated: new Date(),
+        character: {
+            ...character,
+            activeSkin: skinId,
+        },
+        accountId,
+    })
+    return id
 }
 
-const pickPath = R.curry((paths: string[], obj) => 
-    R.reduce((o, p) => R.assocPath(p.split('.'), R.path(p.split('.'), obj), o), {}, paths))
+export const addSkin = async (dependencies: Dependencies, characterId: string, accountId: string, skin: Buffer, name: string) => {
+    const storedSkin = await dependencies.services.skinService.create(dependencies, {
+        accountId,
+        characterId,
+        name,
+        originalSkin: skin,
+    })
+    return storedSkin
+}
 
-const getCharacterDatabase = async (dependencies: Dependencies) =>
-    (await dependencies.services.databaseService.getDb(dependencies, dependencies.config.charactersDatabasePath) as LowdbFpAsync<DbSchema>)
-    ('characters', [])
-
-export const create = R.curry(async (dependencies: Dependencies, accountId: AccountIdentifier, character: Character) => {
-    const db = await getCharacterDatabase(dependencies)
-    const id = dependencies.lib.nanoid.nanoid()
-    await db.write(R.concat(R.__, [{ id, character, accountId }]))
-    return id
-})
-
-export const update = R.curry(async (dependencies: Dependencies, id: string, character: Character) => {
-    const db = await getCharacterDatabase(dependencies)
-    await db.write(
-        R.converge(
-            // @ts-ignore
-            R.adjust(R.__, R.over(R.lensProp('character'), R.mergeLeft(character))),
-            [R.findIndex(R.propEq('id', id)), R.identity]
-        )
+export const update = async (dependencies: Dependencies, id: string, character: Character) => {
+    const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
+    return dependencies.services.databaseService.update(
+        db,
+        id,
+        // only update the character property by merging
+        R.over(R.lensProp('character'), R.mergeLeft(character))
     )
-    return id
-})
+}
 
-export const remove = R.curry(async (dependencies: Dependencies, id: string) => {
-    const db = await getCharacterDatabase(dependencies)
-    await db.write(
-        R.converge(
-            // @ts-ignore
-            R.remove(R.__, 1),
-            [R.findIndex(R.propEq('id', id)), R.identity]
-        )
-    )
-    return id
-})
+export const remove = async (dependencies: Dependencies, id: string) => {
+    const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
+    return dependencies.services.databaseService.removeById(db, id)
+}
 
-export const findByAccountId = R.curry(async (dependencies: Dependencies, accountId: string) => {
-    const db = await getCharacterDatabase(dependencies)
+export const findByAccountId = async (dependencies: Dependencies, accountId: string) => {
+    const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
     return db(R.filter(R.whereEq({ accountId: parseInt(accountId) })))
-})
+}
 
-export const get = R.curry(async (dependencies: Dependencies, id: string) => {
-    const db = await getCharacterDatabase(dependencies)
-    const characters = await db(R.filter(R.whereEq({ id })))
-    return R.head(characters)
-})
+export const get = async (dependencies: Dependencies, id: string) => {
+    const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
+    return dependencies.services.databaseService.getById(db, id)
+}
 
-export const find = R.curry(async (dependencies: Dependencies, query: ParsedQuery) => {
-    const db = await getCharacterDatabase(dependencies)
-    console.log(query)
-    return db(R.pipe(
-        R.slice(query._offset, query._offset + query._limit),
-        R.unless(() => R.isEmpty(query._properties), R.map(pickPath(query._properties)))
-    ))
-})
+export const find = async (dependencies: Dependencies, query: ParsedQuery) => {
+    const db = await dependencies.services.databaseService.getCharacterDatabase(dependencies)
+    return dependencies.services.databaseService.find(db, query)
+}

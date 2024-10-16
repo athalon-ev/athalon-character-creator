@@ -12,12 +12,12 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.3.6",
-    "@nuxtjs/dotenv": "^1.4.0",
+    "@nuxtjs/axios": "^5.12.3",
     "cookie-universal-nuxt": "^2.1.4",
+    "cookieparser": "^0.1.0",
     "fantasy-name-generator": "^2.0.0",
     "lodash.debounce": "^4.0.8",
-    "nuxt": "^2.12.2",
+    "nuxt": "^2.14.11",
     "ramda": "^0.27.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
@@ -30,6 +30,9 @@
     "@nuxtjs/vuetify": "^1.11.2",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.1.0",
-    "eslint-plugin-nuxt": ">=0.4.2"
+    "eslint-plugin-nuxt": ">=0.4.2",
+    "eslint-plugin-only-warn": "^1.0.3",
+    "tailwind-css-variables": "^2.0.3",
+    "tailwindcss-textshadow": "^2.1.3"
   }
 }

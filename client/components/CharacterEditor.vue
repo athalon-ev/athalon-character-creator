@@ -1,5 +1,9 @@
 <template>
-    <v-form class="shadow bg-white rounded relative">
+    <v-alert v-if="!user && isNew" type="warning" :value="true">
+        <b>Achtung!</b> Aktuell benötigst du einen <a class="font-bold" href="https://board.athalon.de/member.php?action=register">Athalon Forenaccount</a> um den Charakter abspeichern zu können.<br>
+        Registriere dich oder logge dich zuerst ein.
+    </v-alert>
+    <v-form v-else class="shadow bg-white rounded relative">
         <v-tabs
             v-model="tab"
             background-color="primary"
@@ -7,6 +11,9 @@
         >
             <v-tab>
                 Hauptdaten
+            </v-tab>
+            <v-tab v-if="!isNew">
+                Kleiderschrank
             </v-tab>
             <v-tab>
                 Persönliches
@@ -18,25 +25,41 @@
                 Attribute
             </v-tab>
             <v-tab>
-                Export
+                Speichern
             </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
             <v-tab-item class="p-4">
-                <v-btn color="primary" outlined @click="randomize" class="top-0 right-0 absolute m-4">
-                    <v-icon class="lg:mr-2">
-                        mdi-dice-6
-                    </v-icon>
-                    <span class="hidden lg:block">Lass den Zufall entscheiden</span>
-                </v-btn>
-                <v-text-field v-model="character.name" name="name" label="Name" class="sm:w-1/2" />
+                <div class="flex justify-end w-full">
+                    <v-btn v-if="isNew" class="self-end" color="primary" outlined @click="randomize">
+                        <v-icon class="lg:mr-2">
+                            mdi-dice-6
+                        </v-icon>
+                        <span class="hidden lg:block">Lass den Zufall entscheiden</span>
+                    </v-btn>
+                </div>
+                <div class="flex justify-between">
+                    <div class="sm:w-1/2">
+                        <v-text-field v-model="character.name" name="name" label="Name" />
+                    </div>
+                    <v-switch label="Charakter in öffentlicher Liste anzeigen" v-model="character.isPublic" />
+                </div>
                 <v-text-field v-model="character.minecraftName" name="minecraft-name" label="Minecraft Name" class="sm:w-1/2" />
                 <p class="text-gray-700">
                     Hiermit kannst du dein Erscheinungsbild verfeinern, wie willst du auf andere wirken?
                 </p>
-                <div class="sm:flex">
+                <div class="sm:flex my-8">
                     <div class="sm:w-1/6 pr-4">
                         <MinecraftSkinImage :name="character.minecraftName" />
+                        <div class="text-sm mt-2">
+                            <v-icon v-if="isNew" class="text-blue-400">mdi-information</v-icon>
+                            <span v-if="isNew">
+                                Den Skin kannst du nach der Erstellung ändern
+                            </span>
+                            <span v-else>
+                                <v-btn color="primary" small @click="tab++">Skin bearbeiten</v-btn>
+                            </span>
+                        </div>
                     </div>
                     <div class="sm:w-2/6 pr-4">
                         <v-text-field v-model="character.age" name="age" type="number" :min="5" :max="200" label="Alter" suffix="Jahre" />
@@ -96,14 +119,8 @@
                 <div class="flex justify-between">
                     <div class="sm:w-1/2 pr-4">
                         <v-select name="nationality" label="Nationalität" v-model="character.nationality" item-value="name" :items="nations">
-                            <div slot="item" slot-scope="{ item }" class="flex items-center">
-                                <v-img :src="item.banner" :width="32" class="mr-2" />
-                                {{ item.name }}
-                            </div>
-                            <div slot="selection" slot-scope="{ item }" class="flex items-center">
-                                <v-img :src="item.banner" :width="32" class="mr-2" />
-                                {{ item.name }}
-                            </div>
+                            <NationalityBanner slot="item" slot-scope="{ item }" :nation="item.name" />
+                            <NationalityBanner slot="selection" slot-scope="{ item }" :nation="item.name" />
                             <v-btn color="primary" icon slot="append" small v-if="character.nationality" :href="getNationUrl(character.nationality)" target="_blank">
                                 <v-icon>mdi-map-search</v-icon>
                             </v-btn>
@@ -113,6 +130,139 @@
                         <v-combobox name="birthcity" label="Geburtsort" v-model="character.birthcity" :items="cities" />
                     </div>
                 </div>
+            </v-tab-item>
+            <v-tab-item v-if="!isNew" class="p-4 bg-gray-200">
+                <h3 class="text-xl font-bold mb-4">Aktueller Kleiderschrank</h3>
+                <div class="grid md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <div class="flex items-center flex-column bg-white shadow rounded p-4 text-center">
+                        <MinecraftSkinImage class="h-64 w-32 mb-2" :name="character.minecraftName"/>
+                        <div>Aktueller Minecraft Skin</div>
+                    </div>
+                    <div
+                        v-for="skin in skins"
+                        :key="skin.updated"
+                        :class="{
+                            'bg-blue-600 text-white': editSkin && skin.id == editSkin.id,
+                            'bg-green-600 text-white skin-active': skin.id == character.activeSkin,
+                        }"
+                        class="cursor-pointer transition duration-150 flex items-center justify-between flex-column bg-white hover:text-white hover:bg-blue-600 shadow rounded text-center break-all overflow-hidden"
+                    >
+                        <div class="p-4 flex flex-column justify-between items-center" @click="editSkin = { ...skin, base64: '', file: null }">
+                            <img :src="$withBase(`images/${skin.renderedSkinPath}?ts=${skin.updated}`)" class="h-64 w-32 mb-2" alt="">
+                            <div class="break-words">{{ skin.name.slice(0, 35) }}</div>
+                        </div>
+                        <div class="flex w-full">
+                            <v-tooltip bottom v-if="!(editSkin && editSkin.id == skin.id)">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <div v-bind="attrs" v-on="on" @click="editSkin = skin" v-ripple class="w-full cursor-pointer bg-white text-black py-2 hover:bg-blue-700 text-blue-600 hover:text-white">
+                                        <v-icon>mdi-human-edit</v-icon>
+                                    </div>
+                                </template>
+                                Skin bearbeiten
+                            </v-tooltip>
+                            <v-tooltip bottom v-if="skin.id != character.activeSkin">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <div @click="activateSkin(skin)" v-bind="attrs" v-on="on" v-ripple class="w-full cursor-pointer bg-white text-black py-2 hover:bg-green-600 text-blue-600 hover:text-white">
+                                        <v-icon>mdi-human-greeting</v-icon>
+                                    </div>
+                                </template>
+                                Für Athalon Auswählen
+                            </v-tooltip>
+                            <v-tooltip bottom v-if="false">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <div v-bind="attrs" v-on="on" v-ripple class="w-full cursor-pointer bg-white text-black py-2 hover:bg-green-600 text-blue-600 hover:text-white">
+                                        <v-icon>mdi-cube-send</v-icon>
+                                    </div>
+                                </template>
+                                Auf Minecraft hochladen
+                            </v-tooltip>
+                            <v-tooltip bottom v-if="skin.id != character.activeSkin">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <div @click="deleteSkin(skin)" v-bind="attrs" v-on="on" v-ripple class="w-full cursor-pointer bg-white text-black py-2 hover:bg-red-600 text-blue-600 hover:text-white">
+                                        <v-icon>mdi-account-remove</v-icon>
+                                    </div>
+                                </template>
+                                Löschen
+                            </v-tooltip>
+                        </div>
+                    </div>
+                </div>
+                <v-form v-if="editSkin" class="my-4 bg-white shadow rounded p-4 text-center">
+                    <h3 class="text-xl font-bold text-left mb-4">Skin <span class="text-blue-600">{{ editSkin.name }}</span> bearbeiten</h3>
+                    <v-file-input
+                        v-model="editSkin.file"
+                        @change="updateSkin(editSkin)"
+                        accept="image/png"
+                        label="Minecraft kompatiblen Skin im png Format auswählen"
+                        outlined
+                        color="primary"
+                        prepend-icon="mdi-account-plus-outline"
+                    >
+                        <template v-slot:selection="{ text }">
+                            <v-chip
+                                color="primary"
+                                dark
+                                label
+                                small
+                            >
+                                {{ text }}
+                            </v-chip>
+                        </template>
+                    </v-file-input>
+                    <v-text-field v-model="editSkin.name" name="name" label="Skin Name" :counter="35" :rules="[v => v.length <= 35 || 'Maximum 35 Zeichen']" />
+                    <div class="text-left font-bold">
+                        Skin Vorschau
+                        <div class="flex">
+                            <div class="p-2 checkerboard-bg shadow rounded">
+                                <img :src="editSkin.base64 || $withBase(`images/${editSkin.originalSkinPath}`)" class="w-48" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <v-btn color="primary" :disabled="editSkin.name.length > 35" @click="uploadSkin(editSkin)">
+                        <v-icon class="block mr-2">
+                            mdi-account-edit-outline
+                        </v-icon>
+                        <div>Skin abspeichern</div>
+                    </v-btn>
+                </v-form>
+                <v-form class="my-4 bg-white shadow rounded p-4 text-center">
+                    <h3 class="text-xl font-bold text-left mb-4">Neuen Skin hochladen</h3>
+                    <v-file-input
+                        v-model="newSkin.file"
+                        @change="updateSkin(newSkin)"
+                        accept="image/png"
+                        label="Minecraft kompatiblen Skin im png Format auswählen"
+                        outlined
+                        color="primary"
+                        prepend-icon="mdi-account-plus-outline"
+                    >
+                        <template v-slot:selection="{ text }">
+                            <v-chip
+                                color="primary"
+                                dark
+                                label
+                                small
+                            >
+                                {{ text }}
+                            </v-chip>
+                        </template>
+                    </v-file-input>
+                    <v-text-field v-model="newSkin.name" name="name" label="Skin Name" :counter="35" :rules="[v => v.length <= 35 || 'Maximum 35 Zeichen']" />
+                    <div v-if="newSkin.base64" class="text-left font-bold">
+                        Skin Vorschau
+                        <div class="flex">
+                            <div class="p-2 checkerboard-bg shadow rounded">
+                                <img :src="newSkin.base64" class="w-48" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <v-btn color="primary" :disabled="!(newSkin.file && newSkin.name) || newSkin.name.length > 35" @click="uploadSkin(newSkin)">
+                        <v-icon class="block mr-2">
+                            mdi-account-plus-outline
+                        </v-icon>
+                        <div>Neuen Skin hochladen</div>
+                    </v-btn>
+                </v-form>
             </v-tab-item>
             <v-tab-item class="p-4">
                 <v-textarea v-model="character.ideology" label="Persönlichkeit und Weltanschauung" :rows="5" />
@@ -170,10 +320,13 @@
                         {{ weaponBonusMalus }}
                     </div>
                 </div>
+                <v-alert v-if="leftoverAttributepoints || leftoverSkillpoints" class="mt-2" type="error">
+                    Bitte beachte, dass alle Attributs-, und Fertigkeitspunkte vergeben werden müssen
+                </v-alert>
                 <div v-sticky sticky-offset="{top: 50}" class="bg-white py-2">
                     <v-progress-linear
                         class="rounded-full mb-4"
-                        color="primary"
+                        :color="leftoverAttributepoints ? 'primary' : 'green'"
                         height="25"
                         :value="usedAttributepointsPercentage"
                     >
@@ -183,7 +336,7 @@
                     </v-progress-linear>
                     <v-progress-linear
                         class="rounded-full"
-                        color="primary"
+                        :color="leftoverSkillpoints ? 'primary' : 'green'"
                         height="25"
                         :value="usedSkillpointsPercentage"
                     >
@@ -194,66 +347,74 @@
                 </div>
                 <SkillAttributes
                     :all="character.skillpoints"
+                    :used-skillpoints="usedSkillpoints"
+                    :used-attributepoints="usedAttributepoints"
                     v-model="character.skillpoints.strength"
                     name="Stärke" color="-red-"
                     v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
+                    :used-skillpoints="usedSkillpoints"
+                    :used-attributepoints="usedAttributepoints"
                     v-model="character.skillpoints.constitution"
                     name="Konstitution" color="-orange-"
                     v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
+                    :used-skillpoints="usedSkillpoints"
+                    :used-attributepoints="usedAttributepoints"
                     v-model="character.skillpoints.aptness"
                     name="Geschick" color="-green-"
                     v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
+                    :used-skillpoints="usedSkillpoints"
+                    :used-attributepoints="usedAttributepoints"
                     v-model="character.skillpoints.intelligence"
                     name="Intelligenz" color="-blue-"
                     v-bind="$props"
                 />
                 <SkillAttributes
                     :all="character.skillpoints"
+                    :used-skillpoints="usedSkillpoints"
+                    :used-attributepoints="usedAttributepoints"
                     v-model="character.skillpoints.mind"
                     name="Geist" color="-purple-"
                     v-bind="$props"
                 />
             </v-tab-item>
-            <v-tab-item class="p-4 py-16 flex justify-between">
-                <div class="text-center w-1/3">
-                    <p class="text-4xl font-bold mb-4">
-                        1.
+            <v-tab-item class="p-4 py-16 flex flex-wrap justify-center">
+                <div class="lg:w-1/2">
+                    <p class="p-4 shadow rounded bg-gray-200">
+                        Ihr wollt also mit dem Schiff nach <b>Neu Corethon</b> reisen, Hmmm?<br>
+                        Wie war der Name nochmal? <b class="text-blue-600">{{ character.name }}</b>? Na dann wollen wir mal sehen.<br>
+                        <em class="my-1 block text-gray-600">*Der Aufseher des Hafens fährt mit seinen rauen Fingern in einem großen ledergebundenen Buch die Seiten entlang*</em><br>
+                        Ah! Hier haben wir {{ character.gender == 'Männlich' ? 'ihn' : 'sie' }}.<br>
+                        <em class="my-1 block text-gray-600">*Gemächlich nimmt der Grauhaarige den mächtigen Stempel zur Hand und presst damit einmal im Buch und dann auf dem Reisedokument sein Symbol auf*</em><br>
+                        Es ist alles für euch vorbereitet. Dann wünsche ich gute Fahrt!<br>
+                        <em class="my-1 block text-gray-600">*Er reicht dir die Papiere und winkt dir nach*</em><br>
                     </p>
-                    <p>Gute Arbeit! Der Text für deinen Charakter wird beim Klick automatisch in die Zwischenablage kopiert</p>
-                    <v-btn color="primary" @click="exportCharacter">
+                </div>
+                <div class="w-full flex flex-wrap justify-center">
+                    <p class="text-4xl w-full font-bold my-8 text-center">
+                        Bereit für das Abenteuer?
+                    </p>
+                    <v-alert v-if="isNew && (leftoverAttributepoints || leftoverSkillpoints)" class="mt-2" type="error">
+                        Oh! Da fehlt noch etwas.
+                        Bitte beachte, dass alle Attributs-, und Fertigkeitspunkte vergeben werden müssen.
+                    </v-alert>
+                    <v-btn class="mx-2" v-if="!isNew" color="primary" @click="exportCharacter">
                         Charakterdaten Kopieren
                     </v-btn>
-                    <v-btn color="primary" @click="saveCharacter">
-                        Charakter speichern
+                    <v-btn :disabled="leftoverAttributepoints || leftoverSkillpoints ? true : false" class="mx-2" color="primary" @click="saveCharacter">
+                        Charakter {{ isNew ? 'erstellen' : 'speichern' }}
                     </v-btn>
-                    <v-btn v-if="id" color="error" @click="deleteCharacter">
+                    <v-btn class="mx-2" v-if="id && !isNew" color="error" @click="deleteCharacter">
                         Charakter löschen
                     </v-btn>
-                </div>
-                <div class="text-center w-1/3">
-                    <p class="text-4xl font-bold mb-4">
-                        2.
-                    </p>
-                    <p>Wenn du dich noch nicht registriert hast, ist das jetzt der Zeitpunkt. Der Button öffnet das Forum in einem neuen Tab</p>
-                    <p />
-                    <v-btn color="primary" href="https://board.athalon.net/newthread.php?fid=16" target="_blank">
-                        Bewerbung einreichen
-                    </v-btn>
-                </div>
-                <div class="text-center w-1/3">
-                    <p class="text-4xl font-bold mb-4">
-                        3.
-                    </p>
-                    <p>Text mit <kbd>STRG+V</kbd> oder <kbd>CMD+V</kbd> einfügen und auf Absenden klicken - Fertig</p>
                 </div>
             </v-tab-item>
         </v-tabs-items>
@@ -273,6 +434,7 @@
 import * as R from 'ramda'
 import SkillAttributes from './SkillAttributes'
 import MinecraftSkinImage from './MinecraftSkinImage'
+import NationalityBanner from './NationalityBanner'
 import characterData from '~/character-data'
 import { randomItem, getNationByName, availableCities, randomFromRange, exportCharacter, getWeaponBonusMalus, getHealthpoints, emptyCharacter } from '~/util'
 
@@ -288,10 +450,17 @@ const copyToClipboard = (str) => {
     document.body.removeChild(el)
 }
 
+const fileToBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+})
+
 export default {
-    components: { SkillAttributes, MinecraftSkinImage },
+    components: { SkillAttributes, MinecraftSkinImage, NationalityBanner },
     props: {
-        new: {
+        isNew: {
             type: Boolean,
             default: true,
         },
@@ -321,6 +490,13 @@ export default {
         },
     },
     data: () => ({
+        skins: [],
+        editSkin: null,
+        newSkin: {
+            file: null,
+            name: '',
+            base64: null,
+        },
         section: 'character',
         tab: 'Hauptdaten',
         characterData,
@@ -344,6 +520,12 @@ export default {
         usedSkillpointsPercentage() {
             return 100 / this.availableSkillpoints * this.usedSkillpoints
         },
+        leftoverSkillpoints() {
+            return Math.max(0, this.availableSkillpoints - this.usedSkillpoints)
+        },
+        leftoverAttributepoints() {
+            return Math.max(0, this.availableAttributepoints - this.usedAttributepoints)
+        },
         usedSkillpoints() {
             return R.pipe(
                 R.map(R.prop('skills')),
@@ -358,25 +540,61 @@ export default {
         },
         healthpoints() {
             return getHealthpoints(this.character.skillpoints.constitution.attribute)
+        },
+        user() {
+            return this.$cookies.get('user')
         }
     },
+    async created() {
+        this.skins = (await this.$axios.get(`/characters/${this.id}/skins`)).data
+    },
     methods: {
+        async updateSkin(newSkin) {
+            if (newSkin.file && !newSkin.id) newSkin.name = newSkin.file.name.replace(/\.png/i, '').replace(/-/g, ' ')
+            if (newSkin.file) this.$set(newSkin, 'base64', await fileToBase64(newSkin.file))
+            else newSkin.base64 = ''
+        },
+        async activateSkin(skin) {
+            this.character.activeSkin = skin.id
+            await this.$axios.put(`/characters/${this.id}`, { activeSkin: skin.id }, this.getAuthHeaders())
+        },
+        async uploadSkin(skin) {
+            const formData = new FormData()
+            formData.append('name', skin.name)
+            skin.file && formData.append('skin', skin.file)
+            const uploadedSkin = skin.id
+                ? (await this.$axios.put(`/characters/${this.id}/skins/${skin.id}`, formData, this.getAuthHeaders())).data
+                : (await this.$axios.post(`/characters/${this.id}/skins`, formData, this.getAuthHeaders())).data
+            this.newSkin = {
+                name: '',
+                file: null,
+                base64: null,
+            }
+            this.skins = skin.id ? this.skins : [...this.skins, uploadedSkin]
+            this.skins = (await this.$axios.get(`/characters/${this.id}/skins`)).data
+        },
+        async deleteSkin(skin) {
+            await this.$axios.delete(`/characters/${this.id}/skins/${skin.id}`, this.getAuthHeaders())
+            this.skins = (await this.$axios.get(`/characters/${this.id}/skins`)).data
+        },
         exportCharacter() {
             copyToClipboard(exportCharacter(this.character, this.skillUpperbound))
         },
-        async saveCharacter() {
+        getAuthHeaders() {
             const user = this.$cookies.get('user')
             if (!user) return
-            const settings = {
+            return {
                 headers: {
                     Authorization: `Bearer ${user.token}`
                 }
             }
+        },
+        async saveCharacter() {
             this.loading = true
             try {
                 const { data: id } = this.id
-                    ? await this.$axios.put(`/characters/${this.id}`, this.character, settings)
-                    : await this.$axios.post('/characters', this.character, settings)
+                    ? await this.$axios.put(`/characters/${this.id}`, this.character, this.getAuthHeaders())
+                    : await this.$axios.post('/characters', this.character, this.getAuthHeaders())
                 this.$router.push(`/characters/${id}`)
             } catch (error) {
 
@@ -385,16 +603,9 @@ export default {
         },
         async deleteCharacter() {
             if (!this.id) return
-            const user = this.$cookies.get('user')
-            if (!user) return
-            const settings = {
-                headers: {
-                    Authorization: `Bearer ${user.token}`
-                }
-            }
             this.loading = true
             try {
-                await this.$axios.delete(`/characters/${this.id}`, settings)
+                await this.$axios.delete(`/characters/${this.id}`, this.getAuthHeaders())
                 this.$router.push('/')
             } catch (error) {
 
@@ -416,3 +627,8 @@ export default {
     }
 }
 </script>
+
+<style lang="stylus">
+// .skin-active
+//     transform scale(1.05)
+</style>

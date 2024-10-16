@@ -2,13 +2,23 @@
     <div class="skill-skills my-4 rounded" :class="`bg${color}100`">
         <h3 class="pr-2 rounded font-bold justify-between uppercase flex items-center" :class="`text${color}400 bg${color}200`">
             <div class="flex items-center">
-                <v-btn text :disabled="!canDecrement" @click="changeAttribute(-5)">
+                <v-btn text icon :disabled="!canDecrement(5)" @click="changeAttribute(-5)" :class="readonly && 'invisible'">
                     <v-icon :class="`text${color}400`">
                         mdi-arrow-down-bold
                     </v-icon>
                 </v-btn>
+                <v-btn text icon :disabled="!canDecrement(1)" @click="changeAttribute(-1)" :class="readonly && 'invisible'">
+                    <v-icon :class="`text${color}400`">
+                        mdi-arrow-down
+                    </v-icon>
+                </v-btn>
                 {{ value.attribute }}
-                <v-btn text :disabled="!canIncrement" @click="changeAttribute(5)">
+                <v-btn text icon :disabled="!canIncrement(1)" @click="changeAttribute(1)" :class="readonly && 'invisible'">
+                    <v-icon :class="`text${color}400`">
+                        mdi-arrow-up
+                    </v-icon>
+                </v-btn>
+                <v-btn text icon :disabled="!canIncrement(5)" @click="changeAttribute(5)" :class="readonly && 'invisible'">
                     <v-icon :class="`text${color}400`">
                         mdi-arrow-up-bold
                     </v-icon>
@@ -33,11 +43,13 @@
                 {{ skill.category }}
             </div>
             <v-text-field hide-details v-if="!skill.custom" class="ml-1 mr-4 w-1/4" dense v-model="skill.name" type="string" disabled />
-            <v-combobox hide-details v-else v-model="skill.name" :items="getCategories(skill.category)" dense class="ml-1 mr-4 w-1/4" />
+            <v-combobox hide-details v-else :disabled="readonly" v-model="skill.name" :items="getCategories(skill.category)" dense class="ml-1 mr-4 w-1/4" />
             <v-text-field
+                :disabled="readonly"
                 hide-details
                 class="mr-4 w-16"
-                solo dense v-model="skill.points" type="number"
+                :solo="!readonly" dense v-model="skill.points" type="number"
+                @input="refreshSkills"
                 min="0" :max="skillUpperbound - (getSkillBasePoints(value.attribute, skill) + bonusMalus)"
                 v-if="!skill.categories.length"
             />
@@ -58,7 +70,7 @@
                     mdi-playlist-remove
                 </v-icon>
             </v-btn>
-            <div :class="`text${color}400`" v-if="skill.categories.length">
+            <div :class="`text${color}400`" v-if="skill.categories.length && !readonly">
                 <v-btn x-small @click="addSkill(skill)">
                     <v-icon class="text-white">
                         mdi-playlist-plus
@@ -80,6 +92,9 @@ export default {
         all: Object,
         name: String,
         color: String,
+        readonly: Boolean,
+        usedSkillpoints: Number,
+        usedAttributepoints: Number,
         availableSkillpoints: {
             type: Number,
             default: 250,
@@ -109,29 +124,31 @@ export default {
         bonusMalusText() {
             return this.bonusMalus > 0 ? `+${this.bonusMalus}` : this.bonusMalus
         },
-        usedSkillpoints() {
-            return R.pipe(
-                R.map(R.prop('attribute')),
-                R.values,
-                R.sum,
-            )(this.all)
-        },
-        canIncrement() {
-            return this.usedSkillpoints < this.availableSkillpoints && this.value.attribute < this.skillUpperbound
-        },
-        canDecrement() {
-            return this.usedSkillpoints > 0 && this.value.attribute > 10
-        },
+        skillpointsLeft() {
+            return this.availableSkillpoints - this.usedSkillpoints
+        }
     },
     methods: {
+        canIncrement(amount = 5) {
+            return this.usedAttributepoints < this.availableAttributepoints && (this.value.attribute + amount) <= this.attributeUpperbound
+        },
+        canDecrement(amount = 5) {
+            return this.usedAttributepoints > 0 && (this.value.attribute - amount) >= 10
+        },
         changeAttribute(value) {
             this.value.attribute += value
             this.refreshSkills()
         },
         refreshSkills() {
+            // this.usedSkillpoints
+            // this.availableSkillpoints
             this.value.skills = R.map(skill => ({
-                points: R.clamp(0, this.skillUpperbound - (getSkillBasePoints(this.value.attribute, skill) + this.bonusMalus), parseInt(skill.points)),
-                ...skill
+                ...skill,
+                points: R.clamp(
+                    0,
+                    Math.max(0, this.skillUpperbound - (getSkillBasePoints(this.value.attribute, skill) + this.bonusMalus)),
+                    parseInt(skill.points || 0)
+                ),
             }), this.value.skills)
         },
         getCategories(category) {
@@ -159,12 +176,9 @@ export default {
         removeSkill({ name }) {
             this.value.skills = R.filter(R.complement(R.propEq('name', name)), this.value.skills)
         },
-        increment() {
-            this.value.attribute += 5
-        },
-        decrement() {
-            this.value.attribute -= 5
-        },
+        // capSkillpoints() {
+        //     this.skill.points =
+        // }
     }
 }
 </script>
@@ -177,4 +191,6 @@ export default {
         flex 0 0 auto
     .v-input--is-disabled input
         color rgba(0,0,0,.66) !important
+.v-input--is-disabled .v-input__append-inner
+    display none
 </style>

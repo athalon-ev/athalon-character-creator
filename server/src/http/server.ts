@@ -3,21 +3,20 @@ import type { Dependencies } from '../dependencies'
 import type Routes from './routes'
 import type * as Koa from 'koa'
 
-// @ts-ignore
-const useMiddleware = dependencies => app => R.pipe(
+const useMiddleware = (dependencies: Dependencies) => (app: Koa<Koa.DefaultState, Koa.DefaultContext>) => R.pipe(
     // @ts-ignore
     R.applyTo(dependencies),
-    middleware => app.use(middleware)
+    (middleware: Koa.Middleware) => app.use(middleware)
 )
 const useMiddlewares = (dependencies: Dependencies) => 
     (app: Koa) =>
         R.map(useMiddleware(dependencies)(app))
 
 export default (dependencies: Dependencies, routes: typeof Routes) => {
-    const { lib: { Koa, KoaRouter, console }, config, server } = dependencies
+    const { lib: { Koa, KoaRouter, console }, config } = dependencies
     const app = new Koa()
     // @ts-ignore
-    useMiddlewares(dependencies)(app)(server.middlewares)
+    useMiddlewares(dependencies)(app)(config.server.globalMiddlewares)
     app.use(async (ctx, next) => {
         try {
             await next()
@@ -35,6 +34,10 @@ export default (dependencies: Dependencies, routes: typeof Routes) => {
         if (err.response) err.message = err.response.data
         console.error(err)
     })
+    app.use(dependencies.lib.KoaStatic({
+        rootDir: dependencies.config.charactersFolderPath,
+        rootPath: '/images'
+    }))
 
     const router = new KoaRouter({ prefix: config.server.pathPrefix })
     routes(dependencies, router)

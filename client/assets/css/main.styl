@@ -5,7 +5,7 @@
     color inherit !important
 
 .v-application p
-    margin-bottom inherit
+    margin-bottom inherit !important
 
 
 .page-enter-active,
@@ -14,3 +14,21 @@
 .page-enter,
 .page-leave-to
     opacity 0
+
+
+.character-create-card
+    background-image linear-gradient(to top, transparent, var(--color-white)), url("../images/create-character.jpg")
+    background-color: black
+    background-size cover
+    background-position 0 12em
+    transition-property initial !important
+    &:hover
+        background-position 0 0
+        // border 10px solid black
+
+.checkerboard-bg
+    background: repeating-conic-gradient(#CCC 0% 25%, transparent 0% 50%) 50% / 20px 20px
+
+
+.break-words
+    word-break: break-word

@@ -11,6 +11,7 @@ export const emptyCharacter = () => ({
     minecraftName: '',
     gender: '',
     age: '',
+    isPublic: true,
     size: 170,
     weight: null,
     haircolor: '',
@@ -77,6 +78,8 @@ Geschlecht: ${character.gender}
 Alter: ${character.age} Jahre    | Größe: ${character.size}m     | Gewicht: ${character.weight}kg
 Haarfarbe: ${character.haircolor}
 Augenfarbe: ${character.eyecolor}
+
+${character.physical}
 
 [b]➤ Angewohnheiten[/b]
 ${character.habits}

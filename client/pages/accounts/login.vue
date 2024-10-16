@@ -24,6 +24,11 @@
 <script>
 import * as R from 'ramda'
 export default {
+    head() {
+        return {
+            title: 'Login | Athalon Charakterdatenbank'
+        }
+    },
     data: () => ({
         error: null,
         credentials: {
@@ -35,11 +40,13 @@ export default {
         async login() {
             try {
                 const { data: user } = await this.$axios.post('/accounts/login', this.credentials)
-                const essentialUserData = R.pick(['token', 'slug', 'avatar', 'username'], user)
-                this.$cookies.set('user', essentialUserData, {
+                const essentialUserData = R.pick(['token', 'slug', 'avatar', 'username', 'id'], user)
+                const userData = { ...essentialUserData, id: user.uid }
+                this.$cookies.set('user', userData, {
                     path: '/'
                 })
-                this.$root.$emit('loggedIn', user)
+                this.$store.commit('setUser', userData)
+                this.$root.$emit('loggedIn', userData)
                 this.$router.push('/')
             } catch (error) {
                 this.error = error

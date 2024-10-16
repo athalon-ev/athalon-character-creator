@@ -53,9 +53,9 @@ export default {
     ],
     nations: [
         {
-            name: 'Tasperin',
+            name: 'Kaiserliche Monarchie Tasperin',
             url: 'https://wiki.athalon.net/index.php/Kaiserliche_Monarchie_Tasperin',
-            banner: 'http://wiki.athalon.net/images/4/4b/Wappen_Tasperin_2020.png',
+            banner: 'https://wiki.athalon.de/images/4/4b/Wappen_Tasperin_2020.png',
             cities: [
                 'Carviel',
                 'Schwarzwasser',
@@ -66,9 +66,9 @@ export default {
             ],
         },
         {
-            name: 'Sorridia',
+            name: 'Heiliges Königreich Sorridia',
             url: 'https://wiki.athalon.net/index.php/K%C3%B6nigreich_Sorridia',
-            banner: 'http://wiki.athalon.net/images/d/d5/Wappen_Sorridia2020.png',
+            banner: 'https://wiki.athalon.de/images/d/d5/Wappen_Sorridia2020.png',
             cities: [
                 'Montebrillo',
                 'Fortifa',
@@ -77,50 +77,9 @@ export default {
             ],
         },
         {
-            name: 'Weidtland',
-            url: 'http://wiki.athalon.net/index.php/Klanreich_Kaledon',
-            banner: 'http://wiki.athalon.net/images/c/ce/WeidtlandFlagge.png',
-            cities: [
-                'Asmaeth',
-                'Molder',
-                'Rodstedt',
-                'Nordingen',
-            ],
-        },
-        {
-            name: 'Kaledon',
-            url: 'http://wiki.athalon.net/index.php/Nostrisches_Imperium',
-            banner: 'http://wiki.athalon.net/images/5/54/KaledonFlagge.png',
-            cities: [
-                'Brist',
-                'Kirkmore',
-                'Averssire',
-                'Ochsenbach',
-            ],
-        },
-        {
-            name: 'Nostrien',
-            url: 'http://wiki.athalon.net/index.php/Nostrisches_Imperium',
-            banner: 'http://wiki.athalon.net/images/7/77/Wappen_Nostrien_2020.png',
-            cities: [
-                'Herabion', 'Pentas', 'Yamas',
-            ],
-        },
-        {
-            name: 'Nordamar',
-            url: 'http://wiki.athalon.net/index.php/Nordamar',
-            banner: 'http://wiki.athalon.net/images/c/cf/Wappen_Nordamar.png',
-            cities: [
-                'Frostheim',
-                'Otterama',
-                'Bisruk',
-                'Ruladufa'
-            ],
-        },
-        {
-            name: 'AlBastra',
+            name: `Kalifat Al'bastra`,
             url: 'https://wiki.athalon.net/index.php/Kalifat_Al%27bastra',
-            banner: 'http://wiki.athalon.net/images/e/e4/Wappen_Kalifat6.png',
+            banner: 'https://wiki.athalon.de/images/e/e4/Wappen_Kalifat6.png',
             cities: [
                 'Mina Farah',
                 "Waha'kandh",
@@ -129,9 +88,9 @@ export default {
             ],
         },
         {
-            name: 'Silventrum',
+            name: 'Vereinigte Provinzen Silventrums',
             url: 'https://wiki.athalon.net/index.php/Vereinigte_Provinzen_von_Silventrum',
-            banner: 'http://wiki.athalon.net/images/9/99/Wappen_Silventrum2020.png',
+            banner: 'https://wiki.athalon.de/images/9/99/Wappen_Silventrum2020.png',
             cities: [
                 'Zweibach',
                 'Windwarden',
@@ -140,20 +99,31 @@ export default {
             ],
         },
         {
-            name: 'Haldar',
-            url: 'https://wiki.athalon.net/index.php/Haldarische_Stammesl%C3%A4nder',
-            banner: 'http://wiki.athalon.net/images/9/9b/Wappen_Haldar_2020.png',
+            name: 'Königreich Weidtland',
+            url: 'https://wiki.athalon.net/index.php/Klanreich_Kaledon',
+            banner: 'https://wiki.athalon.de/images/9/9a/Weidtland_2020_Neu.png',
             cities: [
-                'Nebelhafen',
-                'Siefhof',
-                'Talgrund',
-                'Haflof',
+                'Asmaeth',
+                'Molder',
+                'Rodstedt',
+                'Nordingen',
             ],
         },
         {
-            name: 'Patrien',
+            name: 'Klanreich Kaledon',
+            url: 'https://wiki.athalon.net/index.php/Nostrisches_Imperium',
+            banner: 'https://wiki.athalon.de/images/6/6a/Kaledon_2020_2.png',
+            cities: [
+                'Brist',
+                'Kirkmore',
+                'Averssire',
+                'Ochsenbach',
+            ],
+        },
+        {
+            name: 'Königreich Patrien',
             url: 'https://wiki.athalon.net/index.php/K%C3%B6nigreich_Patrien',
-            banner: 'http://wiki.athalon.net/images/4/4e/Wappen_Patrien.png',
+            banner: 'https://wiki.athalon.de/images/4/4e/Wappen_Patrien.png',
             cities: [
                 'Olapaso',
                 'Corastella',
@@ -162,20 +132,29 @@ export default {
             ],
         },
         {
-            name: 'Fallice',
+            name: 'Königreich Fallice',
             url: 'https://wiki.athalon.net/index.php/K%C3%B6nigreich_Fallice',
-            banner: 'http://wiki.athalon.net/images/4/4c/Wappen_FalliceNeu_2020.png',
+            banner: 'https://wiki.athalon.de/images/3/30/Fallice2020_Neu.png',
             cities: [
                 'Hilton',
-                'Tremban',
-                'Graméntis',
-                'Pas - Baltan',
+                'Pas-Baltan',
+                'Le Tiullé',
+                'Safáloris',
+                'Itiais',
             ],
         },
         {
-            name: 'Kurmark',
+            name: 'Nostrisches Imperium',
+            url: 'https://wiki.athalon.net/index.php/Nostrisches_Imperium',
+            banner: 'https://wiki.athalon.de/images/2/2c/Wappen_Nostrien_2020_Neu.png',
+            cities: [
+                'Herabion', 'Pentas', 'Yamas',
+            ],
+        },
+        {
+            name: 'Erzbistum Kurmark',
             url: 'https://wiki.athalon.net/index.php/Erzbistum_Kurmark',
-            banner: 'http://wiki.athalon.net/images/4/49/KurmarkFlagge.png',
+            banner: 'https://wiki.athalon.de/images/0/0b/Kurmark2020.png',
             cities: [
                 'Zandig',
                 'Sôlfurt',
@@ -184,7 +163,29 @@ export default {
                 'Königsberg',
                 'Lötzen',
             ]
-        }
+        },
+        {
+            name: 'Haldarische Stammesländer',
+            url: 'https://wiki.athalon.net/index.php/Haldarische_Stammesl%C3%A4nder',
+            banner: 'https://wiki.athalon.de/images/d/d5/Wappen_Haldar_2020_Neu.png',
+            cities: [
+                'Nebelhafen',
+                'Siefhof',
+                'Talgrund',
+                'Haflof',
+            ],
+        },
+        {
+            name: 'Nordamar',
+            url: 'https://wiki.athalon.net/index.php/Nordamar',
+            banner: 'https://wiki.athalon.de/images/0/0b/FlaggeNordamar.png',
+            cities: [
+                'Frostheim',
+                'Otterama',
+                'Bisruk',
+                'Ruladufa'
+            ],
+        },
     ],
     skillpoints: {
         strength: {
@@ -225,9 +226,7 @@ export default {
                 skillpoint('Fernkampfwaffen', 10, [
                     'Bögen', 'Armbrüste', 'Pulverwaffen', 'Belagerungsgeräte'
                 ]),
-                skillpoint('Steuern', 5, [
-                    'Reiten', 'Gespann', 'Schiff', 'Luftschiff'
-                ]),
+                skillpoint('Reiten', 10),
                 skillpoint('Heimlichkeit', 20),
                 skillpoint('Fingerfertigkeit', 20),
             ],

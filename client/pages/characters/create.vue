@@ -20,6 +20,11 @@ export default {
     components: {
         CharacterEditor
     },
+    head() {
+        return {
+            title: 'Erstelle einen neuen Charakter'
+        }
+    },
     data: () => ({
         masterMode: false,
     }),
